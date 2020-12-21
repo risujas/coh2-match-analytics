@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Coh2Stats
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class Result
     {
         public int code { get; set; }
@@ -47,7 +46,7 @@ namespace Coh2Stats
         public int lastMatchDate { get; set; }
     }
 
-    public class Root
+    public class LeaderboardResponse
     {
         public Result result { get; set; }
         public List<StatGroup> statGroups { get; set; }
