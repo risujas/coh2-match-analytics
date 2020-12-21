@@ -6,11 +6,14 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-            var temp = RecentMatchHistoryResponse.GetRecentMatchHistoryByProfileId("183282");
+            var temp = PersonalStatResponse.GetPersonalStatBySteamId("76561198050674754");
 
-			for (int i = 0; i < temp.profiles.Count; i++)
+			for (int i = 0; i < temp.leaderboardStats.Count; i++)
 			{
-                Console.WriteLine(temp.profiles[i].alias);
+				if (temp.leaderboardStats[i].rank != -1)
+				{
+					Console.WriteLine(temp.leaderboardStats[i].leaderboard_id + " " + temp.leaderboardStats[i].rank);
+				}
 			}
 
             Console.ReadLine();

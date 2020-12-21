@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
-    class LeaderboardResponse
+	class PersonalStatResponse
 	{
         public class Result
         {
@@ -54,13 +54,23 @@ namespace Coh2Stats
             public Result result { get; set; }
             public List<StatGroup> statGroups { get; set; }
             public List<LeaderboardStat> leaderboardStats { get; set; }
-            public int rankTotal { get; set; }
         }
 
-        public static Root GetLeaderboardById(int leaderboardId, int startRank, int numRanks)
+        public static Root GetPersonalStatByProfileId(string profileId)
         {
-            string url = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
-            string urlParams = "?title=coh2&leaderboard_id=5&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
+            string url = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
+            string urlParams = "?title=coh2&profile_ids=[" + profileId + "]";
+
+            string jsonResponse = WebUtils.GetJsonResponseString(url, urlParams);
+            Root structuredResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            return structuredResponse;
+        }
+
+        public static Root GetPersonalStatBySteamId(string steamId)
+        {
+            string url = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
+            string urlParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
 
             string jsonResponse = WebUtils.GetJsonResponseString(url, urlParams);
             Root structuredResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);

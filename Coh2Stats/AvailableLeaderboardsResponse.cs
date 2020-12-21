@@ -75,9 +75,9 @@ namespace Coh2Stats
             string urlParams = "?title=coh2";
 
             string jsonResponse = WebUtils.GetJsonResponseString(url, urlParams);
-            Root availableLeaderboardsResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
+            Root structuredResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
 
-            return availableLeaderboardsResponse;
+            return structuredResponse;
         }
     }
 }

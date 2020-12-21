@@ -90,9 +90,9 @@ namespace Coh2Stats
             string urlParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
 
             string jsonResponse = WebUtils.GetJsonResponseString(url, urlParams);
-            Root recentMatchHistoryResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
+            Root structuredResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
 
-            return recentMatchHistoryResponse;
+            return structuredResponse;
         }
     }
 }
