@@ -6,10 +6,10 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-            var lb = LeaderboardResponse.GetLeaderboardById(5, 1, 10);
-            for (int i = 0; i < lb.statGroups.Count; i++)
+            var temp = AvailableLeaderboardsResponse.GetAvailableLeaderboards();
+            for (int i = 0; i < temp.leaderboards.Count; i++)
 			{
-                Console.WriteLine(lb.statGroups[i].members[0].alias + " " + lb.statGroups[i].members[0].country + " " + lb.statGroups[i].members[0].profile_id);
+                Console.WriteLine(temp.leaderboards[i].name);
 			}
 
             Console.ReadLine();
