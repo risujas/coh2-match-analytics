@@ -6,7 +6,7 @@ namespace Coh2Stats
 {
 	class WebUtils
 	{
-        public static string GetJsonResponse(string requestUrl, string requestParams)
+        public static string GetJsonResponseString(string requestUrl, string requestParams)
         {
             string responseString;
 

@@ -62,7 +62,7 @@ namespace Coh2Stats
             string url = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
             string urlParams = "?title=coh2&leaderboard_id=5&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
 
-            string jsonResponse = WebUtils.GetJsonResponse(url, urlParams);
+            string jsonResponse = WebUtils.GetJsonResponseString(url, urlParams);
             Root leaderboardResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
 
             return leaderboardResponse;
