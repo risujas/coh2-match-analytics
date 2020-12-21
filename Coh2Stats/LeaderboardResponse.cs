@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
@@ -54,6 +55,17 @@ namespace Coh2Stats
             public List<StatGroup> statGroups { get; set; }
             public List<LeaderboardStat> leaderboardStats { get; set; }
             public int rankTotal { get; set; }
+        }
+
+        public static Root GetLeaderboardById(int leaderboardId, int startRank, int numRanks)
+        {
+            string url = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
+            string urlParams = "?title=coh2&leaderboard_id=5&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
+
+            string jsonResponse = Program.GetJsonResponse(url, urlParams);
+            Root leaderboardResponse = JsonConvert.DeserializeObject<LeaderboardResponse.Root>(jsonResponse);
+
+            return leaderboardResponse;
         }
     }
 }

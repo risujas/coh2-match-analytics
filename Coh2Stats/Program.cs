@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
+
 
 namespace Coh2Stats
 {
@@ -32,20 +32,9 @@ namespace Coh2Stats
             return responseString;
 		}
 
-        public static LeaderboardResponse.Root GetLeaderboardById(int leaderboardId, int startRank, int numRanks)
-        {
-            string url = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
-            string urlParams = "?title=coh2&leaderboard_id=5&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
-
-            string jsonResponse = GetJsonResponse(url, urlParams);
-            LeaderboardResponse.Root leaderboardResponse = JsonConvert.DeserializeObject<LeaderboardResponse.Root>(jsonResponse);
-
-            return leaderboardResponse;
-        }
-
         static void Main(string[] args)
 		{
-            var lb = GetLeaderboardById(5, 1, 10);
+            var lb = LeaderboardResponse.GetLeaderboardById(5, 1, 10);
             for (int i = 0; i < lb.statGroups.Count; i++)
 			{
                 Console.WriteLine(lb.statGroups[i].members[0].alias + " " + lb.statGroups[i].members[0].country + " " + lb.statGroups[i].members[0].profile_id);
