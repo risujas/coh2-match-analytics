@@ -6,7 +6,7 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-            var temp = RecentMatchHistoryResponse.GetRecentMatchHistoryBySteamId("76561198050674754");
+            var temp = RecentMatchHistoryResponse.GetRecentMatchHistoryByProfileId("183282");
 
 			for (int i = 0; i < temp.profiles.Count; i++)
 			{

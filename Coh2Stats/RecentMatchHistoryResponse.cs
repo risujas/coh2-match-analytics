@@ -76,7 +76,7 @@ namespace Coh2Stats
         public static Root GetRecentMatchHistoryByProfileId(string profileId)
         {
             string url = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
-            string urlParams = "?title=coh2&profile_ids=[\"/steam/" + profileId + "\"]";
+            string urlParams = "?title=coh2&profile_ids=[" + profileId + "]";
 
             string jsonResponse = WebUtils.GetJsonResponseString(url, urlParams);
             Root recentMatchHistoryResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
