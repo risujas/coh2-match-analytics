@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Coh2Stats
 {
-    namespace LeaderboardResponse
+    class LeaderboardResponse
 	{
         public class Result
         {
