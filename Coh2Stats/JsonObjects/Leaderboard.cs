@@ -12,7 +12,7 @@ namespace Coh2Stats
 				public string message { get; set; }
 			}
 
-			public class Member
+			public struct Member
 			{
 				public int profile_id { get; set; }
 				public string name { get; set; }
