@@ -9,7 +9,7 @@ namespace Coh2Stats
 	{
 		public int slot = 0;
 		public int team = 0;
-		public string profileId = "";
+		public int profileId = 0;
 		public string name = "";
 		public string race = "";
 	}
@@ -52,8 +52,8 @@ namespace Coh2Stats
 					player.slot = int.Parse(parts[0]);
 					player.race = parts[parts.Length - 1];
 					player.team = int.Parse(parts[parts.Length - 2]);
-					player.profileId = parts[parts.Length - 3];
-					player.name = playerInfo.Substring(2, playerInfo.IndexOf(player.profileId) - 2);
+					player.profileId = int.Parse(parts[parts.Length - 3]);
+					player.name = playerInfo.Substring(2, playerInfo.IndexOf(player.profileId.ToString()) - 2);
 					players.Add(player);
 				}
 			}

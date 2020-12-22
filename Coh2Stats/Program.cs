@@ -9,8 +9,12 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-			var temp = RelicApi.AvailableLeaderboards.Get();
-			Console.WriteLine(temp.leaderboards[51].name);
+			var players = LogParser.GetPlayerList();
+			foreach (var p in players)
+			{
+				Console.WriteLine("{0} {1}", p.profileId, p.name);
+			}
+
 			Console.ReadLine();
 		}
 	}
