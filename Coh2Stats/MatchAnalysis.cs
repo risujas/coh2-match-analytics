@@ -8,6 +8,88 @@ namespace Coh2Stats
 {
 	class MatchAnalysis
 	{
+		public static void ShowWinRates(List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches)
+		{
+			// factions
+			// allies 0
+			// axis 1
+
+			// races
+			// german 0
+			// soviet 1
+			// wgerman 2
+			// aef 3
+			// british 4
+
+			int germanGames = 0;
+			int germanWins = 0;
+			int sovietGames = 0;
+			int sovietWins = 0;
+			int westGermanGames = 0;
+			int westGermanWins = 0;
+			int aefGames = 0;
+			int aefWins = 0;
+			int britishGames = 0;
+			int britishWins = 0;
+
+			foreach (var um in uniqueMatches)
+			{
+				foreach (var report in um.matchhistoryreportresults)
+				{
+					if (report.race_id == 0)
+					{
+						germanGames++;
+						if (report.resulttype == 1)
+						{
+							germanWins++;
+						}
+					}
+
+					if (report.race_id == 1)
+					{
+						sovietGames++;
+						if (report.resulttype == 1)
+						{
+							sovietWins++;
+						}
+					}
+
+					if (report.race_id == 2)
+					{
+						westGermanGames++;
+						if (report.resulttype == 1)
+						{
+							westGermanWins++;
+						}
+					}
+
+					if (report.race_id == 3)
+					{
+						aefGames++;
+						if (report.resulttype == 1)
+						{
+							aefWins++;
+						}
+					}
+
+					if (report.race_id == 4)
+					{
+						britishGames++;
+						if (report.resulttype == 1)
+						{
+							britishWins++;
+						}
+					}
+				}
+			}
+
+			Console.WriteLine("Wehrmacht win rate: {0}% ({1} out of {2} games)", ((float)germanWins / germanGames) * 100, germanWins, germanGames);
+			Console.WriteLine("Soviet win rate: {0}% ({1} out of {2} games)", ((float)sovietWins / sovietGames) * 100, sovietWins, sovietGames);
+			Console.WriteLine("Oberkommando West win rate: {0}% ({1} out of {2} games)", ((float)westGermanWins / westGermanGames) * 100, westGermanWins, westGermanGames);
+			Console.WriteLine("United States Forces win rate: {0}% ({1} out of {2} games)", ((float)aefWins / aefGames) * 100, aefWins, aefGames);
+			Console.WriteLine("British Forces win rate: {0}% ({1} out of {2} games)", ((float)britishWins / britishGames) * 100, britishWins, britishGames);
+		}
+
 		public static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Build1v1MatchList(int startRank, int numRanks, int maxAgeHours)
 		{
 			List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches = new List<RelicApi.RecentMatchHistory.MatchHistoryStat>();

@@ -1,4 +1,5 @@
 ﻿#pragma warning disable IDE1006
+using System;
 using System.Collections.Generic;
 
 namespace Coh2Stats
@@ -64,6 +65,67 @@ namespace Coh2Stats
 				string requestParams = "?title=coh2&leaderboard_id=" + leaderboardId.ToString() + "&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
 
 				return WebUtils.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+			}
+
+			public static int FindEquivalentRankForLevel(int leaderboardId, int level)
+			{
+				Console.WriteLine("Finding the equivalent ranking for level {0} on leaderboard #{1}...", level, leaderboardId);
+
+				if (level == 20)
+				{
+					return 1;
+				}
+
+				if (level == 19)
+				{
+					return 3;
+				}
+
+				if (level == 18)
+				{
+					return 14;
+				}
+
+				if (level == 17)
+				{
+					return 37;
+				}
+
+				if (level == 16)
+				{
+					return 81;
+				}
+
+				int equivalentRank = 0;
+				int maxRank = int.MaxValue;
+				int rankScanInterval = 50;
+
+				for (int i = 1; i < maxRank; i += rankScanInterval)
+				{
+					var response = GetById(leaderboardId, i, rankScanInterval);
+					maxRank = response.rankTotal;
+
+					bool found = false;
+
+					foreach (var lbs in response.leaderboardStats)
+					{
+						if (lbs.rankLevel == level)
+						{
+							equivalentRank = lbs.rank;
+							found = true;
+							break;
+						}
+					}
+
+					if (found)
+					{
+						break;
+					}
+
+					Console.Write(".");
+				}
+
+				return equivalentRank;
 			}
 		}
 	}
