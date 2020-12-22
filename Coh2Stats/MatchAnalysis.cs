@@ -8,9 +8,56 @@ namespace Coh2Stats
 {
 	class MatchAnalysis
 	{
-		public static void foobar()
+		public static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Build1v1MatchList(int startRank, int numRanks, int maxAgeHours)
 		{
-			Build1v1PlayerList(1, 100);
+			List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches = new List<RelicApi.RecentMatchHistory.MatchHistoryStat>();
+
+			var players = Build1v1PlayerList(startRank, numRanks);
+			foreach (var p in players)
+			{
+				var response = RelicApi.RecentMatchHistory.GetByProfileId(p.profile_id.ToString());
+				if (response.matchHistoryStats == null)
+				{
+					continue;
+				}
+
+				foreach (var m in response.matchHistoryStats)
+				{
+					if (m.maxplayers != 2)
+					{
+						continue;
+					}
+
+					bool isUnique = true;
+					foreach (var um in uniqueMatches)
+					{
+						if (um.id == m.id)
+						{
+							isUnique = false;
+							break;
+						}
+					}
+
+					bool isWithinPermittedTimePeriod = true;
+					DateTime cutoffTime = DateTime.Now.AddHours(-maxAgeHours);
+					long cutoffUnixTime = ((DateTimeOffset)cutoffTime).ToUnixTimeSeconds();
+
+					Console.WriteLine("cutoff time set to " + cutoffUnixTime);
+
+					if (m.completiontime < cutoffUnixTime)
+					{
+						isWithinPermittedTimePeriod = false;
+					}
+
+					if (isUnique && isWithinPermittedTimePeriod)
+					{
+						uniqueMatches.Add(m);
+					}
+				}
+			}
+
+			uniqueMatches = uniqueMatches.OrderBy(um => um.completiontime).ToList();
+			return uniqueMatches;
 		}
 
 		private static List<RelicApi.Leaderboard.Member> Build1v1PlayerList(int startRank, int numRanks)
