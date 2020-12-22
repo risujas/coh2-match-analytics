@@ -12,6 +12,7 @@ namespace Coh2Stats
 		public string profileId = "";
 		public string nickName = "";
 		public string race = "";
+		public int rank = -999;
 	}
 
 	class LogParser
@@ -28,11 +29,21 @@ namespace Coh2Stats
 		public static List<LoggedPlayer> GetPlayerList()
 		{
 			List<LoggedPlayer> players = new List<LoggedPlayer>();
-			StreamReader reader = new StreamReader(LogFile);
+
+			string clonedLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\warnings.log";
+			File.Delete(clonedLogFile);
+			File.Copy(LogFile, clonedLogFile);
+
+			StreamReader reader = new StreamReader(clonedLogFile);
 
 			string line = "";
 			while ((line = reader.ReadLine()) != null)
 			{
+				if (line.Contains("GAME -- Scenario"))
+				{
+					players.Clear();
+				}
+
 				if (line.Contains("GAME -- Human Player"))
 				{
 					string playerInfo = line.Substring(36);

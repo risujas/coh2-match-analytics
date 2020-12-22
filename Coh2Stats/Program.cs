@@ -9,14 +9,12 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-			var players = LogParser.GetPlayerList();
-
-			foreach (var p in players)
+			while(true)
 			{
-				Console.WriteLine(p.nickName);
+				CeloDataDisplayer cdd = new CeloDataDisplayer();
+				cdd.init();
+				Console.ReadLine();
 			}
-
-            Console.ReadLine();
 		}
 	}
 }
