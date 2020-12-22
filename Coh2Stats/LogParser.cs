@@ -35,7 +35,7 @@ namespace Coh2Stats
 
 			StreamReader reader = new StreamReader(clonedLogFile);
 
-			string line = "";
+			string line;
 			while ((line = reader.ReadLine()) != null)
 			{
 				if (line.Contains("GAME -- Scenario"))
