@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Coh2Stats
@@ -24,7 +24,7 @@ namespace Coh2Stats
 			path += "\\my games\\company of heroes 2\\warnings.log";
 			LogFile = path;
 		}
-		
+
 		public static List<LoggedPlayer> GetPlayerList()
 		{
 			List<LoggedPlayer> players = new List<LoggedPlayer>();

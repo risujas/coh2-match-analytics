@@ -5,37 +5,37 @@ using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
-    class WebUtils
-    {
-        public static string GetJsonResponseString(string requestUrl, string requestParams)
-        {
-            string responseString;
+	class WebUtils
+	{
+		public static string GetJsonResponseString(string requestUrl, string requestParams)
+		{
+			string responseString;
 
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(requestUrl);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			HttpClient client = new HttpClient();
+			client.BaseAddress = new Uri(requestUrl);
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage responseObject = client.GetAsync(requestParams).Result;
-            if (responseObject.IsSuccessStatusCode)
-            {
-                responseString = responseObject.Content.ReadAsStringAsync().Result;
+			HttpResponseMessage responseObject = client.GetAsync(requestParams).Result;
+			if (responseObject.IsSuccessStatusCode)
+			{
+				responseString = responseObject.Content.ReadAsStringAsync().Result;
 
-            }
-            else
-            {
-                throw new Exception((int)responseObject.StatusCode + " (" + responseObject.ReasonPhrase + ")");
-            }
+			}
+			else
+			{
+				throw new Exception((int)responseObject.StatusCode + " (" + responseObject.ReasonPhrase + ")");
+			}
 
-            client.Dispose();
+			client.Dispose();
 
-            return responseString;
-        }
+			return responseString;
+		}
 
-        public static T GetStructuredJsonResponse<T>(string requestUrl, string requestParams)
-        {
-            string responseString = GetJsonResponseString(requestUrl, requestParams);
-            T structuredResponse = JsonConvert.DeserializeObject<T>(responseString);
-            return structuredResponse;
-        }
-    }
+		public static T GetStructuredJsonResponse<T>(string requestUrl, string requestParams)
+		{
+			string responseString = GetJsonResponseString(requestUrl, requestParams);
+			T structuredResponse = JsonConvert.DeserializeObject<T>(responseString);
+			return structuredResponse;
+		}
+	}
 }
