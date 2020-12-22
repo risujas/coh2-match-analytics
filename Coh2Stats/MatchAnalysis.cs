@@ -42,8 +42,6 @@ namespace Coh2Stats
 					DateTime cutoffTime = DateTime.Now.AddHours(-maxAgeHours);
 					long cutoffUnixTime = ((DateTimeOffset)cutoffTime).ToUnixTimeSeconds();
 
-					Console.WriteLine("cutoff time set to " + cutoffUnixTime);
-
 					if (m.completiontime < cutoffUnixTime)
 					{
 						isWithinPermittedTimePeriod = false;

@@ -7,9 +7,6 @@ namespace Coh2Stats
 {
 	class WebUtils
 	{
-		//private static int previousRequestUnixTimeMs = 0;
-		//private const int requestIntervalTimeMs = 250;
-
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)
 		{
 			string responseString;
