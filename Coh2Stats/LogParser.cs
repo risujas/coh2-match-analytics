@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Coh2Stats
 {
-	public class Player
+	public class LoggedPlayer
 	{
 		public int slot = 0;
 		public int team = 0;
@@ -25,9 +25,9 @@ namespace Coh2Stats
 			LogFile = path;
 		}
 		
-		public static List<Player> GetPlayerList()
+		public static List<LoggedPlayer> GetPlayerList()
 		{
-			List<Player> players = new List<Player>();
+			List<LoggedPlayer> players = new List<LoggedPlayer>();
 			StreamReader reader = new StreamReader(LogFile);
 
 			string line = "";
@@ -38,7 +38,7 @@ namespace Coh2Stats
 					string playerInfo = line.Substring(36);
 					var parts = playerInfo.Split(' ');
 
-					Player player = new Player();
+					LoggedPlayer player = new LoggedPlayer();
 					player.slot = int.Parse(parts[0]);
 					player.race = parts[parts.Length - 1];
 					player.team = int.Parse(parts[parts.Length - 2]);
