@@ -8,6 +8,7 @@ namespace Coh2Stats
 {
 	class MatchAnalysis
 	{
+		// TODO show winrates per matchup and per map
 		public static void ShowWinRates(List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches)
 		{
 			int germanGames = 0;
