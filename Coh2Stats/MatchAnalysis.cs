@@ -13,7 +13,7 @@ namespace Coh2Stats
 			Build1v1PlayerList(1, 100);
 		}
 
-		private static void Build1v1PlayerList(int startRank, int numRanks)
+		private static List<RelicApi.Leaderboard.Member> Build1v1PlayerList(int startRank, int numRanks)
 		{
 			List<RelicApi.Leaderboard.Member> uniqueMembers = new List<RelicApi.Leaderboard.Member>();
 
@@ -35,6 +35,7 @@ namespace Coh2Stats
 			}
 
 			uniqueMembers = uniqueMembers.OrderBy(um => um.alias).ToList();
+			return uniqueMembers;
 		}
 	}
 }
