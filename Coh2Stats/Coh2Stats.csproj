@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AvailableLeaderboardsResponse.cs" />
-    <Compile Include="CeloDataDisplayer.cs" />
     <Compile Include="LeaderboardResponse.cs" />
     <Compile Include="LogParser.cs" />
     <Compile Include="PersonalStatResponse.cs" />

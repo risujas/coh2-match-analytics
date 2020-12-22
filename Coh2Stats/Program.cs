@@ -9,12 +9,7 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-			while(true)
-			{
-				CeloDataDisplayer cdd = new CeloDataDisplayer();
-				cdd.init();
-				Console.ReadLine();
-			}
+
 		}
 	}
 }
