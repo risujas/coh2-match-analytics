@@ -28,26 +28,14 @@ namespace Coh2Stats
 						continue;
 					}
 
-					bool isUnique = true;
-					foreach (var um in uniqueMatches)
-					{
-						if (um.id == m.id)
-						{
-							isUnique = false;
-							break;
-						}
-					}
-
-					bool isWithinPermittedTimePeriod = true;
 					DateTime cutoffTime = DateTime.Now.AddHours(-maxAgeHours);
 					long cutoffUnixTime = ((DateTimeOffset)cutoffTime).ToUnixTimeSeconds();
-
 					if (m.completiontime < cutoffUnixTime)
 					{
-						isWithinPermittedTimePeriod = false;
+						continue;
 					}
 
-					if (isUnique && isWithinPermittedTimePeriod)
+					if (!uniqueMatches.Contains(m))
 					{
 						uniqueMatches.Add(m);
 					}

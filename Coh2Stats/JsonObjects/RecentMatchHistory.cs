@@ -37,7 +37,7 @@ namespace Coh2Stats
 				public int itemlocation_id { get; set; }
 			}
 
-			public class MatchHistoryStat
+			public struct MatchHistoryStat
 			{
 				public int id { get; set; }
 				public int creator_profile_id { get; set; }
