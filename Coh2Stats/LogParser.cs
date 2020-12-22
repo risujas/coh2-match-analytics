@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace Coh2Stats
 {
-	public class LoggedPlayer
+	struct LoggedPlayer
 	{
-		public int slot = 0;
-		public int team = 0;
-		public int profileId = 0;
-		public string name = "";
-		public string race = "";
+		public int slot;
+		public int team;
+		public int profileId;
+		public string name;
+		public string race;
 	}
 
 	class LogParser
