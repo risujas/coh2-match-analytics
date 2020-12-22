@@ -173,8 +173,6 @@ namespace Coh2Stats
 					equivalentRank = (int)(maxRank * 0.94) + 1;
 				}
 
-				Console.WriteLine("Equivalent rank for level {0} on leaderboard {1} is roughly: {2}", level, leaderboardId, equivalentRank);
-
 				return equivalentRank;
 			}
 		}

@@ -10,17 +10,6 @@ namespace Coh2Stats
 	{
 		public static void ShowWinRates(List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches)
 		{
-			// factions
-			// allies 0
-			// axis 1
-
-			// races
-			// german 0
-			// soviet 1
-			// wgerman 2
-			// aef 3
-			// british 4
-
 			int germanGames = 0;
 			int germanWins = 0;
 			int sovietGames = 0;
@@ -83,11 +72,12 @@ namespace Coh2Stats
 				}
 			}
 
-			Console.WriteLine("Wehrmacht win rate: {0}% ({1} out of {2} games)", ((float)germanWins / germanGames) * 100, germanWins, germanGames);
-			Console.WriteLine("Soviet win rate: {0}% ({1} out of {2} games)", ((float)sovietWins / sovietGames) * 100, sovietWins, sovietGames);
-			Console.WriteLine("Oberkommando West win rate: {0}% ({1} out of {2} games)", ((float)westGermanWins / westGermanGames) * 100, westGermanWins, westGermanGames);
-			Console.WriteLine("United States Forces win rate: {0}% ({1} out of {2} games)", ((float)aefWins / aefGames) * 100, aefWins, aefGames);
-			Console.WriteLine("British Forces win rate: {0}% ({1} out of {2} games)", ((float)britishWins / britishGames) * 100, britishWins, britishGames);
+			Console.WriteLine("Total games: {0}", (germanGames + sovietGames + westGermanGames + aefGames + britishGames) / 2);
+			Console.WriteLine("Wehrmacht win rate: {0:0.0}% ({1} out of {2} games)", ((float)germanWins / germanGames) * 100, germanWins, germanGames);
+			Console.WriteLine("Soviet win rate: {0:0.0}% ({1} out of {2} games)", ((float)sovietWins / sovietGames) * 100, sovietWins, sovietGames);
+			Console.WriteLine("Oberkommando West win rate: {0:0.0}% ({1} out of {2} games)", ((float)westGermanWins / westGermanGames) * 100, westGermanWins, westGermanGames);
+			Console.WriteLine("United States Forces win rate: {0:0.0}% ({1} out of {2} games)", ((float)aefWins / aefGames) * 100, aefWins, aefGames);
+			Console.WriteLine("British Forces win rate: {0:0.0}% ({1} out of {2} games)", ((float)britishWins / britishGames) * 100, britishWins, britishGames);
 		}
 
 		public static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Build1v1MatchList(int level, int numPlayers, int maxAgeHours)
@@ -115,7 +105,7 @@ namespace Coh2Stats
 
 					DateTime cutoffTime = DateTime.Now.AddHours(-maxAgeHours);
 					long cutoffUnixTime = ((DateTimeOffset)cutoffTime).ToUnixTimeSeconds();
-					if (m.completiontime < cutoffUnixTime)
+					if (m.startgametime < cutoffUnixTime)
 					{
 						continue;
 					}
@@ -138,14 +128,9 @@ namespace Coh2Stats
 						uniqueMatches.Add(m);
 					}
 				}
-
-				if (numMatches > 0)
-				{
-					Console.WriteLine("Found {0} matches ({1} new) for player {2} ({3})", numMatches, newMatches, p.name, p.alias);
-				}
 			}
 
-			uniqueMatches = uniqueMatches.OrderBy(um => um.completiontime).ToList();
+			uniqueMatches = uniqueMatches.OrderBy(um => um.startgametime).ToList();
 			return uniqueMatches;
 		}
 
@@ -160,8 +145,6 @@ namespace Coh2Stats
 					continue;
 				}
 
-				Console.WriteLine("Parsing leaderboard #{0}, level {1}, {2} players", i, level, numPlayers);
-
 				int equivalentRank = RelicApi.Leaderboard.FindEquivalentRankForLevel(i, level);
 				var leaderboard = RelicApi.Leaderboard.GetById(i, equivalentRank, numPlayers);
 
@@ -172,8 +155,6 @@ namespace Coh2Stats
 						uniqueMembers.Add(stg.members[0]);
 					}
 				}
-
-				Console.WriteLine("Total unique players: {0}", uniqueMembers.Count);
 			}
 
 			uniqueMembers = uniqueMembers.OrderBy(um => um.alias).ToList();
