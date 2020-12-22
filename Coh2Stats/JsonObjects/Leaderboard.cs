@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable IDE1006
+using System.Collections.Generic;
 
 namespace Coh2Stats
 {
