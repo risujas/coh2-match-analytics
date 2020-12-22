@@ -7,7 +7,7 @@ namespace Coh2Stats
 {
 	class WebUtils
 	{
-		public static string GetJsonResponseString(string requestUrl, string requestParams)
+		public static string GetStringJsonResponse(string requestUrl, string requestParams)
 		{
 			string responseString;
 
@@ -33,7 +33,7 @@ namespace Coh2Stats
 
 		public static T GetStructuredJsonResponse<T>(string requestUrl, string requestParams)
 		{
-			string responseString = GetJsonResponseString(requestUrl, requestParams);
+			string responseString = GetStringJsonResponse(requestUrl, requestParams);
 			T structuredResponse = JsonConvert.DeserializeObject<T>(responseString);
 			return structuredResponse;
 		}
