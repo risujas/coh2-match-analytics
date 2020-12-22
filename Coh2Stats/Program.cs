@@ -4,7 +4,7 @@ namespace Coh2Stats
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
 			var games = MatchAnalysis.Build1v1MatchList(1, 5, 24*14);
 			Console.WriteLine(games.Count);
