@@ -6,14 +6,8 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
-			var games = MatchAnalysis.Build1v1MatchList(1, 5, 24*14);
+			var games = MatchAnalysis.Build1v1MatchList(1, 100, 24);
 			Console.WriteLine(games.Count);
-			foreach (var g in games)
-			{
-				Console.WriteLine("Game --------------------------------");
-				Console.WriteLine(g.completiontime + " (" + DateTimeOffset.FromUnixTimeSeconds(g.completiontime) + ")");
-				Console.WriteLine(g.id);
-			}
 			Console.ReadLine();
 		}
 	}

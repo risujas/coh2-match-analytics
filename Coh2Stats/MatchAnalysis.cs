@@ -21,6 +21,9 @@ namespace Coh2Stats
 					continue;
 				}
 
+				int numMatches = 0;
+				int newMatches = 0;
+
 				foreach (var m in response.matchHistoryStats)
 				{
 					if (m.maxplayers != 2)
@@ -35,10 +38,28 @@ namespace Coh2Stats
 						continue;
 					}
 
-					if (!uniqueMatches.Contains(m))
+					numMatches++;
+
+					bool isUnique = true;
+					foreach (var um in uniqueMatches)
 					{
+						if (um.id == m.id)
+						{
+							isUnique = false;
+							break;
+						}
+					}
+
+					if (isUnique)
+					{
+						newMatches++;
 						uniqueMatches.Add(m);
 					}
+				}
+
+				if (numMatches > 0)
+				{
+					Console.WriteLine("Found {0} matches ({1} new) for player {2} ({3})", numMatches, newMatches, p.name, p.alias);
 				}
 			}
 
@@ -57,6 +78,8 @@ namespace Coh2Stats
 					continue;
 				}
 
+				Console.WriteLine("Parsing leaderboard #{0}, ranks {1}-{2}", i, startRank, numRanks);
+
 				var leaderboard = RelicApi.Leaderboard.GetById(i, startRank, numRanks);
 				foreach (var stg in leaderboard.statGroups)
 				{
@@ -65,6 +88,8 @@ namespace Coh2Stats
 						uniqueMembers.Add(stg.members[0]);
 					}
 				}
+
+				Console.WriteLine("Total unique players: {0}", uniqueMembers.Count);
 			}
 
 			uniqueMembers = uniqueMembers.OrderBy(um => um.alias).ToList();
