@@ -9,7 +9,9 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-
+			var temp = AvailableLeaderboardsResponse.GetAvailableLeaderboards();
+			Console.WriteLine(temp.leaderboards[51].name);
+			Console.ReadLine();
 		}
 	}
 }

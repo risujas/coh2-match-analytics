@@ -62,13 +62,10 @@ namespace Coh2Stats
 
         public static Root GetPlayerSummariesBySteamId(string steamId)
         {
-            string url = "https://coh2-api.reliclink.com/community/external/proxysteamuserrequest";
-            string urlParams = "?request=/ISteamUser/GetPlayerSummaries/v0002/&title=coh2&profileNames=[\"/steam/" + steamId + "\"]";
+            string requestUrl = "https://coh2-api.reliclink.com/community/external/proxysteamuserrequest";
+            string requestParams = "?request=/ISteamUser/GetPlayerSummaries/v0002/&title=coh2&profileNames=[\"/steam/" + steamId + "\"]";
 
-            string jsonResponse = WebUtils.GetJsonResponseString(url, urlParams);
-            Root structuredResponse = JsonConvert.DeserializeObject<Root>(jsonResponse);
-
-            return structuredResponse;
+            return WebUtils.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
         }
     }
 }
