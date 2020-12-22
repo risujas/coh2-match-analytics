@@ -9,7 +9,7 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-			var temp = AvailableLeaderboardsResponse.Get();
+			var temp = RelicApi.AvailableLeaderboards.Get();
 			Console.WriteLine(temp.leaderboards[51].name);
 			Console.ReadLine();
 		}

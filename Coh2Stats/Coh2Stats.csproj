@@ -46,14 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AvailableLeaderboardsResponse.cs" />
-    <Compile Include="LeaderboardResponse.cs" />
+    <Compile Include="AvailableLeaderboards.cs" />
+    <Compile Include="Leaderboard.cs" />
     <Compile Include="LogParser.cs" />
-    <Compile Include="PersonalStatResponse.cs" />
-    <Compile Include="PlayerSummariesResponse.cs" />
+    <Compile Include="PersonalStat.cs" />
+    <Compile Include="PlayerSummaries.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecentMatchHistoryResponse.cs" />
+    <Compile Include="RecentMatchHistory.cs" />
     <Compile Include="WebUtils.cs" />
   </ItemGroup>
   <ItemGroup>
