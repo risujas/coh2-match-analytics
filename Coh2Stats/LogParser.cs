@@ -5,21 +5,30 @@ using System.Linq;
 
 namespace Coh2Stats
 {
+	public class Player
+	{
+		public int slot = 0;
+		public int team = 0;
+		public string profileId = "";
+		public string nickName = "";
+		public string race = "";
+	}
+
 	class LogParser
 	{
-		public class Player
-		{
-			public int slot = 0;
-			public int team = 0;
-			public string profileId = "";
-			public string nickName = "";
-			public string race = "";
-		}
+		public static string LogFile { get; set; }
 
-		public static List<Player> GetPlayerList(string logFilePath)
+		static LogParser()
+		{
+			var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			path += "\\my games\\company of heroes 2\\warnings.log";
+			LogFile = path;
+		}
+		
+		public static List<Player> GetPlayerList()
 		{
 			List<Player> players = new List<Player>();
-			StreamReader reader = new StreamReader(logFilePath);
+			StreamReader reader = new StreamReader(LogFile);
 
 			string line = "";
 			while ((line = reader.ReadLine()) != null)

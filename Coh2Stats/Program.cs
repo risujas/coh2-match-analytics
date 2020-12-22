@@ -9,7 +9,12 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-			var players = LogParser.GetPlayerList("C:/Users/johan/Documents/my games/company of heroes 2/warnings.log");
+			var players = LogParser.GetPlayerList();
+
+			foreach (var p in players)
+			{
+				Console.WriteLine(p.nickName);
+			}
 
             Console.ReadLine();
 		}
