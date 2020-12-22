@@ -21,7 +21,7 @@ namespace Coh2Stats
 		static LogParser()
 		{
 			var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			path += "\\my games\\company of heroes 2\\warnings.log";
+			path += @"\my games\company of heroes 2\warnings.log";
 			LogFile = path;
 		}
 
@@ -29,7 +29,7 @@ namespace Coh2Stats
 		{
 			List<LoggedPlayer> players = new List<LoggedPlayer>();
 
-			string clonedLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\warnings.log";
+			string clonedLogFile = AppDomain.CurrentDomain.BaseDirectory + @"\warnings.log";
 			File.Delete(clonedLogFile);
 			File.Copy(LogFile, clonedLogFile);
 
