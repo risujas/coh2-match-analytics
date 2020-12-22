@@ -28,16 +28,57 @@ namespace Coh2Stats
 		{
 			public List<Result> matchResults = new List<Result>();
 
-			public int NumGermanMatches { get; private set; } = 0;
-			public int NumGermanWins { get; private set; } = 0;
-			public int NumSovietMatches { get; private set; } = 0;
-			public int NumSovietWins { get; private set; } = 0;
-			public int NumWestGermanMatches { get; private set; } = 0;
-			public int NumWestGermanWins { get; private set; } = 0;
-			public int NumAefMatches { get; private set; } = 0;
-			public int NumAefWins { get; private set; } = 0;
-			public int NumBritishMatches { get; private set; } = 0;
-			public int NumBritishWins { get; private set; } = 0;
+			public int GetGermanGamesAgainstSoviet()
+			{
+				int num = 0;
+				foreach (var r in matchResults)
+				{
+					if (r.axisFactionPick == Race.German && r.alliedFactionPick == Race.Soviet)
+					{
+						num++;
+					}
+				}
+				return num;
+			}
+
+			public int GetGermanWinsAgainstSoviet()
+			{
+				int num = 0;
+				foreach (var r in matchResults)
+				{
+					if (r.axisFactionPick == Race.German && r.alliedFactionPick == Race.Soviet && r.axisVictory)
+					{
+						num++;
+					}
+				}
+				return num;
+			}
+
+			public int GetGermanGamesAgainstAef()
+			{
+				int num = 0;
+				foreach (var r in matchResults)
+				{
+					if (r.axisFactionPick == Race.German && r.alliedFactionPick == Race.AEF)
+					{
+						num++;
+					}
+				}
+				return num;
+			}
+
+			public int GetGermanWinsAgainstAef()
+			{
+				int num = 0;
+				foreach (var r in matchResults)
+				{
+					if (r.axisFactionPick == Race.German && r.alliedFactionPick == Race.AEF && r.axisVictory)
+					{
+						num++;
+					}
+				}
+				return num;
+			}
 
 			public void ParseMatches(List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches)
 			{
@@ -50,60 +91,50 @@ namespace Coh2Stats
 						if (report.race_id == (int)Race.German)
 						{
 							res.axisFactionPick = (Race)report.race_id;
-							NumGermanMatches++;
 
 							if (report.resulttype == 1)
 							{
 								res.axisVictory = true;
-								NumGermanWins++;
 							}
 						}
 
 						if (report.race_id == (int)Race.Soviet)
 						{
 							res.alliedFactionPick = (Race)report.race_id;
-							NumSovietMatches++;
 
 							if (report.resulttype == 1)
 							{
 								res.axisVictory = false;
-								NumSovietWins++;
 							}
 						}
 
 						if (report.race_id == (int)Race.WestGerman)
 						{
 							res.axisFactionPick = (Race)report.race_id;
-							NumWestGermanMatches++;
 
 							if (report.resulttype == 1)
 							{
 								res.axisVictory = true;
-								NumWestGermanWins++;
 							}
 						}
 
 						if (report.race_id == (int)Race.AEF)
 						{
 							res.alliedFactionPick = (Race)report.race_id;
-							NumAefMatches++;
 
 							if (report.resulttype == 1)
 							{
 								res.axisVictory = false;
-								NumAefWins++;
 							}
 						}
 
 						if (report.race_id == (int)Race.British)
 						{
 							res.alliedFactionPick = (Race)report.race_id;
-							NumBritishMatches++;
 
 							if (report.resulttype == 1)
 							{
 								res.axisVictory = false;
-								NumBritishWins++;
 							}
 						}
 					}
