@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AvailableLeaderboardsResponse.cs" />
     <Compile Include="LeaderboardResponse.cs" />
+    <Compile Include="LogParser.cs" />
     <Compile Include="PersonalStatResponse.cs" />
     <Compile Include="PlayerSummariesResponse.cs" />
     <Compile Include="Program.cs" />

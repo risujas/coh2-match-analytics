@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Coh2Stats
 {
@@ -6,9 +9,7 @@ namespace Coh2Stats
 	{
         static void Main(string[] args)
 		{
-			var temp = PlayerSummariesResponse.GetPlayerSummariesBySteamId("76561198050674754");
-
-			Console.WriteLine(temp.steamResults.response.players[0].avatarfull);
+			var players = LogParser.GetPlayerList("C:/Users/johan/Documents/my games/company of heroes 2/warnings.log");
 
             Console.ReadLine();
 		}
