@@ -12,7 +12,7 @@ namespace Coh2Stats
 		public string profileId = "";
 		public string nickName = "";
 		public string race = "";
-		public int rank = -999;
+		public int rank = 0;
 	}
 
 	class LogParser
