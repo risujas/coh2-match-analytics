@@ -69,7 +69,7 @@ namespace Coh2Stats
             public List<LeaderboardRegion> leaderboardRegions { get; set; }
         }
 
-        public static Root GetAvailableLeaderboards()
+        public static Root Get()
         {
             string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetAvailableLeaderboards";
             string requestParams = "?title=coh2";

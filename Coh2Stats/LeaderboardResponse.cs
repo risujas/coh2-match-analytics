@@ -57,7 +57,7 @@ namespace Coh2Stats
             public int rankTotal { get; set; }
         }
 
-        public static Root GetLeaderboardById(int leaderboardId, int startRank, int numRanks)
+        public static Root GetById(int leaderboardId, int startRank, int numRanks)
         {
             string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
             string requestParams = "?title=coh2&leaderboard_id=" + leaderboardId.ToString() + "&start=" + startRank.ToString() + "&count=" + numRanks.ToString();

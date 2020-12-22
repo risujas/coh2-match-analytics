@@ -60,7 +60,7 @@ namespace Coh2Stats
             public SteamResults steamResults { get; set; }
         }
 
-        public static Root GetPlayerSummariesBySteamId(string steamId)
+        public static Root GetBySteamId(string steamId)
         {
             string requestUrl = "https://coh2-api.reliclink.com/community/external/proxysteamuserrequest";
             string requestParams = "?request=/ISteamUser/GetPlayerSummaries/v0002/&title=coh2&profileNames=[\"/steam/" + steamId + "\"]";

@@ -73,7 +73,7 @@ namespace Coh2Stats
             public List<Profile> profiles { get; set; }
         }
 
-        public static Root GetRecentMatchHistoryByProfileId(string profileId)
+        public static Root GetByProfileId(string profileId)
         {
             string url = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
             string urlParams = "?title=coh2&profile_ids=[" + profileId + "]";
@@ -84,7 +84,7 @@ namespace Coh2Stats
             return recentMatchHistoryResponse;
         }
 
-        public static Root GetRecentMatchHistoryBySteamId(string steamId)
+        public static Root GetBySteamId(string steamId)
         {
             string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
             string requestParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
