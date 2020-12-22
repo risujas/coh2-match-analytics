@@ -8,84 +8,125 @@ namespace Coh2Stats
 {
 	class MatchAnalysis
 	{
-		// TODO show winrates per matchup and per map
-		public static void ShowWinRates(List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches)
+		public enum Race
 		{
-			int germanGames = 0;
-			int germanWins = 0;
-			int sovietGames = 0;
-			int sovietWins = 0;
-			int westGermanGames = 0;
-			int westGermanWins = 0;
-			int aefGames = 0;
-			int aefWins = 0;
-			int britishGames = 0;
-			int britishWins = 0;
+			German = 0,
+			Soviet = 1,
+			WestGerman = 2,
+			AEF = 3,
+			British = 4
+		}
 
-			foreach (var um in uniqueMatches)
+		public struct Result
+		{
+			public Race alliedFactionPick;
+			public Race axisFactionPick;
+			public bool axisVictory;
+		}
+
+		public class ResultBundle
+		{
+			public List<Result> matchResults = new List<Result>();
+
+			public int NumGermanMatches { get; private set; } = 0;
+			public int NumGermanWins { get; private set; } = 0;
+			public int NumSovietMatches { get; private set; } = 0;
+			public int NumSovietWins { get; private set; } = 0;
+			public int NumWestGermanMatches { get; private set; } = 0;
+			public int NumWestGermanWins { get; private set; } = 0;
+			public int NumAefMatches { get; private set; } = 0;
+			public int NumAefWins { get; private set; } = 0;
+			public int NumBritishMatches { get; private set; } = 0;
+			public int NumBritishWins { get; private set; } = 0;
+
+			public void ParseMatches(List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches)
 			{
-				foreach (var report in um.matchhistoryreportresults)
+				foreach (var um in uniqueMatches)
 				{
-					if (report.race_id == 0)
+					Result res = new Result();
+
+					foreach (var report in um.matchhistoryreportresults)
 					{
-						germanGames++;
-						if (report.resulttype == 1)
+						if (report.race_id == (int)Race.German)
 						{
-							germanWins++;
+							res.axisFactionPick = (Race)report.race_id;
+							NumGermanMatches++;
+
+							if (report.resulttype == 1)
+							{
+								res.axisVictory = true;
+								NumGermanWins++;
+							}
+						}
+
+						if (report.race_id == (int)Race.Soviet)
+						{
+							res.alliedFactionPick = (Race)report.race_id;
+							NumSovietMatches++;
+
+							if (report.resulttype == 1)
+							{
+								res.axisVictory = false;
+								NumSovietWins++;
+							}
+						}
+
+						if (report.race_id == (int)Race.WestGerman)
+						{
+							res.axisFactionPick = (Race)report.race_id;
+							NumWestGermanMatches++;
+
+							if (report.resulttype == 1)
+							{
+								res.axisVictory = true;
+								NumWestGermanWins++;
+							}
+						}
+
+						if (report.race_id == (int)Race.AEF)
+						{
+							res.alliedFactionPick = (Race)report.race_id;
+							NumAefMatches++;
+
+							if (report.resulttype == 1)
+							{
+								res.axisVictory = false;
+								NumAefWins++;
+							}
+						}
+
+						if (report.race_id == (int)Race.British)
+						{
+							res.alliedFactionPick = (Race)report.race_id;
+							NumBritishMatches++;
+
+							if (report.resulttype == 1)
+							{
+								res.axisVictory = false;
+								NumBritishWins++;
+							}
 						}
 					}
 
-					if (report.race_id == 1)
-					{
-						sovietGames++;
-						if (report.resulttype == 1)
-						{
-							sovietWins++;
-						}
-					}
-
-					if (report.race_id == 2)
-					{
-						westGermanGames++;
-						if (report.resulttype == 1)
-						{
-							westGermanWins++;
-						}
-					}
-
-					if (report.race_id == 3)
-					{
-						aefGames++;
-						if (report.resulttype == 1)
-						{
-							aefWins++;
-						}
-					}
-
-					if (report.race_id == 4)
-					{
-						britishGames++;
-						if (report.resulttype == 1)
-						{
-							britishWins++;
-						}
-					}
+					matchResults.Add(res);
 				}
 			}
 
-			Console.WriteLine("Total games: {0}", (germanGames + sovietGames + westGermanGames + aefGames + britishGames) / 2);
-			Console.WriteLine("Wehrmacht win rate: {0:0.0}% ({1} out of {2} games)", ((float)germanWins / germanGames) * 100, germanWins, germanGames);
-			Console.WriteLine("Soviet win rate: {0:0.0}% ({1} out of {2} games)", ((float)sovietWins / sovietGames) * 100, sovietWins, sovietGames);
-			Console.WriteLine("Oberkommando West win rate: {0:0.0}% ({1} out of {2} games)", ((float)westGermanWins / westGermanGames) * 100, westGermanWins, westGermanGames);
-			Console.WriteLine("United States Forces win rate: {0:0.0}% ({1} out of {2} games)", ((float)aefWins / aefGames) * 100, aefWins, aefGames);
-			Console.WriteLine("British Forces win rate: {0:0.0}% ({1} out of {2} games)", ((float)britishWins / britishGames) * 100, britishWins, britishGames);
+			public void PrintWinRates()
+			{
+				Console.WriteLine("Soviet: {0:0.0}% ({1} out of {2})", ((float)NumSovietWins / NumSovietMatches) * 100, NumSovietWins, NumSovietMatches);
+				Console.WriteLine("Wehrmacht: {0:0.0}% ({1} out of {2})", ((float)NumGermanWins / NumGermanMatches) * 100, NumGermanWins, NumGermanMatches);
+				Console.WriteLine("Oberkommando West: {0:0.0}% ({1} out of {2})", ((float)NumWestGermanWins / NumWestGermanMatches) * 100, NumWestGermanWins, NumWestGermanMatches);
+				Console.WriteLine("United States Forces: {0:0.0}% ({1} out of {2})", ((float)NumAefWins / NumAefMatches) * 100, NumAefWins, NumAefMatches);
+				Console.WriteLine("British Forces: {0:0.0}% ({1} out of {2})", ((float)NumBritishWins / NumBritishMatches) * 100, NumBritishWins, NumBritishMatches);
+			}
 		}
 
-		public static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Build1v1MatchList(int level, int numPlayers, int maxAgeHours)
+		public static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Get1v1MatchList(int level, int numPlayers, int maxAgeHours)
 		{
 			List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches = new List<RelicApi.RecentMatchHistory.MatchHistoryStat>();
 
-			var players = Build1v1PlayerList(level, numPlayers);
+			var players = Get1v1PlayerList(level, numPlayers);
 			foreach (var p in players)
 			{
 				var response = RelicApi.RecentMatchHistory.GetByProfileId(p.profile_id.ToString());
@@ -99,7 +140,7 @@ namespace Coh2Stats
 
 				foreach (var m in response.matchHistoryStats)
 				{
-					if (m.maxplayers != 2)
+					if (m.maxplayers != 2 || m.description != "AUTOMATCH")
 					{
 						continue;
 					}
@@ -135,7 +176,7 @@ namespace Coh2Stats
 			return uniqueMatches;
 		}
 
-		private static List<RelicApi.Leaderboard.Member> Build1v1PlayerList(int level, int numPlayers)
+		private static List<RelicApi.Leaderboard.Member> Get1v1PlayerList(int level, int numPlayers)
 		{
 			List<RelicApi.Leaderboard.Member> uniqueMembers = new List<RelicApi.Leaderboard.Member>();
 
