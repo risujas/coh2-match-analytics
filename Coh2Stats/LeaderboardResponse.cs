@@ -60,7 +60,7 @@ namespace Coh2Stats
         public static Root GetLeaderboardById(int leaderboardId, int startRank, int numRanks)
         {
             string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
-            string requestParams = "?title=coh2&leaderboard_id=5&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
+            string requestParams = "?title=coh2&leaderboard_id=" + leaderboardId.ToString() + "&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
 
             return WebUtils.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
         }
