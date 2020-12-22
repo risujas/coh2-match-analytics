@@ -90,11 +90,11 @@ namespace Coh2Stats
 			Console.WriteLine("British Forces win rate: {0}% ({1} out of {2} games)", ((float)britishWins / britishGames) * 100, britishWins, britishGames);
 		}
 
-		public static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Build1v1MatchList(int startRank, int numRanks, int maxAgeHours)
+		public static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Build1v1MatchList(int level, int numPlayers, int maxAgeHours)
 		{
 			List<RelicApi.RecentMatchHistory.MatchHistoryStat> uniqueMatches = new List<RelicApi.RecentMatchHistory.MatchHistoryStat>();
 
-			var players = Build1v1PlayerList(startRank, numRanks);
+			var players = Build1v1PlayerList(level, numPlayers);
 			foreach (var p in players)
 			{
 				var response = RelicApi.RecentMatchHistory.GetByProfileId(p.profile_id.ToString());
@@ -149,7 +149,7 @@ namespace Coh2Stats
 			return uniqueMatches;
 		}
 
-		private static List<RelicApi.Leaderboard.Member> Build1v1PlayerList(int startRank, int numRanks)
+		private static List<RelicApi.Leaderboard.Member> Build1v1PlayerList(int level, int numPlayers)
 		{
 			List<RelicApi.Leaderboard.Member> uniqueMembers = new List<RelicApi.Leaderboard.Member>();
 
@@ -160,9 +160,11 @@ namespace Coh2Stats
 					continue;
 				}
 
-				Console.WriteLine("Parsing leaderboard #{0}, ranks {1}-{2}", i, startRank, numRanks);
+				Console.WriteLine("Parsing leaderboard #{0}, level {1}, {2} players", i, level, numPlayers);
 
-				var leaderboard = RelicApi.Leaderboard.GetById(i, startRank, numRanks);
+				int equivalentRank = RelicApi.Leaderboard.FindEquivalentRankForLevel(i, level);
+				var leaderboard = RelicApi.Leaderboard.GetById(i, equivalentRank, numPlayers);
+
 				foreach (var stg in leaderboard.statGroups)
 				{
 					if (!uniqueMembers.Contains(stg.members[0]))

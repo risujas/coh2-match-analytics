@@ -69,61 +69,111 @@ namespace Coh2Stats
 
 			public static int FindEquivalentRankForLevel(int leaderboardId, int level)
 			{
-				Console.WriteLine("Finding the equivalent ranking for level {0} on leaderboard #{1}...", level, leaderboardId);
+				int equivalentRank = 0;
+				var response = GetById(leaderboardId, 1, 10);
+				int maxRank = response.rankTotal;
 
 				if (level == 20)
 				{
-					return 1;
+					equivalentRank = 1;
 				}
 
 				if (level == 19)
 				{
-					return 3;
+					equivalentRank = 3;
 				}
 
 				if (level == 18)
 				{
-					return 14;
+					equivalentRank = 14;
 				}
 
 				if (level == 17)
 				{
-					return 37;
+					equivalentRank = 37;
 				}
 
 				if (level == 16)
 				{
-					return 81;
+					equivalentRank = 81;
 				}
 
-				int equivalentRank = 0;
-				int maxRank = int.MaxValue;
-				int rankScanInterval = 50;
-
-				for (int i = 1; i < maxRank; i += rankScanInterval)
+				if (level == 15) 
 				{
-					var response = GetById(leaderboardId, i, rankScanInterval);
-					maxRank = response.rankTotal;
-
-					bool found = false;
-
-					foreach (var lbs in response.leaderboardStats)
-					{
-						if (lbs.rankLevel == level)
-						{
-							equivalentRank = lbs.rank;
-							found = true;
-							break;
-						}
-					}
-
-					if (found)
-					{
-						break;
-					}
-
-					Console.Write(".");
+					equivalentRank = 201; // depends
 				}
+
+				if (level == 14)
+				{
+					equivalentRank = 251; // depends
+				}
+
+				if (level == 13)
+				{
+					equivalentRank = (int)(maxRank * 0.1) + 1;
+				}
+
+				if (level == 12)
+				{
+					equivalentRank = (int)(maxRank * 0.15) + 1;
+				}
+
+				if (level == 11)
+				{
+					equivalentRank = (int)(maxRank * 0.2) + 1;
+				}
+
+				if (level == 10)
+				{
+					equivalentRank = (int)(maxRank * 0.25) + 1;
+				}
+
+				if (level == 9)
+				{
+					equivalentRank = (int)(maxRank * 0.31) + 1;
+				}
+
+				if (level == 8)
+				{
+					equivalentRank = (int)(maxRank * 0.38) + 1;
+				}
+
+				if (level == 7)
+				{
+					equivalentRank = (int)(maxRank * 0.45) + 1;
+				}
+
+				if (level == 6)
+				{
+					equivalentRank = (int)(maxRank * 0.55) + 1;
+				}
+
+				if (level == 5)
+				{
+					equivalentRank = (int)(maxRank * 0.65) + 1;
+				}
+
+				if (level == 4)
+				{
+					equivalentRank = (int)(maxRank * 0.75) + 1;
+				}
+
+				if (level == 3)
+				{
+					equivalentRank = (int)(maxRank * 0.8) + 1;
+				}
+
+				if (level == 2)
+				{
+					equivalentRank = (int)(maxRank * 0.86) + 1;
+				}
+
+				if (level == 1)
+				{
+					equivalentRank = (int)(maxRank * 0.94) + 1;
+				}
+
+				Console.WriteLine("Equivalent rank for level {0} on leaderboard {1} is roughly: {2}", level, leaderboardId, equivalentRank);
 
 				return equivalentRank;
 			}
