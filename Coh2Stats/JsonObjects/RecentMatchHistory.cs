@@ -7,13 +7,13 @@ namespace Coh2Stats
 	{
 		class RecentMatchHistory
 		{
-			public class Result
+			public struct Result
 			{
 				public int code { get; set; }
 				public string message { get; set; }
 			}
 
-			public class Matchhistoryreportresult
+			public struct Matchhistoryreportresult
 			{
 				public int matchhistory_id { get; set; }
 				public int profile_id { get; set; }
@@ -25,7 +25,7 @@ namespace Coh2Stats
 				public int matchstartdate { get; set; }
 			}
 
-			public class Matchhistoryitem
+			public struct Matchhistoryitem
 			{
 				public int profile_id { get; set; }
 				public int matchhistory_id { get; set; }
@@ -55,7 +55,7 @@ namespace Coh2Stats
 				public List<object> matchurls { get; set; }
 			}
 
-			public class Profile
+			public struct Profile
 			{
 				public int profile_id { get; set; }
 				public string name { get; set; }
@@ -67,7 +67,7 @@ namespace Coh2Stats
 				public string country { get; set; }
 			}
 
-			public class Root
+			public struct Root
 			{
 				public Result result { get; set; }
 				public List<MatchHistoryStat> matchHistoryStats { get; set; }

@@ -7,13 +7,13 @@ namespace Coh2Stats
 	{
 		class PlayerSummaries
 		{
-			public class Result
+			public struct Result
 			{
 				public int code { get; set; }
 				public string message { get; set; }
 			}
 
-			public class Avatar
+			public struct Avatar
 			{
 				public int profile_id { get; set; }
 				public string name { get; set; }
@@ -25,7 +25,7 @@ namespace Coh2Stats
 				public string country { get; set; }
 			}
 
-			public class Player
+			public struct Player
 			{
 				public string steamid { get; set; }
 				public int communityvisibilitystate { get; set; }
@@ -44,17 +44,17 @@ namespace Coh2Stats
 				public string loccountrycode { get; set; }
 			}
 
-			public class Response
+			public struct Response
 			{
 				public List<Player> players { get; set; }
 			}
 
-			public class SteamResults
+			public struct SteamResults
 			{
 				public Response response { get; set; }
 			}
 
-			public class Root
+			public struct Root
 			{
 				public Result result { get; set; }
 				public List<Avatar> avatars { get; set; }

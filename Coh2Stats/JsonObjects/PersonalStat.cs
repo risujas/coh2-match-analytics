@@ -7,13 +7,13 @@ namespace Coh2Stats
 	{
 		class PersonalStat
 		{
-			public class Result
+			public struct Result
 			{
 				public int code { get; set; }
 				public string message { get; set; }
 			}
 
-			public class Member
+			public struct Member
 			{
 				public int profile_id { get; set; }
 				public string name { get; set; }
@@ -25,7 +25,7 @@ namespace Coh2Stats
 				public string country { get; set; }
 			}
 
-			public class StatGroup
+			public struct StatGroup
 			{
 				public int id { get; set; }
 				public string name { get; set; }
@@ -33,7 +33,7 @@ namespace Coh2Stats
 				public List<Member> members { get; set; }
 			}
 
-			public class LeaderboardStat
+			public struct LeaderboardStat
 			{
 				public int statGroup_id { get; set; }
 				public int leaderboard_id { get; set; }
@@ -50,7 +50,7 @@ namespace Coh2Stats
 				public int lastMatchDate { get; set; }
 			}
 
-			public class Root
+			public struct Root
 			{
 				public Result result { get; set; }
 				public List<StatGroup> statGroups { get; set; }
