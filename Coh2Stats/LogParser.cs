@@ -33,32 +33,34 @@ namespace Coh2Stats
 			File.Delete(clonedLogFile);
 			File.Copy(LogFile, clonedLogFile);
 
-			StreamReader reader = new StreamReader(clonedLogFile);
-
-			string line;
-			while ((line = reader.ReadLine()) != null)
+			using (StreamReader reader = new StreamReader(clonedLogFile))
 			{
-				if (line.Contains("GAME -- Scenario"))
+				string line;
+				while ((line = reader.ReadLine()) != null)
 				{
-					players.Clear();
-				}
+					if (line.Contains("GAME -- Scenario"))
+					{
+						players.Clear();
+					}
 
-				if (line.Contains("GAME -- Human Player"))
-				{
-					string playerInfo = line.Substring(36);
-					var parts = playerInfo.Split(' ');
+					if (line.Contains("GAME -- Human Player"))
+					{
+						string playerInfo = line.Substring(36);
+						var parts = playerInfo.Split(' ');
 
-					LoggedPlayer player = new LoggedPlayer();
-					player.slot = int.Parse(parts[0]);
-					player.race = parts[parts.Length - 1];
-					player.team = int.Parse(parts[parts.Length - 2]);
-					player.profileId = int.Parse(parts[parts.Length - 3]);
-					player.name = playerInfo.Substring(2, playerInfo.IndexOf(player.profileId.ToString()) - 2);
-					players.Add(player);
+						LoggedPlayer player = new LoggedPlayer();
+
+						player.slot = int.Parse(parts[0]);
+						player.race = parts[parts.Length - 1];
+						player.team = int.Parse(parts[parts.Length - 2]);
+						player.profileId = int.Parse(parts[parts.Length - 3]);
+						player.name = playerInfo.Substring(2, playerInfo.IndexOf(player.profileId.ToString()) - 2);
+
+						players.Add(player);
+					}
 				}
 			}
 
-			reader.Close();
 			players = players.OrderBy(p => p.team).ToList();
 
 			return players;
