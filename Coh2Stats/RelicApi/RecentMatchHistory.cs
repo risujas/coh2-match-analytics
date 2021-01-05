@@ -72,6 +72,21 @@ namespace Coh2Stats
 				public Result result { get; set; }
 				public List<MatchHistoryStat> matchHistoryStats { get; set; }
 				public List<Profile> profiles { get; set; }
+
+				public string GetPlayerAlias(string profileId)
+				{
+					string alias = "";
+
+					foreach (var p in profiles)
+					{
+						if (p.profile_id.ToString() == profileId)
+						{
+							alias = p.alias;
+						}
+					}
+
+					return alias;
+				}
 			}
 
 			public static Root GetByProfileId(string profileId)

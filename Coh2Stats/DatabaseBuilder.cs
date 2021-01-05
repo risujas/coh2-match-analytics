@@ -7,6 +7,18 @@ using System.Linq;
 
 namespace Coh2Stats
 {
+	class Player
+	{
+		public string Alias;
+		public string ProfileId;
+
+		public Player(string alias, string profileId)
+		{
+			Alias = alias;
+			ProfileId = profileId;
+		}
+	}
+
 	class MatchDataSet
 	{
 		public RelicApi.RecentMatchHistory.MatchHistoryStat MatchHistoryStat = new RelicApi.RecentMatchHistory.MatchHistoryStat();
@@ -15,12 +27,43 @@ namespace Coh2Stats
 
 	class DatabaseBuilder
 	{
-		public List<string> PlayersByProfileId = new List<string>();
-		public List<MatchDataSet> Matches = new List<MatchDataSet>();
+		private List<Player> Players = new List<Player>();
+		private List<MatchDataSet> Matches = new List<MatchDataSet>();
+
+		public bool PlayerListContainsEntry(string profileId)
+		{
+			foreach (var p in Players)
+			{
+				if (p.ProfileId == profileId)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public string GetPlayerAlias(string profileId)
+		{
+			string alias = "";
+
+			foreach (var p in Players)
+			{
+				if (p.ProfileId == profileId)
+				{
+					alias = p.Alias;
+					break;
+				}
+			}
+
+			// maybe throw exception here
+
+			return alias;
+		}
 
 		public void BuildPlayerList()
 		{
-			PlayersByProfileId.Clear();
+			Players.Clear();
 
 			for (int i = 4; i <= 51; i++)
 			{
@@ -30,18 +73,18 @@ namespace Coh2Stats
 				}
 
 				var lb = RelicApi.Leaderboard.GetById(i, 1, 10);
-				List<string> tempPlayersList = new List<string>();
+				List<Player> tempPlayersList = new List<Player>();
 
 				foreach (var sg in lb.statGroups)
 				{
 					string profileId = sg.members[0].profile_id.ToString();
-					if (!PlayersByProfileId.Contains(profileId))
+					if (!PlayerListContainsEntry(profileId))
 					{
-						tempPlayersList.Add(profileId);
+						tempPlayersList.Add(new Player(sg.members[0].alias, profileId));
 					}
 				}
 
-				PlayersByProfileId.AddRange(tempPlayersList);
+				Players.AddRange(tempPlayersList);
 			}
 		}
 
@@ -49,9 +92,9 @@ namespace Coh2Stats
 		{
 			int duplicateGames = 0;
 
-			foreach (var player in PlayersByProfileId)
+			foreach (var player in Players)
 			{
-				var recentMatchHistory = RelicApi.RecentMatchHistory.GetByProfileId(player);
+				var recentMatchHistory = RelicApi.RecentMatchHistory.GetByProfileId(player.ProfileId);
 				foreach (var mhs in recentMatchHistory.matchHistoryStats)
 				{
 					DateTime dt = DateTime.Now.AddHours(-ageLimitInHours);
