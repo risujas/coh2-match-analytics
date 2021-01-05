@@ -29,7 +29,7 @@ namespace Coh2Stats
 					continue;
 				}
 
-				var lb = RelicApi.Leaderboard.GetById(i, 1, 3);
+				var lb = RelicApi.Leaderboard.GetById(i, 1, 10);
 				List<string> tempPlayersList = new List<string>();
 
 				foreach (var sg in lb.statGroups)
@@ -102,7 +102,10 @@ namespace Coh2Stats
 
 				foreach (var reportResults in m.MatchHistoryStat.matchhistoryreportresults)
 				{
-					Console.WriteLine("Player: {0} RaceId: {1} TeamId: {2} ResultType: {3}", reportResults.profile_id, reportResults.race_id, reportResults.teamid, reportResults.resulttype);
+					Console.WriteLine("{0} {1} {2}", 
+						Utilities.GetAliasByProfileId(reportResults.profile_id.ToString()), 
+						Utilities.GetHumanReadableRaceId(reportResults.race_id), 
+						Utilities.GetHumanReadableResultType(reportResults.resulttype));
 				}
 			}
 		}

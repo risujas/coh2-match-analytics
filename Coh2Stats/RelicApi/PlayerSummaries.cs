@@ -63,7 +63,7 @@ namespace Coh2Stats
 
 			public static Root GetByProfileId(string profileId)
 			{
-				return GetBySteamId(Utilities.GetSteamIdFromProfileId(profileId));
+				return GetBySteamId(Utilities.GetSteamIdByProfileId(profileId));
 			}
 
 			public static Root GetBySteamId(string steamId)
