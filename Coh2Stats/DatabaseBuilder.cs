@@ -8,5 +8,9 @@ namespace Coh2Stats
 {
 	class DatabaseBuilder
 	{
+		public void PerformTasks()
+		{
+
+		}
 	}
 }
