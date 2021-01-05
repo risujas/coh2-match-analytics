@@ -62,7 +62,7 @@ namespace Coh2Stats
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
 				string requestParams = "?title=coh2&profile_ids=[" + profileId + "]";
 
-				return WebUtils.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 			}
 
 			public static Root GetBySteamId(string steamId)
@@ -70,7 +70,7 @@ namespace Coh2Stats
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
 				string requestParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
 
-				return WebUtils.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 			}
 		}
 	}
