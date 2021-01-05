@@ -46,12 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseBuilder.cs" />
     <Compile Include="JsonObjects\AvailableLeaderboards.cs" />
     <Compile Include="JsonObjects\Leaderboard.cs" />
     <Compile Include="LogParser.cs" />
     <Compile Include="JsonObjects\PersonalStat.cs" />
     <Compile Include="JsonObjects\PlayerSummaries.cs" />
-    <Compile Include="MatchAnalysis.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JsonObjects\RecentMatchHistory.cs" />

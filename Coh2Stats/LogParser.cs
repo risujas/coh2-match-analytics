@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace Coh2Stats
 {
-	// Represents a single player when reading data from warnings.log - not intended for general use
 	struct LoggedPlayer
 	{
 		public int slot;
