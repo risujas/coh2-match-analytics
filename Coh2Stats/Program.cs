@@ -6,7 +6,6 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
-			
 		}
 	}
 }
