@@ -90,13 +90,15 @@ namespace Coh2Stats
 
 				foreach (var sg in response.statGroups)
 				{
-					foreach (var m in sg.members)
+					foreach (var x in sg.members)
 					{
-						PlayerIdentity pi = new PlayerIdentity();
-						pi.SteamId = m.name.Substring(m.name.LastIndexOf('/') + 1);
-						pi.Nickname = m.alias;
-						pi.ProfileId = m.profile_id.ToString();
-						PlayerIdentityTracker.LogPlayer(pi);
+						Profile profile = new Profile();
+						profile.SteamId = x.name.Substring(x.name.LastIndexOf('/') + 1);
+						profile.Nickname = x.alias;
+						profile.ProfileId = x.profile_id.ToString();
+						profile.PersonalStatGroupId = x.personal_statgroup_id.ToString();
+						profile.Country = x.country;
+						PlayerIdentityTracker.LogPlayer(profile);
 					}
 				}
 

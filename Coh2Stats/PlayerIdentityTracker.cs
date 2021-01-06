@@ -3,29 +3,20 @@ using System.Collections.Generic;
 
 namespace Coh2Stats
 {
-	class PlayerIdentity
+	class Profile
 	{
 		public string Nickname;
 		public string SteamId;
 		public string ProfileId;
-
-		public PlayerIdentity()
-		{
-		}
-
-		public PlayerIdentity(string nickname, string steamId, string profileId)
-		{
-			Nickname = nickname;
-			SteamId = steamId;
-			ProfileId = profileId;
-		}
+		public string PersonalStatGroupId;
+		public string Country;
 	}
 
 	class PlayerIdentityTracker
 	{
-		private static List<PlayerIdentity> playerIdentities = new List<PlayerIdentity>();
+		private static List<Profile> playerIdentities = new List<Profile>();
 
-		public static PlayerIdentity GetPlayerByProfileId(string profileId)
+		public static Profile GetPlayerByProfileId(string profileId)
 		{
 			foreach (var pi in playerIdentities)
 			{
@@ -38,7 +29,7 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public static PlayerIdentity GetPlayerBySteamId(string steamId)
+		public static Profile GetPlayerBySteamId(string steamId)
 		{
 			foreach (var pi in playerIdentities)
 			{
@@ -51,7 +42,7 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public static void LogPlayer(PlayerIdentity playerIdentity)
+		public static void LogPlayer(Profile playerIdentity)
 		{
 			if (GetPlayerByProfileId(playerIdentity.ProfileId) == null)
 			{

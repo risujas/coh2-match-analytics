@@ -105,13 +105,15 @@ namespace Coh2Stats
 
 				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
-				foreach (var p in response.profiles)
+				foreach (var x in response.profiles)
 				{
-					PlayerIdentity pi = new PlayerIdentity();
-					pi.SteamId = p.name.Substring(p.name.LastIndexOf('/') + 1);
-					pi.Nickname = p.alias;
-					pi.ProfileId = p.profile_id.ToString();
-					PlayerIdentityTracker.LogPlayer(pi);
+					Coh2Stats.Profile profile = new Coh2Stats.Profile();
+					profile.SteamId = x.name.Substring(x.name.LastIndexOf('/') + 1);
+					profile.Nickname = x.alias;
+					profile.ProfileId = x.profile_id.ToString();
+					profile.PersonalStatGroupId = x.personal_statgroup_id.ToString();
+					profile.Country = x.country;
+					PlayerIdentityTracker.LogPlayer(profile);
 				}
 
 				foreach (var mhs in response.matchHistoryStats)
