@@ -52,6 +52,11 @@ namespace Coh2Stats
 					continue;
 				}
 
+				if (leaderboardIndex != 4)
+				{
+					continue;
+				}
+
 				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.rankTotal;
 				int batchStartingIndex = 1;
@@ -63,11 +68,11 @@ namespace Coh2Stats
 
 					if (difference < 200)
 					{
-						batchSize = difference;
+						batchSize = difference + 1;
 					}
 
 					RelicApi.JsonLeaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
-					Console.WriteLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
+					Console.WriteLine("Parsing leaderboard #{0}: {1} - {2} ({3} total)", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1, PlayerIdentityTracker.GetNumLoggedPlayers());
 					batchStartingIndex += batchSize;
 				}
 			}
