@@ -104,7 +104,6 @@ namespace Coh2Stats
 				}
 
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
-				Console.WriteLine("Fetching recent match history for {0} ({1})...", p.Name, p.Alias);
 				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, maxPlayers);
 			}
 		}
