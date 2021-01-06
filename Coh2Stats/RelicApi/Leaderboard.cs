@@ -73,7 +73,21 @@ namespace Coh2Stats
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
 				string requestParams = "?title=coh2&leaderboard_id=" + leaderboardId.ToString() + "&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
 
-				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				var response = Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+
+				foreach (var sg in response.statGroups)
+				{
+					foreach (var m in sg.members)
+					{
+						PlayerIdentity pi = new PlayerIdentity();
+						pi.SteamId = m.name.Substring(m.name.LastIndexOf('/') + 1);
+						pi.Alias = m.alias;
+						pi.ProfileId = m.profile_id.ToString();
+						PlayerIdentityTracker.LogPlayer(pi);
+					}
+				}
+
+				return response;
 			}
 		}
 	}

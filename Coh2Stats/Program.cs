@@ -7,7 +7,8 @@ namespace Coh2Stats
 		// 76561198050674754
 		static void Main()
 		{
-			RelicApi.RecentMatchHistory.GetBySteamId("76561198404414770");
+			RelicApi.Leaderboard.GetById(4, 1, 5);
+			RelicApi.Leaderboard.GetById(5, 1, 5);
 
 			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
