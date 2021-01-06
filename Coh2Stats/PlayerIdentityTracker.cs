@@ -13,7 +13,7 @@ namespace Coh2Stats
 		[JsonProperty("xp")] public int Xp { get; set; }
 		[JsonProperty("level")] public int Level { get; set; }
 		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
-		[JsonProperty("country")] public string country { get; set; }
+		[JsonProperty("country")] public string Country { get; set; }
 
 		public PlayerIdentity() {}
 
@@ -26,7 +26,7 @@ namespace Coh2Stats
 			Xp = relicObject.Xp;
 			Level = relicObject.Level;
 			LeaderboardRegionId = relicObject.LeaderboardRegionId;
-			country = relicObject.country;
+			Country = relicObject.Country;
 		}
 	}
 
