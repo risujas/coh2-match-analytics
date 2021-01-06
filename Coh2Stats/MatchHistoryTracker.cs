@@ -38,18 +38,45 @@ namespace Coh2Stats
 
 		public static void BuildDatabase()
 		{
-			Build1v1PlayerList();
+			BuildPlayerList(2);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
 			Build1v1MatchList();
 		}
 
-		private static void Build1v1PlayerList()
+		private static void BuildPlayerList(int maxPlayers)
 		{
-			for (int leaderboardIndex = 4; leaderboardIndex < 52; leaderboardIndex++)
+			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
+				if (maxPlayers == 2)
 				{
-					continue;
+					if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
+					{
+						continue;
+					}
+				}
+
+				if (maxPlayers == 4)
+				{
+					if (leaderboardIndex != 8 && leaderboardIndex != 9 && leaderboardIndex != 10 && leaderboardIndex != 11 && leaderboardIndex != 52)
+					{
+						continue;
+					}
+				}
+
+				if (maxPlayers == 6)
+				{
+					if (leaderboardIndex != 12 && leaderboardIndex != 13 && leaderboardIndex != 14 && leaderboardIndex != 15 && leaderboardIndex != 53)
+					{
+						continue;
+					}
+				}
+
+				if (maxPlayers == 8)
+				{
+					if (leaderboardIndex != 16 && leaderboardIndex != 17 && leaderboardIndex != 18 && leaderboardIndex != 19 && leaderboardIndex != 54)
+					{
+						continue;
+					}
 				}
 
 				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
