@@ -101,7 +101,7 @@ namespace Coh2Stats
 			}
 		}
 
-		public static string GetAllPlayersAsString()
+		public static string GetPlayersForWebRequest()
 		{
 			List<string> names = new List<string>();
 			foreach(var p in playerIdentities)
