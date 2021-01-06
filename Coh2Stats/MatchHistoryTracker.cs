@@ -7,15 +7,6 @@ using System.Threading.Tasks;
 
 namespace Coh2Stats
 {
-	[Flags] enum RaceId
-	{
-		German = 0,
-		Soviet = 1,
-		WGerman = 2,
-		AEF = 3,
-		British = 4
-	}
-
 	class MatchHistoryTracker
 	{
 		private static List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat> matches = new List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat>();

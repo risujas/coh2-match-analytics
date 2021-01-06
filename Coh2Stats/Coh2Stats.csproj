@@ -49,6 +49,7 @@
     <Compile Include="DatabaseBuilder.cs" />
     <Compile Include="MapAnalysis.cs" />
     <Compile Include="PlayerIdentityTracker.cs" />
+    <Compile Include="RelicApi\Enums.cs" />
     <Compile Include="RelicApi\JsonAvailableLeaderboards.cs" />
     <Compile Include="MatchHistoryTracker.cs" />
     <Compile Include="RelicApi\JsonLeaderboard.cs" />

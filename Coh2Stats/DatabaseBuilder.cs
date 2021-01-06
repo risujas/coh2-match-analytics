@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace Coh2Stats
 {
-	enum GameMode
-	{
-		OneVsOne = 1,
-		TwoVsTwo = 2,
-		ThreeVsThree = 3,
-		FourVsFour = 4
-	}
-
 	class DatabaseBuilder
 	{
 		public void Build(GameMode gameMode)
