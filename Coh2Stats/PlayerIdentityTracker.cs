@@ -5,7 +5,7 @@ namespace Coh2Stats
 {
 	class PlayerIdentity
 	{
-		public string Alias;
+		public string Nickname;
 		public string SteamId;
 		public string ProfileId;
 
@@ -13,9 +13,9 @@ namespace Coh2Stats
 		{
 		}
 
-		public PlayerIdentity(string alias, string steamId, string profileId)
+		public PlayerIdentity(string nickname, string steamId, string profileId)
 		{
-			Alias = alias;
+			Nickname = nickname;
 			SteamId = steamId;
 			ProfileId = profileId;
 		}
@@ -68,7 +68,7 @@ namespace Coh2Stats
 		{
 			foreach (var pi in playerIdentities)
 			{
-				Console.WriteLine(pi.SteamId + " " + pi.ProfileId + " " + pi.Alias);
+				Console.WriteLine(pi.SteamId + " " + pi.ProfileId + " " + pi.Nickname);
 			}
 		}
 	}
