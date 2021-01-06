@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Coh2Stats
 {
@@ -61,6 +62,14 @@ namespace Coh2Stats
 		public static int GetNumLoggedPlayers()
 		{
 			return playerIdentities.Count;
+		}
+
+		public static void PrintLoggedPlayers()
+		{
+			foreach (var pi in playerIdentities)
+			{
+				Console.WriteLine(pi.SteamId + " " + pi.ProfileId + " " + pi.Alias);
+			}
 		}
 	}
 }

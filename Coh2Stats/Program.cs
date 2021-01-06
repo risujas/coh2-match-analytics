@@ -7,10 +7,9 @@ namespace Coh2Stats
 		// 76561198050674754
 		static void Main()
 		{
-			RelicApi.PersonalStat.GetBySteamId("76561198050674754");
+			RelicApi.PersonalStat.GetBySteamId("76561198404414770");
 
-
-			Console.WriteLine(PlayerIdentityTracker.GetNumLoggedPlayers());
+			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}
 	}

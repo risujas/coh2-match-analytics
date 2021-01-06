@@ -69,7 +69,7 @@ namespace Coh2Stats
 					foreach (var m in sg.members)
 					{
 						PlayerIdentity pi = new PlayerIdentity();
-						pi.SteamId = steamId;
+						pi.SteamId = m.name.Substring(m.name.LastIndexOf('/') + 1);
 						pi.Alias = m.alias;
 						pi.ProfileId = m.profile_id.ToString();
 						PlayerIdentityTracker.LogPlayer(pi);
