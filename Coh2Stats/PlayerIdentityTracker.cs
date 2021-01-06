@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -35,6 +36,10 @@ namespace Coh2Stats
 	class PlayerIdentityTracker
 	{
 		private static List<PlayerIdentity> playerIdentities = new List<PlayerIdentity>();
+		public static ReadOnlyCollection<PlayerIdentity> PlayerIdentities
+		{
+			get { return playerIdentities.AsReadOnly(); }
+		}
 
 		public static PlayerIdentity GetPlayerByProfileId(int profileId)
 		{
