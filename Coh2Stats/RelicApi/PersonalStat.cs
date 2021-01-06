@@ -62,7 +62,7 @@ namespace Coh2Stats
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
 				string requestParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
 
-				var response = Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
 				foreach (var sg in response.statGroups)
 				{

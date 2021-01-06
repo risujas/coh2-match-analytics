@@ -67,15 +67,18 @@ namespace Coh2Stats
 				string requestUrl = "https://coh2-api.reliclink.com/community/external/proxysteamuserrequest";
 				string requestParams = "?request=/ISteamUser/GetPlayerSummaries/v0002/&title=coh2&profileNames=[\"/steam/" + steamId + "\"]";
 
-				var response = Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
 				if (response.result.message == "SUCCESS")
 				{
-					PlayerIdentity pi = new PlayerIdentity();
-					pi.SteamId = steamId;
-					pi.Alias = response.avatars[0].alias;
-					pi.ProfileId = response.avatars[0].profile_id.ToString();
-					PlayerIdentityTracker.LogPlayer(pi);
+					foreach (var a in response.avatars)
+					{
+						PlayerIdentity pi = new PlayerIdentity();
+						pi.SteamId = a.name.ToString().Substring(a.name.ToString().LastIndexOf('/') + 1);
+						pi.Alias = a.alias;
+						pi.ProfileId = a.profile_id.ToString();
+						PlayerIdentityTracker.LogPlayer(pi);
+					}
 				}
 				else
 				{

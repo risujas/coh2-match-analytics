@@ -75,7 +75,7 @@ namespace Coh2Stats
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetAvailableLeaderboards";
 				string requestParams = "?title=coh2";
 
-				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				return WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 			}
 		}
 	}

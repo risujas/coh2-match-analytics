@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
-	class Utilities
+	class WebRequestHandler
 	{
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)
 		{
