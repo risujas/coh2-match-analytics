@@ -61,11 +61,6 @@ namespace Coh2Stats
 				public SteamResults steamResults { get; set; }
 			}
 
-			public static Root GetByProfileId(string profileId)
-			{
-				return GetBySteamId(Utilities.GetSteamIdByProfileId(profileId));
-			}
-
 			public static Root GetBySteamId(string steamId)
 			{
 				string requestUrl = "https://coh2-api.reliclink.com/community/external/proxysteamuserrequest";

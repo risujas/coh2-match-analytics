@@ -6,11 +6,6 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
-			DatabaseBuilder db = new DatabaseBuilder();
-			db.BuildPlayerList();
-			db.BuildMatchList();
-			db.PrintMatchList();
-
 			Console.ReadLine();
 		}
 	}
