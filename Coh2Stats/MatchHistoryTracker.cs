@@ -40,7 +40,7 @@ namespace Coh2Stats
 		{
 			BuildPlayerList(2);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			Build1v1MatchList();
+			BuildMatchList(2);
 		}
 
 		private static void BuildPlayerList(int maxPlayers)
@@ -100,13 +100,13 @@ namespace Coh2Stats
 			}
 		}
 
-		private static void Build1v1MatchList()
+		private static void BuildMatchList(int maxPlayers)
 		{
 			for (int i = 0; i < PlayerIdentityTracker.GetNumLoggedPlayers(); i++)
 			{
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
 				Console.WriteLine("Fetching recent match history for {0} ({1})...", p.Name, p.Alias);
-				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, 2);
+				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, maxPlayers);
 			}
 		}
 	}
