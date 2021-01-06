@@ -7,9 +7,12 @@ namespace Coh2Stats
 	{
 		public string Nickname;
 		public string SteamId;
+		public string Country;
 		public int ProfileId;
 		public int PersonalStatGroupId;
-		public string Country;
+		public int LeaderboardRegionId;
+		public int Xp;
+		public int Level;
 	}
 
 	class PlayerIdentityTracker

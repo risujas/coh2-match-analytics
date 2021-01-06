@@ -102,7 +102,10 @@ namespace Coh2Stats
 						identity.Nickname = x.alias;
 						identity.ProfileId = x.profile_id;
 						identity.PersonalStatGroupId = x.personal_statgroup_id;
+						identity.LeaderboardRegionId = x.leaderboardregion_id;
 						identity.Country = x.country;
+						identity.Level = x.level;
+						identity.Xp = x.xp;
 						PlayerIdentityTracker.LogPlayer(identity);
 					}
 				}

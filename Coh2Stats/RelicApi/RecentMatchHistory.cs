@@ -108,11 +108,14 @@ namespace Coh2Stats
 				foreach (var x in response.profiles)
 				{
 					PlayerIdentity identity = new PlayerIdentity();
-					identity.SteamId = x.name.Substring(x.name.LastIndexOf('/') + 1);
+					identity.SteamId = x.name.ToString().Substring(x.name.ToString().LastIndexOf('/') + 1);
 					identity.Nickname = x.alias;
 					identity.ProfileId = x.profile_id;
 					identity.PersonalStatGroupId = x.personal_statgroup_id;
+					identity.LeaderboardRegionId = x.leaderboardregion_id;
 					identity.Country = x.country;
+					identity.Level = x.level;
+					identity.Xp = x.xp;
 					PlayerIdentityTracker.LogPlayer(identity);
 				}
 
