@@ -78,9 +78,8 @@ namespace Coh2Stats
 			for (int i = 0; i < PlayerIdentityTracker.GetNumLoggedPlayers(); i++)
 			{
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
-				Console.Write("Fetching recent match history for {0} ({1})...", p.Name, p.Alias);
-				var response = RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name);
-				Console.Write("{0} matches found (total {1})\n", response.matchHistoryStats.Count, GetNumLoggedMatches());
+				Console.WriteLine("Fetching recent match history for {0} ({1})...", p.Name, p.Alias);
+				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, 2);
 			}
 		}
 	}
