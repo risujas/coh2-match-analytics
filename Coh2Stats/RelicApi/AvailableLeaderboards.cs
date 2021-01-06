@@ -7,20 +7,20 @@ namespace Coh2Stats
 	{
 		class AvailableLeaderboards
 		{
-			public struct Result
+			public class Result
 			{
 				public int code { get; set; }
 				public string message { get; set; }
 			}
 
-			public struct Leaderboardmap
+			public class Leaderboardmap
 			{
 				public int matchtype_id { get; set; }
 				public int statgroup_type { get; set; }
 				public int race_id { get; set; }
 			}
 
-			public struct Leaderboard
+			public class Leaderboard
 			{
 				public int id { get; set; }
 				public string name { get; set; }
@@ -28,7 +28,7 @@ namespace Coh2Stats
 				public List<Leaderboardmap> leaderboardmap { get; set; }
 			}
 
-			public struct MatchType
+			public class MatchType
 			{
 				public int id { get; set; }
 				public string name { get; set; }
@@ -36,7 +36,7 @@ namespace Coh2Stats
 				public string localizedName { get; set; }
 			}
 
-			public struct Race
+			public class Race
 			{
 				public int id { get; set; }
 				public string name { get; set; }
@@ -45,7 +45,7 @@ namespace Coh2Stats
 				public string localizedName { get; set; }
 			}
 
-			public struct Faction
+			public class Faction
 			{
 				public int id { get; set; }
 				public string name { get; set; }
@@ -53,7 +53,7 @@ namespace Coh2Stats
 				public string localizedName { get; set; }
 			}
 
-			public struct LeaderboardRegion
+			public class LeaderboardRegion
 			{
 				public int id { get; set; }
 				public string name { get; set; }

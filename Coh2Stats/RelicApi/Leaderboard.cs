@@ -7,13 +7,13 @@ namespace Coh2Stats
 	{
 		class Leaderboard
 		{
-			public struct Result
+			public class Result
 			{
 				public int code { get; set; }
 				public string message { get; set; }
 			}
 
-			public struct Member
+			public class Member
 			{
 				public int profile_id { get; set; }
 				public string name { get; set; }
@@ -25,7 +25,7 @@ namespace Coh2Stats
 				public string country { get; set; }
 			}
 
-			public struct StatGroup
+			public class StatGroup
 			{
 				public int id { get; set; }
 				public string name { get; set; }
@@ -33,7 +33,7 @@ namespace Coh2Stats
 				public List<Member> members { get; set; }
 			}
 
-			public struct LeaderboardStat
+			public class LeaderboardStat
 			{
 				public int statGroup_id { get; set; }
 				public int leaderboard_id { get; set; }
