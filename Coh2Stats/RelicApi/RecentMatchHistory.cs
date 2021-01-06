@@ -76,8 +76,28 @@ namespace Coh2Stats
 
 			public static Root GetBySteamId(string steamId)
 			{
+				List<string> list = new List<string>();
+				list.Add(steamId);
+				return GetBySteamId(list);
+			}
+
+			public static Root GetBySteamId(List<string> steamIds)
+			{
+				string idString = "";
+				for (int i = 0; i < steamIds.Count; i++)
+				{
+					idString += "\"/steam/";
+					idString += steamIds[i];
+					idString += "\"";
+
+					if (steamIds.Count > i + 1)
+					{
+						idString += ", ";
+					}
+				}
+
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
-				string requestParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
+				string requestParams = "?title=coh2&profile_names=[" + idString + "]";
 
 				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
