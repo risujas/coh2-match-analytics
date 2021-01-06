@@ -5,7 +5,7 @@ namespace Coh2Stats
 {
 	namespace RelicApi
 	{
-		class Leaderboard
+		class JsonPersonalStat
 		{
 			public class Result
 			{
@@ -47,27 +47,24 @@ namespace Coh2Stats
 				public Result result { get; set; }
 				public List<StatGroup> statGroups { get; set; }
 				public List<LeaderboardStat> leaderboardStats { get; set; }
-				public int rankTotal { get; set; }
 
 				private Root()
 				{
 				}
 			}
 
-			public static Root GetById(int leaderboardId, int startRank = -1, int numRanks = -1)
+			public static Root GetBySteamId(string steamId)
 			{
-				if (startRank == -1)
-				{
-					startRank = 1;
-				}
+				List<string> list = new List<string>();
+				list.Add(steamId);
+				return GetBySteamId(list);
+			}
 
-				if (numRanks == -1)
-				{
-					numRanks = 200;
-				}
-
-				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
-				string requestParams = "?title=coh2&leaderboard_id=" + leaderboardId.ToString() + "&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
+			public static Root GetBySteamId(List<string> steamIds)
+			{
+				string idString = "\"" + string.Join("\",\"", steamIds) + "\"";
+				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
+				string requestParams = "?title=coh2&profile_names=[" + idString + "]";
 
 				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 

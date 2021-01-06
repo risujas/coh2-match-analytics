@@ -8,9 +8,9 @@ namespace Coh2Stats
 {
 	class MatchHistoryTracker
 	{
-		private static List<RelicApi.RecentMatchHistory.MatchHistoryStat> Matches = new List<RelicApi.RecentMatchHistory.MatchHistoryStat>();
+		private static List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat> Matches = new List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat>();
 
-		public static void LogMatch(RelicApi.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
+		public static void LogMatch(RelicApi.JsonRecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
 			if (GetById(matchHistoryStat.id) == null)
 			{
@@ -18,7 +18,7 @@ namespace Coh2Stats
 			}
 		}
 
-		public static RelicApi.RecentMatchHistory.MatchHistoryStat GetById(int id)
+		public static RelicApi.JsonRecentMatchHistory.MatchHistoryStat GetById(int id)
 		{
 			foreach (var m in Matches)
 			{

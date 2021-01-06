@@ -47,14 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PlayerIdentityTracker.cs" />
-    <Compile Include="RelicApi\AvailableLeaderboards.cs" />
+    <Compile Include="RelicApi\JsonAvailableLeaderboards.cs" />
     <Compile Include="MatchHistoryTracker.cs" />
-    <Compile Include="RelicApi\Leaderboard.cs" />
-    <Compile Include="RelicApi\PersonalStat.cs" />
-    <Compile Include="RelicApi\PlayerSummaries.cs" />
+    <Compile Include="RelicApi\JsonLeaderboard.cs" />
+    <Compile Include="RelicApi\JsonPersonalStat.cs" />
+    <Compile Include="RelicApi\JsonPlayerSummaries.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RelicApi\RecentMatchHistory.cs" />
+    <Compile Include="RelicApi\JsonRecentMatchHistory.cs" />
     <Compile Include="WebRequestHandler.cs" />
   </ItemGroup>
   <ItemGroup>

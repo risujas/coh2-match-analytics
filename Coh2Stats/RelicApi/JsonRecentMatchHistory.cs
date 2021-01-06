@@ -6,7 +6,7 @@ namespace Coh2Stats
 {
 	namespace RelicApi
 	{
-		class RecentMatchHistory
+		class JsonRecentMatchHistory
 		{
 			public class Result
 			{

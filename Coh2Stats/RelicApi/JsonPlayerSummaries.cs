@@ -6,7 +6,7 @@ namespace Coh2Stats
 {
 	namespace RelicApi
 	{
-		class PlayerSummaries
+		class JsonPlayerSummaries
 		{
 			public class Result
 			{

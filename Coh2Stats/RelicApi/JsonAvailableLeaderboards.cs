@@ -5,7 +5,7 @@ namespace Coh2Stats
 {
 	namespace RelicApi
 	{
-		class AvailableLeaderboards
+		class JsonAvailableLeaderboards
 		{
 			public class Result
 			{

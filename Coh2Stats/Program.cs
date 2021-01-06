@@ -11,7 +11,7 @@ namespace Coh2Stats
 			
 			list.Add("/steam/76561198050674754");
 			list.Add("/steam/76561198088254955");
-			RelicApi.RecentMatchHistory.GetBySteamId(list);
+			RelicApi.JsonRecentMatchHistory.GetBySteamId(list);
 			Console.WriteLine(MatchHistoryTracker.GetNumLoggedMatches());
 
 			Console.ReadLine();
