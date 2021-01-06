@@ -57,14 +57,6 @@ namespace Coh2Stats
 				public List<LeaderboardStat> leaderboardStats { get; set; }
 			}
 
-			public static Root GetByProfileId(string profileId)
-			{
-				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
-				string requestParams = "?title=coh2&profile_ids=[" + profileId + "]";
-
-				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
-			}
-
 			public static Root GetBySteamId(string steamId)
 			{
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
