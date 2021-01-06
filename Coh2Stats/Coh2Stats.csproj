@@ -55,7 +55,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelicApi\RecentMatchHistory.cs" />
-    <Compile Include="RelicApi\Utilities.cs" />
     <Compile Include="WebRequestHandler.cs" />
   </ItemGroup>
   <ItemGroup>

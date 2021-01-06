@@ -62,7 +62,7 @@ namespace Coh2Stats
 
 			public static Root GetBySteamId(List<string> steamIds)
 			{
-				string idString = Utilities.FormatListToSteamIdString(steamIds);
+				string idString = "\"" + string.Join("\",\"", steamIds) + "\"";
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
 				string requestParams = "?title=coh2&profile_names=[" + idString + "]";
 
