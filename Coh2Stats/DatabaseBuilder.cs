@@ -84,9 +84,28 @@ namespace Coh2Stats
 		{
 			for (int i = 0; i < PlayerIdentityTracker.GetNumLoggedPlayers(); i++)
 			{
+				int maxPlayers = 0;
+				switch (gameMode)
+				{
+					case GameMode.OneVsOne:
+						maxPlayers = 2;
+						break;
+					case GameMode.TwoVsTwo:
+						maxPlayers = 4;
+						break;
+					case GameMode.ThreeVsThree:
+						maxPlayers = 6;
+						break;
+					case GameMode.FourVsFour:
+						maxPlayers = 8;
+						break;
+					default:
+						throw new Exception("Invalid value for " + maxPlayers);
+				}
+
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
 				Console.WriteLine("Fetching recent match history for {0} ({1})...", p.Name, p.Alias);
-				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, (int)gameMode * 2);
+				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, maxPlayers);
 			}
 		}
 	}
