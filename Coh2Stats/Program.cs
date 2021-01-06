@@ -7,7 +7,7 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
-			MatchHistoryTracker.BuildDatabase();
+			DatabaseBuilder.Build(GameMode.OneVsOne);
 			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}
