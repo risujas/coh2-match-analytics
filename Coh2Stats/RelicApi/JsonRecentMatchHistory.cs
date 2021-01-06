@@ -71,14 +71,14 @@ namespace Coh2Stats
 				}
 			}
 
-			public static Root GetBySteamId(string steamId)
+			public static Root GetBySteamId(string steamId, int maxPlayers)
 			{
 				List<string> list = new List<string>();
 				list.Add(steamId);
-				return GetBySteamId(list);
+				return GetBySteamId(list, maxPlayers);
 			}
 
-			public static Root GetBySteamId(List<string> steamIds)
+			public static Root GetBySteamId(List<string> steamIds, int maxPlayers)
 			{
 				string idString = "\"" + string.Join("\",\"", steamIds) + "\"";
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
@@ -93,6 +93,11 @@ namespace Coh2Stats
 
 				foreach (var mhs in response.matchHistoryStats)
 				{
+					if (mhs.maxplayers != maxPlayers || mhs.description != "AUTOMATCH")
+					{
+						continue;
+					}
+
 					MatchHistoryTracker.LogMatch(mhs);
 				}
 
