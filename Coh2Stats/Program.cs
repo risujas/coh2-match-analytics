@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Coh2Stats
 {
@@ -7,7 +8,10 @@ namespace Coh2Stats
 		// 76561198050674754
 		static void Main()
 		{
-			RelicApi.PlayerSummaries.GetBySteamId("76561198050674754");
+			List<string> list = new List<string>();
+			list.Add("76561198002068856");
+			list.Add("76561198050674754");
+			RelicApi.PlayerSummaries.GetBySteamId(list);
 			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}
