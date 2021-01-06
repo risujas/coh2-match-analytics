@@ -80,5 +80,16 @@ namespace Coh2Stats
 				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias);
 			}
 		}
+
+		public static string GetAllPlayersAsString()
+		{
+			List<string> names = new List<string>();
+			foreach(var p in playerIdentities)
+			{
+				names.Add(p.Name);
+			}
+			string idString = "\"" + string.Join("\",\"", names) + "\"";
+			return idString;
+		}
 	}
 }
