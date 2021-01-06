@@ -35,5 +35,46 @@ namespace Coh2Stats
 		{
 			return Matches.Count;
 		}
+
+		public static void BuildDatabase()
+		{
+			Build1v1PlayerList();
+			PlayerIdentityTracker.SortPlayersByHighestRank();
+			Build1v1MatchList();
+		}
+
+		private static void Build1v1PlayerList()
+		{
+			for (int i = 4; i < 52; i++)
+			{
+				if (i != 4 && i != 5 && i != 6 && i != 7 && i != 51)
+				{
+					continue;
+				}
+
+				var probe = RelicApi.JsonLeaderboard.GetById(i, 1, 1);
+				int rankedTotal = probe.rankTotal;
+				int index = 1;
+
+				while (index < rankedTotal)
+				{
+					int difference = rankedTotal - index;
+					int batchSize = 200;
+
+					if (difference < 200)
+					{
+						batchSize = difference;
+					}
+
+					RelicApi.JsonLeaderboard.GetById(i, index, batchSize);
+					index += batchSize;
+				}
+			}
+		}
+
+		private static void Build1v1MatchList()
+		{
+
+		}
 	}
 }

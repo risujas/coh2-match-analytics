@@ -1,4 +1,5 @@
 ﻿#pragma warning disable IDE1006
+using System;
 using System.Collections.Generic;
 
 namespace Coh2Stats
@@ -75,7 +76,17 @@ namespace Coh2Stats
 				{
 					foreach (var x in sg.members)
 					{
-						PlayerIdentityTracker.LogPlayer(new PlayerIdentity(x));
+						var p = new PlayerIdentity(x);
+						PlayerIdentityTracker.LogPlayer(p);
+					}
+				}
+
+				foreach (var lbs in response.leaderboardStats)
+				{
+					int best = PlayerIdentityTracker.GetPlayerByPersonalStatGroupId(lbs.statGroup_id).BestRank;
+					if (lbs.rank < best)
+					{
+						PlayerIdentityTracker.GetPlayerByPersonalStatGroupId(lbs.statGroup_id).BestRank = lbs.rank;
 					}
 				}
 

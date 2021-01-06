@@ -7,11 +7,8 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
-			List<string> list = new List<string>();
-			
-			list.Add("/steam/76561198050674754");
-			RelicApi.JsonPlayerSummaries.GetBySteamId(list);
-			Console.WriteLine(PlayerIdentityTracker.GetAllPlayersAsString());
+			MatchHistoryTracker.BuildDatabase();
+			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}
 	}

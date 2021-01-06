@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Coh2Stats
@@ -14,6 +15,7 @@ namespace Coh2Stats
 		[JsonProperty("level")] public int Level { get; set; }
 		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
 		[JsonProperty("country")] public string Country { get; set; }
+		public int BestRank = int.MaxValue;
 
 		public PlayerIdentity() {}
 
@@ -60,6 +62,19 @@ namespace Coh2Stats
 			return null;
 		}
 
+		public static PlayerIdentity GetPlayerByPersonalStatGroupId(int personalStatGroupId)
+		{
+			foreach (var pi in playerIdentities)
+			{
+				if (pi.PersonalStatGroupId == personalStatGroupId)
+				{
+					return pi;
+				}
+			}
+
+			return null;
+		}
+
 		public static void LogPlayer(PlayerIdentity playerIdentity)
 		{
 			if (GetPlayerByProfileId(playerIdentity.ProfileId) == null)
@@ -77,7 +92,7 @@ namespace Coh2Stats
 		{
 			foreach (var p in playerIdentities)
 			{
-				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias);
+				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias + " " + p.BestRank);
 			}
 		}
 
@@ -90,6 +105,11 @@ namespace Coh2Stats
 			}
 			string idString = "\"" + string.Join("\",\"", names) + "\"";
 			return idString;
+		}
+
+		public static void SortPlayersByHighestRank()
+		{
+			playerIdentities = playerIdentities.OrderBy(p => p.BestRank).ToList();
 		}
 	}
 }
