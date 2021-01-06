@@ -28,7 +28,7 @@ namespace Coh2Stats
 					throw new Exception((int)responseObject.StatusCode + " (" + responseObject.ReasonPhrase + ")");
 				}
 			}
-			
+
 			return responseString;
 		}
 
