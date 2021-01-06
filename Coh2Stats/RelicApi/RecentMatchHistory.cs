@@ -74,20 +74,23 @@ namespace Coh2Stats
 				public List<Profile> profiles { get; set; }
 			}
 
-			public static Root GetByProfileId(string profileId)
-			{
-				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
-				string requestParams = "?title=coh2&profile_ids=[" + profileId + "]";
-
-				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
-			}
-
 			public static Root GetBySteamId(string steamId)
 			{
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
 				string requestParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
 
-				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				var response = Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+
+				foreach (var p in response.profiles)
+				{
+					PlayerIdentity pi = new PlayerIdentity();
+					pi.SteamId = p.name.Substring(p.name.LastIndexOf('/') + 1);
+					pi.Alias = p.alias;
+					pi.ProfileId = p.profile_id.ToString();
+					PlayerIdentityTracker.LogPlayer(pi);
+				}
+
+				return response;
 			}
 		}
 	}
