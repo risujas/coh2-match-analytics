@@ -7,8 +7,8 @@ namespace Coh2Stats
 	{
 		public string Nickname;
 		public string SteamId;
-		public string ProfileId;
-		public string PersonalStatGroupId;
+		public int ProfileId;
+		public int PersonalStatGroupId;
 		public string Country;
 	}
 
@@ -16,7 +16,7 @@ namespace Coh2Stats
 	{
 		private static List<Profile> playerIdentities = new List<Profile>();
 
-		public static Profile GetPlayerByProfileId(string profileId)
+		public static Profile GetPlayerByProfileId(int profileId)
 		{
 			foreach (var pi in playerIdentities)
 			{

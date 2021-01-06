@@ -86,7 +86,7 @@ namespace Coh2Stats
 						Profile pi = new Profile();
 						pi.SteamId = m.name.Substring(m.name.LastIndexOf('/') + 1);
 						pi.Nickname = m.alias;
-						pi.ProfileId = m.profile_id.ToString();
+						pi.ProfileId = m.profile_id;
 						PlayerIdentityTracker.LogPlayer(pi);
 					}
 				}

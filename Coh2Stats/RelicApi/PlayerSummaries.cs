@@ -100,8 +100,8 @@ namespace Coh2Stats
 						Profile profile = new Profile();
 						profile.SteamId = x.name.ToString().Substring(x.name.ToString().LastIndexOf('/') + 1);
 						profile.Nickname = x.alias;
-						profile.ProfileId = x.profile_id.ToString();
-						profile.PersonalStatGroupId = x.personal_statgroup_id.ToString();
+						profile.ProfileId = x.profile_id;
+						profile.PersonalStatGroupId = x.personal_statgroup_id;
 						profile.Country = x.country;
 						PlayerIdentityTracker.LogPlayer(profile);
 					}
