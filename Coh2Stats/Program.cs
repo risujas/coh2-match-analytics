@@ -6,6 +6,7 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
+			Console.WriteLine(PlayerIdentityTracker.GetNumLoggedPlayers());
 			Console.ReadLine();
 		}
 	}

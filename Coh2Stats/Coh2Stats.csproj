@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlayerIdentityTracker.cs" />
     <Compile Include="RelicApi\AvailableLeaderboards.cs" />
     <Compile Include="RelicApi\Leaderboard.cs" />
     <Compile Include="RelicApi\PersonalStat.cs" />
