@@ -16,7 +16,13 @@ namespace Coh2Stats.RelicApi
 		British = 4
 	}
 
-	enum GameMode
+	enum FactionId
+	{
+		Axis = 0,
+		Allies = 1
+	}
+
+	enum GameModeId
 	{
 		OneVsOne = 1,
 		TwoVsTwo = 2,
