@@ -45,20 +45,20 @@ namespace Coh2Stats
 
 		private static void Build1v1PlayerList()
 		{
-			for (int i = 4; i < 52; i++)
+			for (int leaderboardIndex = 4; leaderboardIndex < 52; leaderboardIndex++)
 			{
-				if (i != 4 && i != 5 && i != 6 && i != 7 && i != 51)
+				if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
 				{
 					continue;
 				}
 
-				var probe = RelicApi.JsonLeaderboard.GetById(i, 1, 1);
-				int rankedTotal = probe.rankTotal;
-				int index = 1;
+				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
+				int leaderboardMaxRank = probeResponse.rankTotal;
+				int batchStartingIndex = 1;
 
-				while (index < rankedTotal)
+				while (batchStartingIndex < leaderboardMaxRank)
 				{
-					int difference = rankedTotal - index;
+					int difference = leaderboardMaxRank - batchStartingIndex;
 					int batchSize = 200;
 
 					if (difference < 200)
@@ -66,8 +66,9 @@ namespace Coh2Stats
 						batchSize = difference;
 					}
 
-					RelicApi.JsonLeaderboard.GetById(i, index, batchSize);
-					index += batchSize;
+					RelicApi.JsonLeaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
+					Console.WriteLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
+					batchStartingIndex += batchSize;
 				}
 			}
 		}
