@@ -54,6 +54,68 @@ namespace Coh2Stats
 				public List<Matchhistoryreportresult> matchhistoryreportresults { get; set; }
 				public List<Matchhistoryitem> matchhistoryitems { get; set; }
 				public List<object> matchurls { get; set; }
+
+				public bool HasGivenRaces(RaceId raceFlags)
+				{
+					bool requireGerman = raceFlags.HasFlag(RaceId.German);
+					bool requireSoviet = raceFlags.HasFlag(RaceId.Soviet);
+					bool requireWestGerman = raceFlags.HasFlag(RaceId.WGerman);
+					bool requireAef = raceFlags.HasFlag(RaceId.AEF);
+					bool requireBritish = raceFlags.HasFlag(RaceId.British);
+
+					bool hasGerman = false;
+					bool hasSoviet = false;
+					bool hasWestGerman = false;
+					bool hasAef = false;
+					bool hasBritish = false;
+
+					foreach (var x in matchhistoryreportresults)
+					{
+						if (x.race_id == (int)RaceId.German)
+						{
+							hasGerman = true;
+						}
+						if (x.race_id == (int)RaceId.Soviet)
+						{
+							hasSoviet = true;
+						}
+						if (x.race_id == (int)RaceId.WGerman)
+						{
+							hasWestGerman = true;
+						}
+						if (x.race_id == (int)RaceId.AEF)
+						{
+							hasAef = true;
+						}
+						if (x.race_id == (int)RaceId.British)
+						{
+							hasBritish = true;
+						}
+					}
+
+					if (requireGerman && !hasGerman)
+					{
+						return false;
+					}
+					if (requireSoviet && !hasSoviet)
+					{
+						return false;
+					}
+					if (requireWestGerman && !hasWestGerman)
+					{
+						return false;
+					}
+					if (requireAef && !hasAef)
+					{
+						return false;
+					}
+					if (requireBritish && !hasBritish)
+					{
+						return false;
+					}
+
+					return true;
+				}
 			}
 
 			public class Profile: PlayerIdentity
