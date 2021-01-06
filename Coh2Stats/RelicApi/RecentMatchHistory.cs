@@ -107,13 +107,13 @@ namespace Coh2Stats
 
 				foreach (var x in response.profiles)
 				{
-					Coh2Stats.Profile profile = new Coh2Stats.Profile();
-					profile.SteamId = x.name.Substring(x.name.LastIndexOf('/') + 1);
-					profile.Nickname = x.alias;
-					profile.ProfileId = x.profile_id;
-					profile.PersonalStatGroupId = x.personal_statgroup_id;
-					profile.Country = x.country;
-					PlayerIdentityTracker.LogPlayer(profile);
+					PlayerIdentity identity = new PlayerIdentity();
+					identity.SteamId = x.name.Substring(x.name.LastIndexOf('/') + 1);
+					identity.Nickname = x.alias;
+					identity.ProfileId = x.profile_id;
+					identity.PersonalStatGroupId = x.personal_statgroup_id;
+					identity.Country = x.country;
+					PlayerIdentityTracker.LogPlayer(identity);
 				}
 
 				foreach (var mhs in response.matchHistoryStats)
