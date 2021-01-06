@@ -52,11 +52,6 @@ namespace Coh2Stats
 					continue;
 				}
 
-				if (leaderboardIndex != 4)
-				{
-					continue;
-				}
-
 				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.rankTotal;
 				int batchStartingIndex = 1;
@@ -80,7 +75,13 @@ namespace Coh2Stats
 
 		private static void Build1v1MatchList()
 		{
-			
+			for (int i = 0; i < PlayerIdentityTracker.GetNumLoggedPlayers(); i++)
+			{
+				var p = PlayerIdentityTracker.PlayerIdentities[i];
+				Console.Write("Fetching recent match history for {0} ({1})...", p.Name, p.Alias);
+				var response = RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name);
+				Console.Write("{0} matches found (total {1})\n", response.matchHistoryStats.Count, GetNumLoggedMatches());
+			}
 		}
 	}
 }
