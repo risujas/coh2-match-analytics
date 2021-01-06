@@ -8,6 +8,10 @@ namespace Coh2Stats
 		public string SteamId;
 		public string ProfileId;
 
+		public PlayerIdentity()
+		{
+		}
+
 		public PlayerIdentity(string alias, string steamId, string profileId)
 		{
 			Alias = alias;
