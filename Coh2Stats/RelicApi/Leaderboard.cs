@@ -50,12 +50,16 @@ namespace Coh2Stats
 				public int lastMatchDate { get; set; }
 			}
 
-			public struct Root
+			public class Root
 			{
 				public Result result { get; set; }
 				public List<StatGroup> statGroups { get; set; }
 				public List<LeaderboardStat> leaderboardStats { get; set; }
 				public int rankTotal { get; set; }
+
+				private Root()
+				{
+				}
 			}
 
 			public static Root GetById(int leaderboardId, int startRank = -1, int numRanks = -1)

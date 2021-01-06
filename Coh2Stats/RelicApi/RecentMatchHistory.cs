@@ -67,11 +67,15 @@ namespace Coh2Stats
 				public string country { get; set; }
 			}
 
-			public struct Root
+			public class Root
 			{
 				public Result result { get; set; }
 				public List<MatchHistoryStat> matchHistoryStats { get; set; }
 				public List<Profile> profiles { get; set; }
+
+				private Root()
+				{
+				}
 			}
 
 			public static Root GetBySteamId(string steamId)

@@ -60,7 +60,7 @@ namespace Coh2Stats
 				public int locstringid { get; set; }
 			}
 
-			public struct Root
+			public class Root
 			{
 				public Result result { get; set; }
 				public List<Leaderboard> leaderboards { get; set; }
@@ -68,6 +68,10 @@ namespace Coh2Stats
 				public List<Race> races { get; set; }
 				public List<Faction> factions { get; set; }
 				public List<LeaderboardRegion> leaderboardRegions { get; set; }
+
+				private Root()
+				{
+				}
 			}
 
 			public static Root Get()

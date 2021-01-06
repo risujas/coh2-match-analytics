@@ -55,11 +55,15 @@ namespace Coh2Stats
 				public Response response { get; set; }
 			}
 
-			public struct Root
+			public class Root
 			{
 				public Result result { get; set; }
 				public List<Avatar> avatars { get; set; }
 				public SteamResults steamResults { get; set; }
+
+				private Root()
+				{
+				}
 			}
 
 			public static Root GetBySteamId(string steamId)

@@ -50,11 +50,15 @@ namespace Coh2Stats
 				public int lastMatchDate { get; set; }
 			}
 
-			public struct Root
+			public class Root
 			{
 				public Result result { get; set; }
 				public List<StatGroup> statGroups { get; set; }
 				public List<LeaderboardStat> leaderboardStats { get; set; }
+
+				private Root()
+				{
+				}
 			}
 
 			public static Root GetBySteamId(string steamId)
