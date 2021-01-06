@@ -10,6 +10,13 @@ namespace Coh2Stats
 			DatabaseBuilder db = new DatabaseBuilder();
 			db.Build(GameMode.OneVsOne);
 
+			var temp = MapAnalysis.GetMapPopularityDictionary(RaceId.British);
+			Console.Clear();
+			foreach (var t in temp)
+			{
+				Console.WriteLine(t.Value + " " + t.Key);
+			}
+
 			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}

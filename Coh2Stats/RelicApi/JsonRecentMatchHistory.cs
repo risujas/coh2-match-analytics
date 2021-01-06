@@ -135,8 +135,7 @@ namespace Coh2Stats
 
 			public static Root GetBySteamId(string steamId, int maxPlayers)
 			{
-				List<string> list = new List<string>();
-				list.Add(steamId);
+				List<string> list = new List<string> { steamId };
 				return GetBySteamId(list, maxPlayers);
 			}
 

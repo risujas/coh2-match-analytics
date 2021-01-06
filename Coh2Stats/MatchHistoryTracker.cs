@@ -49,28 +49,5 @@ namespace Coh2Stats
 		{
 			return matches.Count;
 		}
-
-		public static Dictionary<string, int> GetMapPopularityDictionary(RaceId raceFlags)
-		{
-			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
-
-			foreach (var m in matches)
-			{
-				if (m.HasGivenRaces(raceFlags))
-				{
-					if (!keyValuePairs.ContainsKey(m.mapname))
-					{
-						keyValuePairs.Add(m.mapname, 0);
-					}
-
-					keyValuePairs[m.mapname] += 1;
-				}
-			}
-
-			keyValuePairs = keyValuePairs.OrderBy(p => p.Value).ToDictionary(p => p.Key, p => p.Value);
-			keyValuePairs = keyValuePairs.Reverse().ToDictionary(p => p.Key, p => p.Value);
-
-			return keyValuePairs;
-		}
 	}
 }
