@@ -77,8 +77,7 @@ namespace Coh2Stats
 				{
 					foreach (var x in response.avatars)
 					{
-						PlayerIdentity identity = new PlayerIdentity(x);
-						PlayerIdentityTracker.LogPlayer(identity);
+						PlayerIdentityTracker.LogPlayer(new PlayerIdentity(x));
 					}
 				}
 				else

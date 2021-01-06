@@ -87,8 +87,7 @@ namespace Coh2Stats
 
 				foreach (var x in response.profiles)
 				{
-					PlayerIdentity identity = new PlayerIdentity(x);
-					PlayerIdentityTracker.LogPlayer(identity);
+					PlayerIdentityTracker.LogPlayer(new PlayerIdentity(x));
 				}
 
 				foreach (var mhs in response.matchHistoryStats)

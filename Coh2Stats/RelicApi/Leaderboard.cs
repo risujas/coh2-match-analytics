@@ -75,8 +75,7 @@ namespace Coh2Stats
 				{
 					foreach (var x in sg.members)
 					{
-						PlayerIdentity identity = new PlayerIdentity(x);
-						PlayerIdentityTracker.LogPlayer(identity);
+						PlayerIdentityTracker.LogPlayer(new PlayerIdentity(x));
 					}
 				}
 
