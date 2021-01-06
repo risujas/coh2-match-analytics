@@ -8,10 +8,11 @@ namespace Coh2Stats
 		static void Main()
 		{
 			List<string> list = new List<string>();
+			
 			list.Add("76561198050674754");
-			RelicApi.Leaderboard.GetById(4);
-
-			PlayerIdentityTracker.PrintLoggedPlayers();
+			list.Add("76561198088254955");
+			RelicApi.RecentMatchHistory.GetBySteamId(list);
+			Console.WriteLine(MatchHistoryTracker.GetNumLoggedMatches());
 
 			Console.ReadLine();
 		}

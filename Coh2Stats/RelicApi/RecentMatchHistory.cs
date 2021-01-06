@@ -114,6 +114,11 @@ namespace Coh2Stats
 					PlayerIdentityTracker.LogPlayer(pi);
 				}
 
+				foreach (var mhs in response.matchHistoryStats)
+				{
+					MatchHistoryTracker.LogMatch(mhs);
+				}
+
 				return response;
 			}
 		}
