@@ -7,7 +7,9 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
-			DatabaseBuilder.Build(GameMode.OneVsOne);
+			DatabaseBuilder db = new DatabaseBuilder();
+			db.Build(GameMode.OneVsOne);
+
 			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}

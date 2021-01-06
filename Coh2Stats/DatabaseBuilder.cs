@@ -16,14 +16,14 @@ namespace Coh2Stats
 
 	class DatabaseBuilder
 	{
-		public static void Build(GameMode gameMode)
+		public void Build(GameMode gameMode)
 		{
 			BuildPlayerList(gameMode);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
 			BuildMatchList(gameMode);
 		}
 
-		private static void BuildPlayerList(GameMode gameMode)
+		private void BuildPlayerList(GameMode gameMode)
 		{
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
@@ -80,7 +80,7 @@ namespace Coh2Stats
 			}
 		}
 
-		private static void BuildMatchList(GameMode gameMode)
+		private void BuildMatchList(GameMode gameMode)
 		{
 			for (int i = 0; i < PlayerIdentityTracker.GetNumLoggedPlayers(); i++)
 			{
