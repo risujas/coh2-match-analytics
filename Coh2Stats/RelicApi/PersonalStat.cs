@@ -62,7 +62,21 @@ namespace Coh2Stats
 				string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
 				string requestParams = "?title=coh2&profile_names=[\"/steam/" + steamId + "\"]";
 
-				return Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+				var response = Utilities.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
+
+				foreach (var sg in response.statGroups)
+				{
+					foreach (var m in sg.members)
+					{
+						PlayerIdentity pi = new PlayerIdentity();
+						pi.SteamId = steamId;
+						pi.Alias = m.alias;
+						pi.ProfileId = m.profile_id.ToString();
+						PlayerIdentityTracker.LogPlayer(pi);
+					}
+				}
+
+				return response;
 			}
 		}
 	}
