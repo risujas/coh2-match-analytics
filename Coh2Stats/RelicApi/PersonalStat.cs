@@ -57,6 +57,13 @@ namespace Coh2Stats
 				public List<LeaderboardStat> leaderboardStats { get; set; }
 			}
 
+			public static Root GetBySteamId(string steamId)
+			{
+				List<string> list = new List<string>();
+				list.Add(steamId);
+				return GetBySteamId(list);
+			}
+
 			public static Root GetBySteamId(List<string> steamIds)
 			{
 				string idString = "";
