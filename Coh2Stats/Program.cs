@@ -11,7 +11,7 @@ namespace Coh2Stats
 			List<string> list = new List<string>();
 			list.Add("76561198002068856");
 			list.Add("76561198050674754");
-			RelicApi.PlayerSummaries.GetBySteamId(list);
+			RelicApi.PersonalStat.GetBySteamId(list);
 			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}
