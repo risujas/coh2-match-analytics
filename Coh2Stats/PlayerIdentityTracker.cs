@@ -1,18 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
-	class PlayerIdentity
+	public class PlayerIdentity
 	{
-		public string Nickname;
-		public string SteamId;
-		public string Country;
-		public int ProfileId;
-		public int PersonalStatGroupId;
-		public int LeaderboardRegionId;
-		public int Xp;
-		public int Level;
+		[JsonProperty("profile_id")] public int ProfileId { get; set; }
+		[JsonProperty("name")] public string Name { get; set; }
+		[JsonProperty("alias")] public string Alias { get; set; }
+		[JsonProperty("personal_statgroup_id")] public int PersonalStatGroupId { get; set; }
+		[JsonProperty("xp")] public int Xp { get; set; }
+		[JsonProperty("level")] public int Level { get; set; }
+		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
+		[JsonProperty("country")] public string country { get; set; }
+
+		public PlayerIdentity() {}
+
+		public PlayerIdentity (PlayerIdentity relicObject)
+		{
+			ProfileId = relicObject.ProfileId;
+			Name = relicObject.Name;
+			Alias = relicObject.Alias;
+			PersonalStatGroupId = relicObject.PersonalStatGroupId;
+			Xp = relicObject.Xp;
+			Level = relicObject.Level;
+			LeaderboardRegionId = relicObject.LeaderboardRegionId;
+			country = relicObject.country;
+		}
 	}
 
 	class PlayerIdentityTracker
@@ -36,7 +51,7 @@ namespace Coh2Stats
 		{
 			foreach (var pi in playerIdentities)
 			{
-				if (pi.SteamId == steamId)
+				if (pi.Name == steamId)
 				{
 					return pi;
 				}
@@ -60,9 +75,9 @@ namespace Coh2Stats
 
 		public static void PrintLoggedPlayers()
 		{
-			foreach (var pi in playerIdentities)
+			foreach (var p in playerIdentities)
 			{
-				Console.WriteLine(pi.SteamId + " " + pi.ProfileId + " " + pi.Nickname);
+				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias);
 			}
 		}
 	}

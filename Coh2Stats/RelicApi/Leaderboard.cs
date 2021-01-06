@@ -13,16 +13,8 @@ namespace Coh2Stats
 				public string message { get; set; }
 			}
 
-			public class Member
+			public class Member: PlayerIdentity
 			{
-				public int profile_id { get; set; }
-				public string name { get; set; }
-				public string alias { get; set; }
-				public int personal_statgroup_id { get; set; }
-				public int xp { get; set; }
-				public int level { get; set; }
-				public int leaderboardregion_id { get; set; }
-				public string country { get; set; }
 			}
 
 			public class StatGroup
@@ -83,15 +75,7 @@ namespace Coh2Stats
 				{
 					foreach (var x in sg.members)
 					{
-						PlayerIdentity identity = new PlayerIdentity();
-						identity.SteamId = x.name.ToString().Substring(x.name.ToString().LastIndexOf('/') + 1);
-						identity.Nickname = x.alias;
-						identity.ProfileId = x.profile_id;
-						identity.PersonalStatGroupId = x.personal_statgroup_id;
-						identity.LeaderboardRegionId = x.leaderboardregion_id;
-						identity.Country = x.country;
-						identity.Level = x.level;
-						identity.Xp = x.xp;
+						PlayerIdentity identity = new PlayerIdentity(x);
 						PlayerIdentityTracker.LogPlayer(identity);
 					}
 				}
