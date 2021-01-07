@@ -55,6 +55,27 @@ namespace Coh2Stats
 				public List<Matchhistoryitem> matchhistoryitems { get; set; }
 				public List<object> matchurls { get; set; }
 
+				public bool HasAxisVictory()
+				{
+					foreach (var x in matchhistoryreportresults)
+					{
+						if (x.race_id == (int)RaceId.German || x.race_id == (int)RaceId.WGerman)
+						{
+							if (x.resulttype == 1)
+							{
+								return true;
+							}
+							
+							else
+							{
+								return false;
+							}
+						}
+					}
+
+					throw new Exception("Invalid factions");
+				}
+
 				public bool HasGivenRaces(RaceFlag raceFlags)
 				{
 					bool requireGerman = raceFlags.HasFlag(RaceFlag.German);

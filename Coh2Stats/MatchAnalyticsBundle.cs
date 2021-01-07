@@ -12,42 +12,69 @@ namespace Coh2Stats
 
 		public static MatchAnalyticsBundle GetAllLoggedMatches()
 		{
-			MatchAnalyticsBundle matchBundle = new MatchAnalyticsBundle();
-			matchBundle.Matches = MatchHistoryTracker.Matches.ToList();
-			return matchBundle;
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+			matchAnalyticsBundle.Matches = MatchHistoryTracker.Matches.ToList();
+			return matchAnalyticsBundle;
 		}
 
 		public MatchAnalyticsBundle FilterByRace(RelicApi.RaceFlag raceFlags)
 		{
-			MatchAnalyticsBundle matchBundle = new MatchAnalyticsBundle();
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
 			foreach (var m in Matches)
 			{
 				if (m.HasGivenRaces(raceFlags))
 				{
-					matchBundle.Matches.Add(m);
+					matchAnalyticsBundle.Matches.Add(m);
 				}
 			}
 
-			return matchBundle;
+			return matchAnalyticsBundle;
 		}
 
 		public MatchAnalyticsBundle FilterByMap(string mapName)
 		{
-			MatchAnalyticsBundle matchBundle = new MatchAnalyticsBundle();
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
 			foreach (var m in Matches)
 			{
 				if (m.mapname == mapName)
 				{
-					matchBundle.Matches.Add(m);
+					matchAnalyticsBundle.Matches.Add(m);
 				}
 			}
 
-			return matchBundle;
+			return matchAnalyticsBundle;
 		}
 
-		// OrderMapsByRaceWinRate
+		public MatchAnalyticsBundle FilterByResult(bool result, RelicApi.FactionId factionId)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				if (factionId == RelicApi.FactionId.Axis && m.HasAxisVictory() == result)
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+
+				else if (factionId == RelicApi.FactionId.Allies && m.HasAxisVictory() != result)
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+			}	
+
+			return matchAnalyticsBundle;
+		}
+
+		public Dictionary<string, double> GetOrderedMapWinRate()
+		{
+			Dictionary<string, double> winRatesByMap = new Dictionary<string, double>();
+
+			// TODO
+
+			return winRatesByMap;
+		}
 
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{

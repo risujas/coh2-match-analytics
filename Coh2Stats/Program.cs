@@ -10,38 +10,24 @@ namespace Coh2Stats
 			DatabaseBuilder db = new DatabaseBuilder();
 			db.Build(RelicApi.GameModeId.OneVsOne);
 
-			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByMap("crossroadswx");
+			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
 
-			var games = mab.FilterByRace(RelicApi.RaceFlag.German).GetOrderedMapPlayCount();
-			Console.WriteLine("\nOSTHEER");
+			var games = mab.FilterByRace(RelicApi.RaceFlag.AEF).GetOrderedMapPlayCount();
+			Console.WriteLine("\nUSF TOTAL");
 			foreach (var g in games)
 			{
 				Console.WriteLine(g.Value + " " + g.Key);
 			}
 
-			games = mab.FilterByRace(RelicApi.RaceFlag.Soviet).GetOrderedMapPlayCount();
-			Console.WriteLine("\nSOVIETS");
+			games = mab.FilterByRace(RelicApi.RaceFlag.AEF).FilterByResult(true, RelicApi.FactionId.Allies).GetOrderedMapPlayCount();
+			Console.WriteLine("\nUSF WINS");
 			foreach (var g in games)
 			{
 				Console.WriteLine(g.Value + " " + g.Key);
 			}
 
-			games = mab.FilterByRace(RelicApi.RaceFlag.WGerman).GetOrderedMapPlayCount();
-			Console.WriteLine("\nOBERKOMMANDO");
-			foreach (var g in games)
-			{
-				Console.WriteLine(g.Value + " " + g.Key);
-			}
-
-			games = mab.FilterByRace(RelicApi.RaceFlag.AEF).GetOrderedMapPlayCount();
-			Console.WriteLine("\nUSF");
-			foreach (var g in games)
-			{
-				Console.WriteLine(g.Value + " " + g.Key);
-			}
-
-			games = mab.FilterByRace(RelicApi.RaceFlag.British).GetOrderedMapPlayCount();
-			Console.WriteLine("\nBRITISH");
+			games = mab.FilterByRace(RelicApi.RaceFlag.AEF).FilterByResult(false, RelicApi.FactionId.Allies).GetOrderedMapPlayCount();
+			Console.WriteLine("\nUSF LOSSES");
 			foreach (var g in games)
 			{
 				Console.WriteLine(g.Value + " " + g.Key);

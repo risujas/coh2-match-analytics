@@ -12,7 +12,7 @@ namespace Coh2Stats
 		{
 			BuildPlayerList(gameMode, 1, 200);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList(gameMode, 25);
+			BuildMatchList(gameMode, 50);
 		}
 
 		private void BuildPlayerList(RelicApi.GameModeId gameMode, int startingRank = 1, int maxRank = -1)
