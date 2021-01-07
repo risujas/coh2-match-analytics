@@ -8,18 +8,18 @@ namespace Coh2Stats
 {
 	class DatabaseBuilder
 	{
-		public void Build(RelicApi.GameModeId gameMode)
+		public void Build(RelicApi.MatchTypeId gameMode)
 		{
 			BuildPlayerList(gameMode, 1, 200);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
 			BuildMatchList(5);
 		}
 
-		private void BuildPlayerList(RelicApi.GameModeId gameMode, int startingRank = 1, int maxRank = -1)
+		private void BuildPlayerList(RelicApi.MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
 		{
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (gameMode == RelicApi.GameModeId.OneVsOne)
+				if (gameMode == RelicApi.MatchTypeId.Auto1v1)
 				{
 					if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
 					{
@@ -27,7 +27,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == RelicApi.GameModeId.TwoVsTwo)
+				if (gameMode == RelicApi.MatchTypeId.Auto2v2)
 				{
 					if (leaderboardIndex != 8 && leaderboardIndex != 9 && leaderboardIndex != 10 && leaderboardIndex != 11 && leaderboardIndex != 52)
 					{
@@ -35,7 +35,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == RelicApi.GameModeId.ThreeVsThree)
+				if (gameMode == RelicApi.MatchTypeId.Auto3v3)
 				{
 					if (leaderboardIndex != 12 && leaderboardIndex != 13 && leaderboardIndex != 14 && leaderboardIndex != 15 && leaderboardIndex != 53)
 					{
@@ -43,7 +43,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == RelicApi.GameModeId.FourVsFour)
+				if (gameMode == RelicApi.MatchTypeId.Auto4v4)
 				{
 					if (leaderboardIndex != 16 && leaderboardIndex != 17 && leaderboardIndex != 18 && leaderboardIndex != 19 && leaderboardIndex != 54)
 					{

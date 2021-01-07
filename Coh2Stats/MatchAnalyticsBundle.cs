@@ -150,6 +150,21 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
+		public MatchAnalyticsBundle FilterByMatchType(RelicApi.MatchTypeId matchTypeId)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				if (m.matchtype_id == (int)matchTypeId)
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
