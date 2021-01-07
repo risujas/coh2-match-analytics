@@ -111,4 +111,16 @@ namespace Coh2Stats.RelicApi
 		_3v3British_ = 53,
 		_4v4British_ = 54,
 	}
+
+	enum LeaderboardRegionId
+	{
+		Europe = 0,
+		MiddleEast = 1,
+		Asia = 2,
+		NorthAmerica = 3,
+		SouthAmerica = 4,
+		Oceania = 5,
+		Africa = 6,
+		Unknown = 7
+	}
 }
