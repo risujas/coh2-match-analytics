@@ -10,9 +10,9 @@ namespace Coh2Stats
 	{
 		public void Build(RelicApi.GameModeId gameMode)
 		{
-			BuildPlayerList(gameMode);
+			BuildPlayerList(gameMode, 1, 200);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList(gameMode);
+			BuildMatchList(gameMode, 50);
 		}
 
 		private void BuildPlayerList(RelicApi.GameModeId gameMode, int startingRank = 1, int maxRank = -1)
@@ -77,9 +77,15 @@ namespace Coh2Stats
 			}
 		}
 
-		private void BuildMatchList(RelicApi.GameModeId gameMode)
+		private void BuildMatchList(RelicApi.GameModeId gameMode, int maxPlayersProcessed = -1)
 		{
-			for (int i = 0; i < PlayerIdentityTracker.GetNumLoggedPlayers(); i++)
+			int max = PlayerIdentityTracker.GetNumLoggedPlayers();
+			if (maxPlayersProcessed != -1)
+			{
+				max = maxPlayersProcessed;
+			}
+
+			for (int i = 0; i < max; i++)
 			{
 				int maxPlayers = 0;
 				switch (gameMode)
@@ -102,6 +108,8 @@ namespace Coh2Stats
 
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
 				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, maxPlayers);
+
+				Console.WriteLine("Fetched recent match history for {0} ({1})", p.Name, p.Alias);
 			}
 		}
 	}

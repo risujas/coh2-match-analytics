@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 namespace Coh2Stats.RelicApi
 {
 	[Flags]
+	enum RaceFlag
+	{
+		German = 1,
+		Soviet = 2,
+		WGerman = 4,
+		AEF = 8,
+		British = 16
+	}
+
 	enum RaceId
 	{
 		German = 0,

@@ -55,13 +55,13 @@ namespace Coh2Stats
 				public List<Matchhistoryitem> matchhistoryitems { get; set; }
 				public List<object> matchurls { get; set; }
 
-				public bool HasGivenRaces(RaceId raceFlags)
+				public bool HasGivenRaces(RaceFlag raceFlags)
 				{
-					bool requireGerman = raceFlags.HasFlag(RaceId.German);
-					bool requireSoviet = raceFlags.HasFlag(RaceId.Soviet);
-					bool requireWestGerman = raceFlags.HasFlag(RaceId.WGerman);
-					bool requireAef = raceFlags.HasFlag(RaceId.AEF);
-					bool requireBritish = raceFlags.HasFlag(RaceId.British);
+					bool requireGerman = raceFlags.HasFlag(RaceFlag.German);
+					bool requireSoviet = raceFlags.HasFlag(RaceFlag.Soviet);
+					bool requireWestGerman = raceFlags.HasFlag(RaceFlag.WGerman);
+					bool requireAef = raceFlags.HasFlag(RaceFlag.AEF);
+					bool requireBritish = raceFlags.HasFlag(RaceFlag.British);
 
 					bool hasGerman = false;
 					bool hasSoviet = false;

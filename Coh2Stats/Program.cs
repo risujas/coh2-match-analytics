@@ -12,6 +12,41 @@ namespace Coh2Stats
 
 			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
 
+			var games = mab.FilterByRace(RelicApi.RaceFlag.German).GetOrderedPlayCount();
+			Console.WriteLine("\nOSTHEER");
+			foreach (var g in games)
+			{
+				Console.WriteLine(g.Value + " " + g.Key);
+			}
+
+			games = mab.FilterByRace(RelicApi.RaceFlag.Soviet).GetOrderedPlayCount();
+			Console.WriteLine("\nSOVIETS");
+			foreach (var g in games)
+			{
+				Console.WriteLine(g.Value + " " + g.Key);
+			}
+
+			games = mab.FilterByRace(RelicApi.RaceFlag.WGerman).GetOrderedPlayCount();
+			Console.WriteLine("\nOBERKOMMANDO");
+			foreach (var g in games)
+			{
+				Console.WriteLine(g.Value + " " + g.Key);
+			}
+
+			games = mab.FilterByRace(RelicApi.RaceFlag.AEF).GetOrderedPlayCount();
+			Console.WriteLine("\nUSF");
+			foreach (var g in games)
+			{
+				Console.WriteLine(g.Value + " " + g.Key);
+			}
+
+			games = mab.FilterByRace(RelicApi.RaceFlag.British).GetOrderedPlayCount();
+			Console.WriteLine("\nBRITISH");
+			foreach (var g in games)
+			{
+				Console.WriteLine(g.Value + " " + g.Key);
+			}
+
 			Console.ReadLine();
 		}
 	}

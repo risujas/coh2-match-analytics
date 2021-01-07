@@ -17,7 +17,7 @@ namespace Coh2Stats
 			return matchBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByRace(RelicApi.RaceId raceFlags)
+		public MatchAnalyticsBundle FilterByRace(RelicApi.RaceFlag raceFlags)
 		{
 			MatchAnalyticsBundle matchBundle = new MatchAnalyticsBundle();
 
