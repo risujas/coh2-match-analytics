@@ -8,16 +8,10 @@ namespace Coh2Stats
 		static void Main()
 		{
 			DatabaseBuilder db = new DatabaseBuilder();
-			db.Build(GameMode.OneVsOne);
+			db.Build(RelicApi.GameModeId.OneVsOne);
 
-			var temp = MapAnalysis.GetMapPopularityDictionary(RaceId.British);
-			Console.Clear();
-			foreach (var t in temp)
-			{
-				Console.WriteLine(t.Value + " " + t.Key);
-			}
+			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
 
-			PlayerIdentityTracker.PrintLoggedPlayers();
 			Console.ReadLine();
 		}
 	}

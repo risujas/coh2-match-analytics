@@ -8,18 +8,18 @@ namespace Coh2Stats
 {
 	class DatabaseBuilder
 	{
-		public void Build(GameMode gameMode)
+		public void Build(RelicApi.GameModeId gameMode)
 		{
 			BuildPlayerList(gameMode);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
 			BuildMatchList(gameMode);
 		}
 
-		private void BuildPlayerList(GameMode gameMode)
+		private void BuildPlayerList(RelicApi.GameModeId gameMode, int startingRank = 1, int maxRank = -1)
 		{
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (gameMode == GameMode.OneVsOne)
+				if (gameMode == RelicApi.GameModeId.OneVsOne)
 				{
 					if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
 					{
@@ -27,7 +27,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == GameMode.TwoVsTwo)
+				if (gameMode == RelicApi.GameModeId.TwoVsTwo)
 				{
 					if (leaderboardIndex != 8 && leaderboardIndex != 9 && leaderboardIndex != 10 && leaderboardIndex != 11 && leaderboardIndex != 52)
 					{
@@ -35,7 +35,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == GameMode.ThreeVsThree)
+				if (gameMode == RelicApi.GameModeId.ThreeVsThree)
 				{
 					if (leaderboardIndex != 12 && leaderboardIndex != 13 && leaderboardIndex != 14 && leaderboardIndex != 15 && leaderboardIndex != 53)
 					{
@@ -43,7 +43,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == GameMode.FourVsFour)
+				if (gameMode == RelicApi.GameModeId.FourVsFour)
 				{
 					if (leaderboardIndex != 16 && leaderboardIndex != 17 && leaderboardIndex != 18 && leaderboardIndex != 19 && leaderboardIndex != 54)
 					{
@@ -53,7 +53,12 @@ namespace Coh2Stats
 
 				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.rankTotal;
-				int batchStartingIndex = 1;
+				int batchStartingIndex = startingRank;
+
+				if (maxRank != -1)
+				{
+					leaderboardMaxRank = maxRank;
+				}
 
 				while (batchStartingIndex < leaderboardMaxRank)
 				{
@@ -72,23 +77,23 @@ namespace Coh2Stats
 			}
 		}
 
-		private void BuildMatchList(GameMode gameMode)
+		private void BuildMatchList(RelicApi.GameModeId gameMode)
 		{
 			for (int i = 0; i < PlayerIdentityTracker.GetNumLoggedPlayers(); i++)
 			{
 				int maxPlayers = 0;
 				switch (gameMode)
 				{
-					case GameMode.OneVsOne:
+					case RelicApi.GameModeId.OneVsOne:
 						maxPlayers = 2;
 						break;
-					case GameMode.TwoVsTwo:
+					case RelicApi.GameModeId.TwoVsTwo:
 						maxPlayers = 4;
 						break;
-					case GameMode.ThreeVsThree:
+					case RelicApi.GameModeId.ThreeVsThree:
 						maxPlayers = 6;
 						break;
-					case GameMode.FourVsFour:
+					case RelicApi.GameModeId.FourVsFour:
 						maxPlayers = 8;
 						break;
 					default:
