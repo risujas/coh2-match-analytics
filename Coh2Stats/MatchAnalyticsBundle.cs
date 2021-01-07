@@ -49,7 +49,7 @@ namespace Coh2Stats
 
 		// OrderMapsByRaceWinRate
 
-		public Dictionary<string, int> GetOrderedPlayCount()
+		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
 
