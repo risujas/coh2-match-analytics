@@ -12,7 +12,7 @@ namespace Coh2Stats
 		{
 			BuildPlayerList(gameMode, 1, 200);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList(gameMode, 5);
+			BuildMatchList(5);
 		}
 
 		private void BuildPlayerList(RelicApi.GameModeId gameMode, int startingRank = 1, int maxRank = -1)
@@ -77,7 +77,7 @@ namespace Coh2Stats
 			}
 		}
 
-		private void BuildMatchList(RelicApi.GameModeId gameMode, int maxPlayersProcessed = -1)
+		private void BuildMatchList(int maxPlayersProcessed = -1)
 		{
 			int max = PlayerIdentityTracker.GetNumLoggedPlayers();
 			if (maxPlayersProcessed != -1)
@@ -87,27 +87,8 @@ namespace Coh2Stats
 
 			for (int i = 0; i < max; i++)
 			{
-				int maxPlayers = 0;
-				switch (gameMode)
-				{
-					case RelicApi.GameModeId.OneVsOne:
-						maxPlayers = 2;
-						break;
-					case RelicApi.GameModeId.TwoVsTwo:
-						maxPlayers = 4;
-						break;
-					case RelicApi.GameModeId.ThreeVsThree:
-						maxPlayers = 6;
-						break;
-					case RelicApi.GameModeId.FourVsFour:
-						maxPlayers = 8;
-						break;
-					default:
-						throw new Exception("Invalid value for " + maxPlayers);
-				}
-
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
-				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name, maxPlayers);
+				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name);
 
 				Console.WriteLine("Fetched recent match history for {0} ({1})", p.Name, p.Alias);
 			}
