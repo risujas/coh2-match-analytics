@@ -67,15 +67,6 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public Dictionary<string, double> GetOrderedMapWinRate()
-		{
-			Dictionary<string, double> winRatesByMap = new Dictionary<string, double>();
-
-			// TODO
-
-			return winRatesByMap;
-		}
-
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
