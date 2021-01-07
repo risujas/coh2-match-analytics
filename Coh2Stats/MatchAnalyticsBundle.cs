@@ -47,6 +47,8 @@ namespace Coh2Stats
 			return matchBundle;
 		}
 
+		// OrderMapsByRaceWinRate
+
 		public Dictionary<string, int> GetOrderedPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();

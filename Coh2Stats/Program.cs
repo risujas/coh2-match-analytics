@@ -10,7 +10,7 @@ namespace Coh2Stats
 			DatabaseBuilder db = new DatabaseBuilder();
 			db.Build(RelicApi.GameModeId.OneVsOne);
 
-			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByRace(RelicApi.RaceFlag.WGerman | RelicApi.RaceFlag.British);
+			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByMap("crossroadswx");
 
 			var games = mab.FilterByRace(RelicApi.RaceFlag.German).GetOrderedPlayCount();
 			Console.WriteLine("\nOSTHEER");
