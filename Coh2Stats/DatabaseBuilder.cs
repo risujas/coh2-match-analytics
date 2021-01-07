@@ -15,40 +15,13 @@ namespace Coh2Stats
 			BuildMatchList(5);
 		}
 
-		private void BuildPlayerList(RelicApi.MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
+		private void BuildPlayerList(RelicApi.MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
 		{
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (gameMode == RelicApi.MatchTypeId._1v1_)
+				if (RelicApi.LeaderboardCompatibility.LeaderboardBelongsWithMatchType((RelicApi.LeaderboardId)leaderboardIndex, matchTypeId) == false)
 				{
-					if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
-					{
-						continue;
-					}
-				}
-
-				if (gameMode == RelicApi.MatchTypeId._2v2_)
-				{
-					if (leaderboardIndex != 8 && leaderboardIndex != 9 && leaderboardIndex != 10 && leaderboardIndex != 11 && leaderboardIndex != 52)
-					{
-						continue;
-					}
-				}
-
-				if (gameMode == RelicApi.MatchTypeId._3v3_)
-				{
-					if (leaderboardIndex != 12 && leaderboardIndex != 13 && leaderboardIndex != 14 && leaderboardIndex != 15 && leaderboardIndex != 53)
-					{
-						continue;
-					}
-				}
-
-				if (gameMode == RelicApi.MatchTypeId._4v4_)
-				{
-					if (leaderboardIndex != 16 && leaderboardIndex != 17 && leaderboardIndex != 18 && leaderboardIndex != 19 && leaderboardIndex != 54)
-					{
-						continue;
-					}
+					continue;
 				}
 
 				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);

@@ -123,4 +123,48 @@ namespace Coh2Stats.RelicApi
 		Africa = 6,
 		Unknown = 7
 	}
+
+	class LeaderboardCompatibility
+	{
+		public static bool LeaderboardBelongsWithMatchType(LeaderboardId leaderboardId, MatchTypeId matchTypeId)
+		{
+			if (matchTypeId == MatchTypeId._1v1_)
+			{
+				if (leaderboardId == LeaderboardId._1v1German_) { return true; }
+				if (leaderboardId == LeaderboardId._1v1Soviet_) { return true; }
+				if (leaderboardId == LeaderboardId._1v1WestGerman_) { return true; }
+				if (leaderboardId == LeaderboardId._1v1AEF_) { return true; }
+				if (leaderboardId == LeaderboardId._1v1British_) { return true; }
+			}
+
+			if (matchTypeId == MatchTypeId._2v2_)
+			{
+				if (leaderboardId == LeaderboardId._2v2German_) { return true; }
+				if (leaderboardId == LeaderboardId._2v2Soviet_) { return true; }
+				if (leaderboardId == LeaderboardId._2v2WestGerman_) { return true; }
+				if (leaderboardId == LeaderboardId._2v2AEF_) { return true; }
+				if (leaderboardId == LeaderboardId._2v2British_) { return true; }
+			}
+
+			if (matchTypeId == MatchTypeId._3v3_)
+			{
+				if (leaderboardId == LeaderboardId._3v3German_) { return true; }
+				if (leaderboardId == LeaderboardId._3v3Soviet_) { return true; }
+				if (leaderboardId == LeaderboardId._3v3WestGerman_) { return true; }
+				if (leaderboardId == LeaderboardId._3v3AEF_) { return true; }
+				if (leaderboardId == LeaderboardId._3v3British_) { return true; }
+			}
+
+			if (matchTypeId == MatchTypeId._4v4_)
+			{
+				if (leaderboardId == LeaderboardId._4v4German_) { return true; }
+				if (leaderboardId == LeaderboardId._4v4Soviet_) { return true; }
+				if (leaderboardId == LeaderboardId._4v4WestGerman_) { return true; }
+				if (leaderboardId == LeaderboardId._4v4AEF_) { return true; }
+				if (leaderboardId == LeaderboardId._4v4British_) { return true; }
+			}
+
+			return false;
+		}
+	}
 }
