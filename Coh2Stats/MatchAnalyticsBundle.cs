@@ -131,6 +131,25 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
+		public MatchAnalyticsBundle FilterByPartialPlayerNickname(string nickname)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				foreach (var rr in m.matchhistoryreportresults)
+				{
+					string currentNick = PlayerIdentityTracker.GetPlayerByProfileId(rr.profile_id).Alias;
+					if (currentNick.ToLower().Contains(nickname.ToLower()))
+					{
+						matchAnalyticsBundle.Matches.Add(m);
+					}
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();

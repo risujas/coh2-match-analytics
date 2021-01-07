@@ -11,7 +11,7 @@ namespace Coh2Stats
 			db.Build(RelicApi.GameModeId.OneVsOne);
 
 			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
-			var games = mab.FilterByDescription("SESSION_MATCH_KEY");
+			var games = mab.FilterByDescription("SESSION_MATCH_KEY").FilterByMaxAgeInHours(24).FilterByPartialPlayerNickname("blois");
 			var dict = games.GetOrderedMapPlayCount();
 
 			foreach(var d in dict)
