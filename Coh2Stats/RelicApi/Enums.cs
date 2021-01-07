@@ -33,24 +33,24 @@ namespace Coh2Stats.RelicApi
 
 	enum MatchTypeId
 	{
-        CustomFriends = 0,
-		Auto1v1 = 1,
-		Auto2v2 = 2,
-		Auto3v3 = 3,
-		Auto4v4 = 4,
-        EasyAi2v2 = 5,
-        MediumAi2v2 = 6,
-        HardAi2v2 = 7,
-        ExpertAi2v2 = 8,
-        EasyAi3v3 = 9,
-        MediumAi3v3 = 10,
-        HardAi3v3 = 11,
-        ExpertAi3v3 = 12,
-        EasyAi4v4 = 13,
-        MediumAi4v4 = 14,
-        HardAi4v4 = 15,
-        ExpertAi4v4 = 16,
-        CustomPublic = 22
+        _Custom_ = 0,
+		_1v1_ = 1,
+		_2v2_ = 2,
+		_3v3_ = 3,
+		_4v4_ = 4,
+        _2v2AiEasy_ = 5,
+        _2v2AiMedium_ = 6,
+		_2v2AiHard_ = 7,
+		_2v2AiExpert_ = 8,
+        _3v3AiEasy_ = 9,
+		_3v3AiMedium_ = 10,
+		_3v3AiHard_ = 11,
+		_3v3AiExpert_ = 12,
+		_4v4AiEasy_ = 13,
+		_4v4AiMedium_ = 14,
+		_4v4AiHard_ = 15,
+		_4v4AiExpert_ = 16,
+        _CustomPublic_ = 22
 	}
 
 	enum LeaderboardId

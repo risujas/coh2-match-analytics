@@ -8,10 +8,10 @@ namespace Coh2Stats
 		static void Main()
 		{
 			DatabaseBuilder db = new DatabaseBuilder();
-			db.Build(RelicApi.MatchTypeId.Auto1v1);
+			db.Build(RelicApi.MatchTypeId._1v1_);
 
 			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
-			var games = mab.FilterByMatchType(RelicApi.MatchTypeId.Auto1v1);
+			var games = mab.FilterByMatchType(RelicApi.MatchTypeId._1v1_);
 			var dict = games.GetOrderedMapPlayCount();
 
 			foreach(var d in dict)

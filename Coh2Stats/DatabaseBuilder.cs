@@ -19,7 +19,7 @@ namespace Coh2Stats
 		{
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (gameMode == RelicApi.MatchTypeId.Auto1v1)
+				if (gameMode == RelicApi.MatchTypeId._1v1_)
 				{
 					if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
 					{
@@ -27,7 +27,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == RelicApi.MatchTypeId.Auto2v2)
+				if (gameMode == RelicApi.MatchTypeId._2v2_)
 				{
 					if (leaderboardIndex != 8 && leaderboardIndex != 9 && leaderboardIndex != 10 && leaderboardIndex != 11 && leaderboardIndex != 52)
 					{
@@ -35,7 +35,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == RelicApi.MatchTypeId.Auto3v3)
+				if (gameMode == RelicApi.MatchTypeId._3v3_)
 				{
 					if (leaderboardIndex != 12 && leaderboardIndex != 13 && leaderboardIndex != 14 && leaderboardIndex != 15 && leaderboardIndex != 53)
 					{
@@ -43,7 +43,7 @@ namespace Coh2Stats
 					}
 				}
 
-				if (gameMode == RelicApi.MatchTypeId.Auto4v4)
+				if (gameMode == RelicApi.MatchTypeId._4v4_)
 				{
 					if (leaderboardIndex != 16 && leaderboardIndex != 17 && leaderboardIndex != 18 && leaderboardIndex != 19 && leaderboardIndex != 54)
 					{
