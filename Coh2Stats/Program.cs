@@ -8,29 +8,15 @@ namespace Coh2Stats
 		static void Main()
 		{
 			DatabaseBuilder db = new DatabaseBuilder();
-			db.Build(RelicApi.GameModeId.OneVsOne);
+			db.Build(RelicApi.GameModeId.FourVsFour);
 
 			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
+			var games = mab.FilterByRace(RelicApi.RaceFlag.British).FilterByMaxAgeInHours(24 * 7);
+			var dict = games.GetOrderedMapPlayCount();
 
-			var games = mab.FilterByRace(RelicApi.RaceFlag.AEF).GetOrderedMapPlayCount();
-			Console.WriteLine("\nUSF TOTAL");
-			foreach (var g in games)
+			foreach(var d in dict)
 			{
-				Console.WriteLine(g.Value + " " + g.Key);
-			}
-
-			games = mab.FilterByRace(RelicApi.RaceFlag.AEF).FilterByResult(true, RelicApi.FactionId.Allies).GetOrderedMapPlayCount();
-			Console.WriteLine("\nUSF WINS");
-			foreach (var g in games)
-			{
-				Console.WriteLine(g.Value + " " + g.Key);
-			}
-
-			games = mab.FilterByRace(RelicApi.RaceFlag.AEF).FilterByResult(false, RelicApi.FactionId.Allies).GetOrderedMapPlayCount();
-			Console.WriteLine("\nUSF LOSSES");
-			foreach (var g in games)
-			{
-				Console.WriteLine(g.Value + " " + g.Key);
+				Console.WriteLine(d.Value + " " + d.Key);
 			}
 
 			Console.ReadLine();

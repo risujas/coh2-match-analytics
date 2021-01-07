@@ -67,6 +67,55 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
+		public MatchAnalyticsBundle FilterByCompletionTime(int completionTimeBegin, int completionTimeEnd)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				if (m.completiontime >= completionTimeBegin && m.completiontime <= completionTimeEnd)
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
+		public MatchAnalyticsBundle FilterByStartGameTime(int startGameTimeBegin, int startGameTimeEnd)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				if (m.startgametime >= startGameTimeBegin && m.startgametime <= startGameTimeEnd)
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
+		public MatchAnalyticsBundle FilterByMaxAgeInHours(int maxAgeInHours)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				DateTime dt = DateTime.UtcNow;
+				DateTimeOffset dto = new DateTimeOffset(dt).AddHours(-maxAgeInHours);
+				long cutoffTime = dto.ToUnixTimeSeconds();
+
+				if (m.completiontime > cutoffTime)
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
