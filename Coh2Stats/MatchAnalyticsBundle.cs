@@ -32,6 +32,21 @@ namespace Coh2Stats
 			return matchBundle;
 		}
 
+		public MatchAnalyticsBundle FilterByMap(string mapName)
+		{
+			MatchAnalyticsBundle matchBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				if (m.mapname == mapName)
+				{
+					matchBundle.Matches.Add(m);
+				}
+			}
+
+			return matchBundle;
+		}
+
 		public Dictionary<string, int> GetOrderedPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
