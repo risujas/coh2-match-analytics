@@ -16,9 +16,13 @@ namespace Coh2Stats
 		[JsonProperty("level")] public int Level { get; set; }
 		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
 		[JsonProperty("country")] public string Country { get; set; }
-		public int BestRank = int.MaxValue;
 
-		public PlayerIdentity() {}
+		int[] leaderboardRanks = new int[55];
+
+		public PlayerIdentity() 
+		{
+			InitRanks();
+		}
 
 		public PlayerIdentity (PlayerIdentity relicObject)
 		{
@@ -30,6 +34,31 @@ namespace Coh2Stats
 			Level = relicObject.Level;
 			LeaderboardRegionId = relicObject.LeaderboardRegionId;
 			Country = relicObject.Country;
+		}
+
+		private void InitRanks()
+		{
+			for (int i = 0; i < leaderboardRanks.Length; i++)
+			{
+				leaderboardRanks[i] = int.MaxValue;
+			}
+		}
+
+		public int BestRank()
+		{
+			int best = int.MaxValue;
+			int indexOfBest = 0;
+
+			for (int i = 0; i < leaderboardRanks.Length; i++)
+			{
+				if (leaderboardRanks[i] < best)
+				{
+					best = leaderboardRanks[i];
+					indexOfBest = i;
+				}
+			}
+
+			return indexOfBest;
 		}
 	}
 

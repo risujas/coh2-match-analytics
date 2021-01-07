@@ -10,9 +10,9 @@ namespace Coh2Stats
 	{
 		public void Build(RelicApi.MatchTypeId gameMode)
 		{
-			BuildPlayerList(gameMode, 1, 200);
+			BuildPlayerList(gameMode);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList(5);
+			BuildMatchList();
 		}
 
 		private void BuildPlayerList(RelicApi.MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)

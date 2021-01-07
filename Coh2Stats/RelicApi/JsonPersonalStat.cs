@@ -71,7 +71,11 @@ namespace Coh2Stats
 				{
 					foreach (var x in sg.members)
 					{
-						PlayerIdentityTracker.LogPlayer(new PlayerIdentity(x));
+						var p = new PlayerIdentity(x);
+
+						// TODO add leaderboard stats to p
+
+						PlayerIdentityTracker.LogPlayer(p);
 					}
 				}
 

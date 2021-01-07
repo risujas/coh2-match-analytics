@@ -180,6 +180,13 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
+		/*
+		public MatchAnalyticsBundle FilterByMinimumRank(int minRank, bool requireOnAll)
+		{
+			// TODO
+		}
+		*/
+
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
