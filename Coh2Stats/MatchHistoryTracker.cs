@@ -17,7 +17,7 @@ namespace Coh2Stats
 
 		public static void LogMatch(RelicApi.JsonRecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
-			if (GetById(matchHistoryStat.id) == null)
+			if (GetById(matchHistoryStat.Id) == null)
 			{
 				matches.Add(matchHistoryStat);
 			}
@@ -27,7 +27,7 @@ namespace Coh2Stats
 		{
 			foreach (var m in matches)
 			{
-				if (m.id == id)
+				if (m.Id == id)
 				{
 					return m;
 				}

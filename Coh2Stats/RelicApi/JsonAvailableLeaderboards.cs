@@ -1,5 +1,5 @@
-﻿#pragma warning disable IDE1006
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
@@ -7,71 +7,61 @@ namespace Coh2Stats
 	{
 		class JsonAvailableLeaderboards
 		{
-			public class Result
-			{
-				public int code { get; set; }
-				public string message { get; set; }
-			}
-
 			public class Leaderboardmap
 			{
-				public int matchtype_id { get; set; }
-				public int statgroup_type { get; set; }
-				public int race_id { get; set; }
+				[JsonProperty("matchtype_id")] public int MatchTypeId { get; set; }
+				[JsonProperty("statgroup_type")] public int StatGroupType { get; set; }
+				[JsonProperty("race_id")] public int RaceId { get; set; }
 			}
 
 			public class Leaderboard
 			{
-				public int id { get; set; }
-				public string name { get; set; }
-				public int isranked { get; set; }
-				public List<Leaderboardmap> leaderboardmap { get; set; }
+				[JsonProperty("id")] public int Id { get; set; }
+				[JsonProperty("name")] public string Name { get; set; }
+				[JsonProperty("isranked")] public int IsRanked { get; set; }
+				[JsonProperty("leaderboardmap")] public List<Leaderboardmap> LeaderboardMap { get; set; }
 			}
 
 			public class MatchType
 			{
-				public int id { get; set; }
-				public string name { get; set; }
-				public int locstringid { get; set; }
-				public string localizedName { get; set; }
+				[JsonProperty("id")] public int Id { get; set; }
+				[JsonProperty("name")] public string Name { get; set; }
+				[JsonProperty("locstringid")] public int LocStringId { get; set; }
+				[JsonProperty("localizedName")] public string LocalizedName { get; set; }
 			}
 
 			public class Race
 			{
-				public int id { get; set; }
-				public string name { get; set; }
-				public int faction_id { get; set; }
-				public int locstringid { get; set; }
-				public string localizedName { get; set; }
+				[JsonProperty("id")] public int Id { get; set; }
+				[JsonProperty("name")] public string Name { get; set; }
+				[JsonProperty("faction_id")] public int FactionId { get; set; }
+				[JsonProperty("locstringid")] public int LocStringId { get; set; }
+				[JsonProperty("localizedName")] public string LocalizedName { get; set; }
 			}
 
 			public class Faction
 			{
-				public int id { get; set; }
-				public string name { get; set; }
-				public int locstringid { get; set; }
-				public string localizedName { get; set; }
+				[JsonProperty("id")] public int Id { get; set; }
+				[JsonProperty("name")] public string Name { get; set; }
+				[JsonProperty("locstringid")] public int LocStringId { get; set; }
+				[JsonProperty("localizedName")] public string LocalizedName { get; set; }
 			}
 
 			public class LeaderboardRegion
 			{
-				public int id { get; set; }
-				public string name { get; set; }
-				public int locstringid { get; set; }
+				[JsonProperty("id")] public int Id { get; set; }
+				[JsonProperty("name")] public string Name { get; set; }
+				[JsonProperty("locstringid")] public int LocStringId { get; set; }
 			}
 
 			public class Root
 			{
-				public Result result { get; set; }
-				public List<Leaderboard> leaderboards { get; set; }
-				public List<MatchType> matchTypes { get; set; }
-				public List<Race> races { get; set; }
-				public List<Faction> factions { get; set; }
-				public List<LeaderboardRegion> leaderboardRegions { get; set; }
-
-				private Root()
-				{
-				}
+				[JsonProperty("result")] public WebRequestResult Result { get; set; }
+				[JsonProperty("leaderboards")] public List<Leaderboard> Leaderboards { get; set; }
+				[JsonProperty("matchTypes")] public List<MatchType> MatchTypes { get; set; }
+				[JsonProperty("races")] public List<Race> Races { get; set; }
+				[JsonProperty("factions")] public List<Faction> Factions { get; set; }
+				[JsonProperty("leaderboardRegions")] public List<LeaderboardRegion> LeaderboardRegions { get; set; }
 			}
 
 			public static Root Get()

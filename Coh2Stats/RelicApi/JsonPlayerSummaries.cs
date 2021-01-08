@@ -1,6 +1,6 @@
-﻿#pragma warning disable IDE1006
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
@@ -8,54 +8,40 @@ namespace Coh2Stats
 	{
 		class JsonPlayerSummaries
 		{
-			public class Result
-			{
-				public int code { get; set; }
-				public string message { get; set; }
-			}
-
-			public class Avatar: PlayerIdentity
-			{
-			}
-
 			public class Player
 			{
-				public string steamid { get; set; }
-				public int communityvisibilitystate { get; set; }
-				public int profilestate { get; set; }
-				public string personaname { get; set; }
-				public int commentpermission { get; set; }
-				public string profileurl { get; set; }
-				public string avatar { get; set; }
-				public string avatarmedium { get; set; }
-				public string avatarfull { get; set; }
-				public string avatarhash { get; set; }
-				public int personastate { get; set; }
-				public string primaryclanid { get; set; }
-				public int timecreated { get; set; }
-				public int personastateflags { get; set; }
-				public string loccountrycode { get; set; }
+				[JsonProperty("steamid")] public string SteamId { get; set; }
+				[JsonProperty("communityvisibilitystate")] public int CommunityVisibilityState { get; set; }
+				[JsonProperty("profilestate")] public int ProfileState { get; set; }
+				[JsonProperty("personaname")] public string PersonaName { get; set; }
+				[JsonProperty("commentpermission")] public int CommentPermission { get; set; }
+				[JsonProperty("profileurl")] public string ProfileUrl { get; set; }
+				[JsonProperty("avatar")] public string Avatar { get; set; }
+				[JsonProperty("avatarmedium")] public string AvatarMedium { get; set; }
+				[JsonProperty("avatarfull")] public string AvatarFull { get; set; }
+				[JsonProperty("avatarhash")] public string AvatarHash { get; set; }
+				[JsonProperty("personastate")] public int PersonaState { get; set; }
+				[JsonProperty("primaryclanid")] public string PrimaryClanId { get; set; }
+				[JsonProperty("timecreated")] public int TimeCreated { get; set; }
+				[JsonProperty("personastateflags")] public int PersonaStateFlags { get; set; }
+				[JsonProperty("loccountrycode")] public string LocCountryCode { get; set; }
 			}
 
 			public class Response
 			{
-				public List<Player> players { get; set; }
+				[JsonProperty("players")] public List<Player> Players { get; set; }
 			}
 
 			public class SteamResults
 			{
-				public Response response { get; set; }
+				[JsonProperty("response")] public Response Response { get; set; }
 			}
 
 			public class Root
 			{
-				public Result result { get; set; }
-				public List<Avatar> avatars { get; set; }
-				public SteamResults steamResults { get; set; }
-
-				private Root()
-				{
-				}
+				[JsonProperty("result")] public WebRequestResult Result { get; set; }
+				[JsonProperty("avatars")] public List<PlayerIdentity> Avatars { get; set; }
+				[JsonProperty("steamResults")] public SteamResults SteamResults { get; set; }
 			}
 
 			public static Root GetBySteamId(string steamId)
@@ -72,16 +58,16 @@ namespace Coh2Stats
 
 				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
-				if (response.result.message == "SUCCESS")
+				if (response.Result.Message == "SUCCESS")
 				{
-					foreach (var x in response.avatars)
+					foreach (var x in response.Avatars)
 					{
-						PlayerIdentityTracker.LogPlayer(new PlayerIdentity(x));
+						PlayerIdentityTracker.LogPlayer(x);
 					}
 				}
 				else
 				{
-					throw new Exception(response.result.message + ": " + idString);
+					throw new Exception(response.Result.Message + ": " + idString);
 				}
 
 				return response;

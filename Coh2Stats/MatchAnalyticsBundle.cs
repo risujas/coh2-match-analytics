@@ -38,7 +38,7 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (m.mapname == mapName)
+				if (m.MapName == mapName)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -73,7 +73,7 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (m.completiontime >= completionTimeBegin && m.completiontime <= completionTimeEnd)
+				if (m.CompletionTime >= completionTimeBegin && m.CompletionTime <= completionTimeEnd)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -88,7 +88,7 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (m.startgametime >= startGameTimeBegin && m.startgametime <= startGameTimeEnd)
+				if (m.StartGameTime >= startGameTimeBegin && m.StartGameTime <= startGameTimeEnd)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -107,7 +107,7 @@ namespace Coh2Stats
 				DateTimeOffset dto = new DateTimeOffset(dt).AddHours(-maxAgeInHours);
 				long cutoffTime = dto.ToUnixTimeSeconds();
 
-				if (m.completiontime > cutoffTime)
+				if (m.CompletionTime > cutoffTime)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -122,7 +122,7 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (description == m.description)
+				if (description == m.Description)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -137,9 +137,9 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				foreach (var rr in m.matchhistoryreportresults)
+				foreach (var rr in m.MatchHistoryReportResults)
 				{
-					string currentNick = PlayerIdentityTracker.GetPlayerByProfileId(rr.profile_id).Alias;
+					string currentNick = PlayerIdentityTracker.GetPlayerByProfileId(rr.ProfileId).Alias;
 					if (currentNick.ToLower().Contains(nickname.ToLower()))
 					{
 						matchAnalyticsBundle.Matches.Add(m);
@@ -156,7 +156,7 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (m.matchtype_id == (int)matchTypeId)
+				if (m.MatchTypeId == (int)matchTypeId)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -171,7 +171,7 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (m.observertotal >= minObserverCount)
+				if (m.ObserverTotal >= minObserverCount)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -193,12 +193,12 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (!keyValuePairs.ContainsKey(m.mapname))
+				if (!keyValuePairs.ContainsKey(m.MapName))
 				{
-					keyValuePairs.Add(m.mapname, 0);
+					keyValuePairs.Add(m.MapName, 0);
 				}
 
-				keyValuePairs[m.mapname] += 1;
+				keyValuePairs[m.MapName] += 1;
 			}
 
 			keyValuePairs = keyValuePairs.OrderBy(p => p.Value).ToDictionary(p => p.Key, p => p.Value);

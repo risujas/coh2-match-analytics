@@ -5,6 +5,12 @@ using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
+	public class WebRequestResult
+	{
+		[JsonProperty("code")] public int Code { get; set; }
+		[JsonProperty("message")] public string Message { get; set; }
+	}
+
 	class WebRequestHandler
 	{
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)

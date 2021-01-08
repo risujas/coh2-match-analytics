@@ -1,6 +1,6 @@
-﻿#pragma warning disable IDE1006
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
@@ -8,60 +8,54 @@ namespace Coh2Stats
 	{
 		class JsonRecentMatchHistory
 		{
-			public class Result
-			{
-				public int code { get; set; }
-				public string message { get; set; }
-			}
-
 			public class Matchhistoryreportresult
 			{
-				public int matchhistory_id { get; set; }
-				public int profile_id { get; set; }
-				public int resulttype { get; set; }
-				public int teamid { get; set; }
-				public int race_id { get; set; }
-				public int xpgained { get; set; }
-				public string counters { get; set; }
-				public int matchstartdate { get; set; }
+				[JsonProperty("matchhistory_id")] public int MatchHistoryId { get; set; }
+				[JsonProperty("profile_id")] public int ProfileId { get; set; }
+				[JsonProperty("resulttype")] public int ResultType { get; set; }
+				[JsonProperty("teamid")] public int TeamId { get; set; }
+				[JsonProperty("race_id")] public int RaceId { get; set; }
+				[JsonProperty("xpgained")] public int XpGained { get; set; }
+				[JsonProperty("counters")] public string Counters { get; set; }
+				[JsonProperty("matchstartdate")] public int MatchStartDate { get; set; }
 			}
 
 			public class Matchhistoryitem
 			{
-				public int profile_id { get; set; }
-				public int matchhistory_id { get; set; }
-				public int iteminstance_id { get; set; }
-				public int itemdefinition_id { get; set; }
-				public int durabilitytype { get; set; }
-				public int durability { get; set; }
-				public string metadata { get; set; }
-				public int itemlocation_id { get; set; }
+				[JsonProperty("profile_id")] public int ProfileId { get; set; }
+				[JsonProperty("matchhistory_id")] public int MatchHistoryId { get; set; }
+				[JsonProperty("iteminstance_id")] public int ItemInstanceId { get; set; }
+				[JsonProperty("itemdefinition_id")] public int ItemDefinitionId { get; set; }
+				[JsonProperty("durabilitytype")] public int DurabilityType { get; set; }
+				[JsonProperty("durability")] public int Durability { get; set; }
+				[JsonProperty("metadata")] public string MetaData { get; set; }
+				[JsonProperty("itemlocation_id")] public int ItemLocationId { get; set; }
 			}
 
 			public class MatchHistoryStat
 			{
-				public int id { get; set; }
-				public int creator_profile_id { get; set; }
-				public string mapname { get; set; }
-				public int maxplayers { get; set; }
-				public int matchtype_id { get; set; }
-				public string options { get; set; }
-				public string slotinfo { get; set; }
-				public string description { get; set; }
-				public int startgametime { get; set; }
-				public int completiontime { get; set; }
-				public int observertotal { get; set; }
-				public List<Matchhistoryreportresult> matchhistoryreportresults { get; set; }
-				public List<Matchhistoryitem> matchhistoryitems { get; set; }
-				public List<object> matchurls { get; set; }
+				[JsonProperty("id")] public int Id { get; set; }
+				[JsonProperty("creator_profile_id")] public int CreatorProfileId { get; set; }
+				[JsonProperty("mapname")] public string MapName { get; set; }
+				[JsonProperty("maxplayers")] public int MaxPlayers { get; set; }
+				[JsonProperty("matchtype_id")] public int MatchTypeId { get; set; }
+				[JsonProperty("options")] public string Options { get; set; }
+				[JsonProperty("slotinfo")] public string SlotInfo { get; set; }
+				[JsonProperty("description")] public string Description { get; set; }
+				[JsonProperty("startgametime")] public int StartGameTime { get; set; }
+				[JsonProperty("completiontime")] public int CompletionTime { get; set; }
+				[JsonProperty("observertotal")] public int ObserverTotal { get; set; }
+				[JsonProperty("matchhistoryreportresults")] public List<Matchhistoryreportresult> MatchHistoryReportResults { get; set; }
+				[JsonProperty("matchhistoryitems")] public List<Matchhistoryitem> MatchHistoryItems { get; set; }
+				[JsonProperty("matchurls")] public List<object> MatchUrls { get; set; }
 
 				public bool HasAxisVictory()
 				{
-					foreach (var x in matchhistoryreportresults)
+					foreach (var x in MatchHistoryReportResults)
 					{
-						if (x.race_id == (int)RaceId.German || x.race_id == (int)RaceId.WGerman)
+						if (x.RaceId == (int)RaceId.German || x.RaceId == (int)RaceId.WGerman)
 						{
-							if (x.resulttype == 1)
+							if (x.ResultType == 1)
 							{
 								return true;
 							}
@@ -90,25 +84,25 @@ namespace Coh2Stats
 					bool hasAef = false;
 					bool hasBritish = false;
 
-					foreach (var x in matchhistoryreportresults)
+					foreach (var x in MatchHistoryReportResults)
 					{
-						if (x.race_id == (int)RaceId.German)
+						if (x.RaceId == (int)RaceId.German)
 						{
 							hasGerman = true;
 						}
-						if (x.race_id == (int)RaceId.Soviet)
+						if (x.RaceId == (int)RaceId.Soviet)
 						{
 							hasSoviet = true;
 						}
-						if (x.race_id == (int)RaceId.WGerman)
+						if (x.RaceId == (int)RaceId.WGerman)
 						{
 							hasWestGerman = true;
 						}
-						if (x.race_id == (int)RaceId.AEF)
+						if (x.RaceId == (int)RaceId.AEF)
 						{
 							hasAef = true;
 						}
-						if (x.race_id == (int)RaceId.British)
+						if (x.RaceId == (int)RaceId.British)
 						{
 							hasBritish = true;
 						}
@@ -139,19 +133,11 @@ namespace Coh2Stats
 				}
 			}
 
-			public class Profile: PlayerIdentity
-			{
-			}
-
 			public class Root
 			{
-				public Result result { get; set; }
-				public List<MatchHistoryStat> matchHistoryStats { get; set; }
-				public List<Profile> profiles { get; set; }
-
-				private Root()
-				{
-				}
+				[JsonProperty("result")] public WebRequestResult Result { get; set; }
+				[JsonProperty("matchHistoryStats")] public List<MatchHistoryStat> MatchHistoryStats { get; set; }
+				[JsonProperty("profiles")] public List<PlayerIdentity> Profiles { get; set; }
 			}
 
 			public static Root GetBySteamId(string steamId)
@@ -168,12 +154,12 @@ namespace Coh2Stats
 
 				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
-				foreach (var x in response.profiles)
+				foreach (var x in response.Profiles)
 				{
-					PlayerIdentityTracker.LogPlayer(new PlayerIdentity(x));
+					PlayerIdentityTracker.LogPlayer(x);
 				}
 
-				foreach (var mhs in response.matchHistoryStats)
+				foreach (var mhs in response.MatchHistoryStats)
 				{
 					MatchHistoryTracker.LogMatch(mhs);
 				}

@@ -8,7 +8,7 @@ namespace Coh2Stats
 		static void Main()
 		{
 			DatabaseBuilder db = new DatabaseBuilder();
-			db.Build(RelicApi.MatchTypeId._1v1_);
+			db.Build(RelicApi.MatchTypeId._1v1_, 10);
 
 			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
 			var games = mab.FilterByMatchType(RelicApi.MatchTypeId._1v1_);

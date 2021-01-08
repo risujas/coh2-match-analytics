@@ -17,12 +17,7 @@ namespace Coh2Stats
 		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
 		[JsonProperty("country")] public string Country { get; set; }
 
-		int[] leaderboardRanks = new int[55];
-
-		public PlayerIdentity() 
-		{
-			InitRanks();
-		}
+		public PlayerIdentity() { }
 
 		public PlayerIdentity (PlayerIdentity relicObject)
 		{
@@ -36,29 +31,9 @@ namespace Coh2Stats
 			Country = relicObject.Country;
 		}
 
-		private void InitRanks()
+		public int GetHighestRank()
 		{
-			for (int i = 0; i < leaderboardRanks.Length; i++)
-			{
-				leaderboardRanks[i] = int.MaxValue;
-			}
-		}
-
-		public int BestRank()
-		{
-			int best = int.MaxValue;
-			int indexOfBest = 0;
-
-			for (int i = 0; i < leaderboardRanks.Length; i++)
-			{
-				if (leaderboardRanks[i] < best)
-				{
-					best = leaderboardRanks[i];
-					indexOfBest = i;
-				}
-			}
-
-			return indexOfBest;
+			return LeaderboardStatTracker.GetHighestStatByStatGroup(PersonalStatGroupId).Rank;
 		}
 	}
 
@@ -126,7 +101,7 @@ namespace Coh2Stats
 		{
 			foreach (var p in playerIdentities)
 			{
-				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias + " " + p.BestRank);
+				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias + " " + p.GetHighestRank());
 			}
 		}
 
@@ -143,7 +118,7 @@ namespace Coh2Stats
 
 		public static void SortPlayersByHighestRank()
 		{
-			playerIdentities = playerIdentities.OrderBy(p => p.BestRank).ToList();
+			playerIdentities = playerIdentities.OrderBy(p => p.GetHighestRank()).ToList();
 		}
 	}
 }

@@ -1,6 +1,6 @@
-﻿#pragma warning disable IDE1006
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
@@ -8,51 +8,12 @@ namespace Coh2Stats
 	{
 		class JsonLeaderboard
 		{
-			public class Result
-			{
-				public int code { get; set; }
-				public string message { get; set; }
-			}
-
-			public class Member: PlayerIdentity
-			{
-			}
-
-			public class StatGroup
-			{
-				public int id { get; set; }
-				public string name { get; set; }
-				public int type { get; set; }
-				public List<Member> members { get; set; }
-			}
-
-			public class LeaderboardStat
-			{
-				public int statGroup_id { get; set; }
-				public int leaderboard_id { get; set; }
-				public int wins { get; set; }
-				public int losses { get; set; }
-				public int streak { get; set; }
-				public int disputes { get; set; }
-				public int drops { get; set; }
-				public int rank { get; set; }
-				public int rankTotal { get; set; }
-				public int regionRank { get; set; }
-				public int regionRankTotal { get; set; }
-				public int rankLevel { get; set; }
-				public int lastMatchDate { get; set; }
-			}
-
 			public class Root
 			{
-				public Result result { get; set; }
-				public List<StatGroup> statGroups { get; set; }
-				public List<LeaderboardStat> leaderboardStats { get; set; }
-				public int rankTotal { get; set; }
-
-				private Root()
-				{
-				}
+				[JsonProperty("result")] public WebRequestResult Result { get; set; }
+				[JsonProperty("statGroups")] public List<StatGroup> StatGroups { get; set; }
+				[JsonProperty("leaderboardStats")] public List<LeaderboardStat> LeaderboardStats { get; set; }
+				[JsonProperty("rankTotal")] public int RankTotal { get; set; }
 			}
 
 			public static Root GetById(int leaderboardId, int startRank = -1, int numRanks = -1)
@@ -72,22 +33,19 @@ namespace Coh2Stats
 
 				var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
-				foreach (var sg in response.statGroups)
+				foreach (var sg in response.StatGroups)
 				{
-					foreach (var x in sg.members)
+					foreach (var x in sg.Members)
 					{
-						var p = new PlayerIdentity(x);
-						PlayerIdentityTracker.LogPlayer(p);
+						PlayerIdentityTracker.LogPlayer(x);
 					}
+
+					StatGroupTracker.LogStatGroup(sg);
 				}
 
-				foreach (var lbs in response.leaderboardStats)
+				foreach (var lbs in response.LeaderboardStats)
 				{
-					int best = PlayerIdentityTracker.GetPlayerByPersonalStatGroupId(lbs.statGroup_id).BestRank;
-					if (lbs.rank < best)
-					{
-						PlayerIdentityTracker.GetPlayerByPersonalStatGroupId(lbs.statGroup_id).BestRank = lbs.rank;
-					}
+					LeaderboardStatTracker.LogStat(lbs);
 				}
 
 				return response;

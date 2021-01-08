@@ -8,11 +8,11 @@ namespace Coh2Stats
 {
 	class DatabaseBuilder
 	{
-		public void Build(RelicApi.MatchTypeId gameMode)
+		public void Build(RelicApi.MatchTypeId gameMode, int maxPlayers = -1)
 		{
-			BuildPlayerList(gameMode);
+			BuildPlayerList(gameMode, 1, maxPlayers);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList();
+			BuildMatchList(maxPlayers);
 		}
 
 		private void BuildPlayerList(RelicApi.MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
@@ -25,7 +25,7 @@ namespace Coh2Stats
 				}
 
 				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
-				int leaderboardMaxRank = probeResponse.rankTotal;
+				int leaderboardMaxRank = probeResponse.RankTotal;
 				int batchStartingIndex = startingRank;
 
 				if (maxRank != -1)

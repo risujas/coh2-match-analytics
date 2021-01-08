@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseBuilder.cs" />
+    <Compile Include="LeaderboardStatTracker.cs" />
     <Compile Include="MatchAnalyticsBundle.cs" />
     <Compile Include="PlayerIdentityTracker.cs" />
     <Compile Include="RelicApi\Enums.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelicApi\JsonRecentMatchHistory.cs" />
+    <Compile Include="StatGroupTracker.cs" />
     <Compile Include="WebRequestHandler.cs" />
   </ItemGroup>
   <ItemGroup>
