@@ -73,7 +73,7 @@ namespace Coh2Stats
 			return lowest;
 		}
 
-		public static LeaderboardStat GetStat(int statGroupId, RelicApi.LeaderboardId leaderboardId)
+		public static LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
 			LeaderboardStat lbs = null;
 
@@ -91,7 +91,7 @@ namespace Coh2Stats
 
 		public static void LogStat(LeaderboardStat stat)
 		{
-			if (GetStat(stat.StatGroupId, (RelicApi.LeaderboardId)stat.LeaderboardId) == null)
+			if (GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId) == null)
 			{
 				leaderboardStats.Add(stat);
 			}
