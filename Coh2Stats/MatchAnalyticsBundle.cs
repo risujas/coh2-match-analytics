@@ -212,7 +212,7 @@ namespace Coh2Stats
 						matchAnalyticsBundle.Matches.Add(m);
 					}
 
-					else if (requireOnAll && numGoodPlayers == m.MatchHistoryReportResults.Count)
+					else if (requireOnAll && numGoodPlayers == m.MaxPlayers)
 					{
 						matchAnalyticsBundle.Matches.Add(m);
 					}

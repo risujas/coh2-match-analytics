@@ -12,7 +12,8 @@ namespace Coh2Stats
 		{
 			BuildPlayerList(gameMode, 1, -1);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList(10);
+
+			BuildMatchList(20);
 		}
 
 		private void BuildPlayerList(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)

@@ -10,7 +10,7 @@ namespace Coh2Stats
 			DatabaseBuilder db = new DatabaseBuilder();
 			db.Build(MatchTypeId._1v1_);
 
-			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
+			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByMatchType(MatchTypeId._1v1_);
 			var games = mab.FilterByMatchType(MatchTypeId._1v1_);
 
 			var dict = games.GetOrderedMapPlayCount();
