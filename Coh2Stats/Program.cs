@@ -8,13 +8,29 @@ namespace Coh2Stats
 		static void Main()
 		{
 			DatabaseBuilder db = new DatabaseBuilder();
-			db.Build(RelicApi.MatchTypeId._1v1_, 10);
+			db.Build(MatchTypeId._1v1_);
 
 			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches();
-			var games = mab.FilterByMatchType(RelicApi.MatchTypeId._1v1_);
-			var dict = games.GetOrderedMapPlayCount();
+			var games = mab.FilterByMatchType(MatchTypeId._1v1_);
 
-			foreach(var d in dict)
+			var dict = games.GetOrderedMapPlayCount();
+			foreach (var d in dict)
+			{
+				Console.WriteLine(d.Value + " " + d.Key);
+			}
+
+			Console.WriteLine();
+
+			dict = games.FilterByMinimumHighRank(253333, false).GetOrderedMapPlayCount();
+			foreach (var d in dict)
+			{
+				Console.WriteLine(d.Value + " " + d.Key);
+			}
+
+			Console.WriteLine();
+
+			dict = games.FilterByMinimumHighRank(253333, true).GetOrderedMapPlayCount();
+			foreach (var d in dict)
 			{
 				Console.WriteLine(d.Value + " " + d.Key);
 			}

@@ -8,7 +8,7 @@ namespace Coh2Stats
 {
 	class MatchAnalyticsBundle
 	{
-		public List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat> Matches = new List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat>();
+		public List<JsonRecentMatchHistory.MatchHistoryStat> Matches = new List<JsonRecentMatchHistory.MatchHistoryStat>();
 
 		public static MatchAnalyticsBundle GetAllLoggedMatches()
 		{
@@ -17,7 +17,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByRace(RelicApi.RaceFlag raceFlags)
+		public MatchAnalyticsBundle FilterByRace(RaceFlag raceFlags)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -47,18 +47,18 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByResult(bool result, RelicApi.FactionId factionId)
+		public MatchAnalyticsBundle FilterByResult(bool result, FactionId factionId)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
 			foreach (var m in Matches)
 			{
-				if (factionId == RelicApi.FactionId.Axis && m.HasAxisVictory() == result)
+				if (factionId == FactionId.Axis && m.HasAxisVictory() == result)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
 
-				else if (factionId == RelicApi.FactionId.Allies && m.HasAxisVictory() != result)
+				else if (factionId == FactionId.Allies && m.HasAxisVictory() != result)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -150,7 +150,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByMatchType(RelicApi.MatchTypeId matchTypeId)
+		public MatchAnalyticsBundle FilterByMatchType(MatchTypeId matchTypeId)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -180,12 +180,47 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		/*
-		public MatchAnalyticsBundle FilterByMinimumRank(int minRank, bool requireOnAll)
+		public MatchAnalyticsBundle FilterByMinimumHighRank(int minHighRank, bool requireOnAll)
 		{
-			// TODO
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				int numGoodPlayers = 0;
+
+				foreach (var rr in m.MatchHistoryReportResults)
+				{
+					var identity = PlayerIdentityTracker.GetPlayerByProfileId(rr.ProfileId);
+					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)rr.RaceId, (MatchTypeId)m.MatchTypeId);
+					var lbs = LeaderboardStatTracker.GetStat(identity.PersonalStatGroupId, lbid);
+
+					if (lbs == null)
+					{
+						continue;
+					}
+
+					if (lbs.Rank <= minHighRank)
+					{
+						numGoodPlayers++;
+					}
+				}
+
+				if (numGoodPlayers > 0)
+				{
+					if (!requireOnAll)
+					{
+						matchAnalyticsBundle.Matches.Add(m);
+					}
+
+					else if (requireOnAll && numGoodPlayers == m.MatchHistoryReportResults.Count)
+					{
+						matchAnalyticsBundle.Matches.Add(m);
+					}
+				}
+			}
+
+			return matchAnalyticsBundle;
 		}
-		*/
 
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{

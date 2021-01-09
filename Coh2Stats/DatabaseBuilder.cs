@@ -8,23 +8,23 @@ namespace Coh2Stats
 {
 	class DatabaseBuilder
 	{
-		public void Build(RelicApi.MatchTypeId gameMode, int maxPlayers = -1)
+		public void Build(MatchTypeId gameMode)
 		{
-			BuildPlayerList(gameMode, 1, maxPlayers);
+			BuildPlayerList(gameMode, 1, -1);
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList(maxPlayers);
+			BuildMatchList(10);
 		}
 
-		private void BuildPlayerList(RelicApi.MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
+		private void BuildPlayerList(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
 		{
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (RelicApi.LeaderboardCompatibility.LeaderboardBelongsWithMatchType((RelicApi.LeaderboardId)leaderboardIndex, matchTypeId) == false)
+				if (LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)leaderboardIndex, matchTypeId) == false)
 				{
 					continue;
 				}
 
-				var probeResponse = RelicApi.JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
+				var probeResponse = JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
 				int batchStartingIndex = startingRank;
 
@@ -43,7 +43,7 @@ namespace Coh2Stats
 						batchSize = difference + 1;
 					}
 
-					RelicApi.JsonLeaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
+					JsonLeaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
 					Console.WriteLine("Parsing leaderboard #{0}: {1} - {2} ({3} total)", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1, PlayerIdentityTracker.GetNumLoggedPlayers());
 					batchStartingIndex += batchSize;
 				}
@@ -61,7 +61,7 @@ namespace Coh2Stats
 			for (int i = 0; i < max; i++)
 			{
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
-				RelicApi.JsonRecentMatchHistory.GetBySteamId(p.Name);
+				JsonRecentMatchHistory.GetBySteamId(p.Name);
 
 				Console.WriteLine("Fetched recent match history for {0} ({1})", p.Name, p.Alias);
 			}

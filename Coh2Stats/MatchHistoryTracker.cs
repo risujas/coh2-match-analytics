@@ -9,13 +9,13 @@ namespace Coh2Stats
 {
 	class MatchHistoryTracker
 	{
-		private static List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat> matches = new List<RelicApi.JsonRecentMatchHistory.MatchHistoryStat>();
-		public static ReadOnlyCollection<RelicApi.JsonRecentMatchHistory.MatchHistoryStat> Matches
+		private static List<JsonRecentMatchHistory.MatchHistoryStat> matches = new List<JsonRecentMatchHistory.MatchHistoryStat>();
+		public static ReadOnlyCollection<JsonRecentMatchHistory.MatchHistoryStat> Matches
 		{
 			get { return matches.AsReadOnly(); }
 		}
 
-		public static void LogMatch(RelicApi.JsonRecentMatchHistory.MatchHistoryStat matchHistoryStat)
+		public static void LogMatch(JsonRecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
 			if (GetById(matchHistoryStat.Id) == null)
 			{
@@ -23,7 +23,7 @@ namespace Coh2Stats
 			}
 		}
 
-		public static RelicApi.JsonRecentMatchHistory.MatchHistoryStat GetById(int id)
+		public static JsonRecentMatchHistory.MatchHistoryStat GetById(int id)
 		{
 			foreach (var m in matches)
 			{
