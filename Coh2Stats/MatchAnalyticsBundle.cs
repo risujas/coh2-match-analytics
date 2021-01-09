@@ -199,7 +199,7 @@ namespace Coh2Stats
 						continue;
 					}
 
-					if (lbs.Rank <= minHighRank)
+					if (lbs.Rank <= minHighRank && lbs.Rank > 0)
 					{
 						numGoodPlayers++;
 					}
