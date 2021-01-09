@@ -39,14 +39,17 @@ namespace Coh2Stats
 
 			foreach (var x in leaderboardStats)
 			{
-				if (highest == null)
+				if (x.StatGroupId == statGroupId)
 				{
-					highest = x;
-				}
+					if (highest == null)
+					{
+						highest = x;
+					}
 
-				else if (x.Rank < highest.Rank)
-				{
-					highest = x;
+					else if (x.Rank < highest.Rank)
+					{
+						highest = x;
+					}
 				}
 			}
 
@@ -59,14 +62,17 @@ namespace Coh2Stats
 
 			foreach (var x in leaderboardStats)
 			{
-				if (lowest == null)
+				if (x.StatGroupId == statGroupId)
 				{
-					lowest = x;
-				}
+					if (lowest == null)
+					{
+						lowest = x;
+					}
 
-				else if (x.Rank > lowest.Rank)
-				{
-					lowest = x;
+					else if (x.Rank > lowest.Rank)
+					{
+						lowest = x;
+					}
 				}
 			}
 
