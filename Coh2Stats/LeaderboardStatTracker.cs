@@ -37,6 +37,8 @@ namespace Coh2Stats
 		{
 			LeaderboardStat highest = null;
 
+			Console.WriteLine(leaderboardStats.Count); // TODO REMOVE
+
 			foreach (var x in leaderboardStats)
 			{
 				if (x.StatGroupId == statGroupId)
@@ -81,18 +83,15 @@ namespace Coh2Stats
 
 		public static LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
-			LeaderboardStat lbs = null;
-
 			foreach (var x in leaderboardStats)
 			{
 				if (x.StatGroupId == statGroupId && x.LeaderboardId == (int)leaderboardId)
 				{
-					lbs = x;
-					break;
+					return x;
 				}
 			}
 
-			return lbs;
+			return null;
 		}
 
 		public static void LogStat(LeaderboardStat stat)

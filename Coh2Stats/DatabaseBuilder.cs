@@ -15,19 +15,13 @@ namespace Coh2Stats
 		{
 			if (!PlayerIdentityTracker.LoadPlayerList(playerList, 60))
 			{
-				BuildPlayerList(gameMode, 1, -1);
+				ParseLeaderboards(gameMode, 1, -1);
 				PlayerIdentityTracker.WritePlayerList(playerList);
 			}
 
-			PlayerIdentityTracker.SortPlayersByHighestRank();
-
-			BuildMatchList(20);
-		}
-
-		private void BuildPlayerList(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
-		{
-			ParseLeaderboards(matchTypeId, startingRank, maxRank);
 			FetchPlayerDetails();
+			PlayerIdentityTracker.SortPlayersByHighestRank();
+			BuildMatchList(20);
 		}
 
 		private void ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
@@ -71,7 +65,7 @@ namespace Coh2Stats
 			int magic = 200;
 			while (players.Count > 0)
 			{
-				Console.WriteLine("Fetching player summaries, {0} remaining", players.Count);
+				Console.WriteLine("Fetching player summaries, {0} remaining", players.Count); // TODO move
 
 				if (players.Count >= magic)
 				{
