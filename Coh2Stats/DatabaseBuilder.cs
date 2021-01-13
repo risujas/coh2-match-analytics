@@ -13,7 +13,7 @@ namespace Coh2Stats
 
 		public void Build(MatchTypeId gameMode)
 		{
-			if (!PlayerIdentityTracker.LoadPlayerList(playerList, 1))
+			if (!PlayerIdentityTracker.LoadPlayerList(playerList, 60))
 			{
 				BuildPlayerList(gameMode, 1, -1);
 				PlayerIdentityTracker.WritePlayerList(playerList);
@@ -25,6 +25,12 @@ namespace Coh2Stats
 		}
 
 		private void BuildPlayerList(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
+		{
+			ParseLeaderboards(matchTypeId, startingRank, maxRank);
+			ParsePlayerDetails();
+		}
+
+		private void ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
 		{
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
@@ -57,7 +63,10 @@ namespace Coh2Stats
 					batchStartingIndex += batchSize;
 				}
 			}
+		}
 
+		private void ParsePlayerDetails()
+		{
 			var players = PlayerIdentityTracker.PlayerIdentities.ToList();
 			int magic = 200;
 			while (players.Count > 0)
@@ -83,7 +92,6 @@ namespace Coh2Stats
 					magic = players.Count;
 				}
 			}
-
 		}
 
 		private void BuildMatchList(int maxPlayersProcessed = -1)

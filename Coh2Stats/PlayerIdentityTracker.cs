@@ -75,7 +75,6 @@ namespace Coh2Stats
 				alias = alias.Substring(0, alias.Length - 1);
 				player.Alias = alias;
 
-				player.PrintPlayer();
 				LogPlayer(player);
 			}
 
