@@ -59,6 +59,12 @@ namespace Coh2Stats
 			}
 		}
 
+
+		// Side effect: this function will discover new players from arranged teams and add them to PlayerIdentityTracker. Detailed information isn't retrieved for these players because:
+		// 1. these players didn't match the original query and are thus not relevant
+		// 2. retrieving detailed information would in turn cause more players to be discovered, creating an ever growing database of irrelevant players
+		// Because of all this, PlayerIdentityTracker will contain some players who don't have any corresponding data in LeaderboardStatTracker. It is therefore necessary to prepare for
+		// certain methods to return null references when "irrelevant" players are queried.
 		private void FetchPlayerDetails()
 		{
 			var players = PlayerIdentityTracker.PlayerIdentities.ToList();
