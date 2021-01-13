@@ -17,20 +17,6 @@ namespace Coh2Stats
 		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
 		[JsonProperty("country")] public string Country { get; set; }
 
-		public PlayerIdentity() { }
-
-		public PlayerIdentity (PlayerIdentity relicObject)
-		{
-			ProfileId = relicObject.ProfileId;
-			Name = relicObject.Name;
-			Alias = relicObject.Alias;
-			PersonalStatGroupId = relicObject.PersonalStatGroupId;
-			Xp = relicObject.Xp;
-			Level = relicObject.Level;
-			LeaderboardRegionId = relicObject.LeaderboardRegionId;
-			Country = relicObject.Country;
-		}
-
 		public int GetHighestRank()
 		{
 			return LeaderboardStatTracker.GetHighestStatByStatGroup(PersonalStatGroupId).Rank;

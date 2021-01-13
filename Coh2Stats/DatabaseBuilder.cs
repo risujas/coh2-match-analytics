@@ -49,6 +49,32 @@ namespace Coh2Stats
 					batchStartingIndex += batchSize;
 				}
 			}
+
+			var players = PlayerIdentityTracker.PlayerIdentities.ToList();
+			int magic = 200;
+			while (players.Count > 0)
+			{
+				Console.WriteLine(players.Count);
+
+				if (players.Count >= magic)
+				{
+					var range = players.GetRange(0, magic);
+					players.RemoveRange(0, magic);
+
+					List<int> profileIds = new List<int>();
+					foreach (var p in range)
+					{
+						profileIds.Add(p.ProfileId);
+					}
+
+					JsonPersonalStat.GetByProfileId(profileIds);
+				}
+
+				else
+				{
+					magic = players.Count;
+				}
+			}
 		}
 
 		private void BuildMatchList(int maxPlayersProcessed = -1)
