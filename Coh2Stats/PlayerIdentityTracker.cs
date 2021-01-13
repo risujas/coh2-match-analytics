@@ -20,8 +20,6 @@ namespace Coh2Stats
 
 		public int GetHighestRank()
 		{
-			Console.WriteLine(Alias + " " + Name); // TODO REMOVE
-
 			return LeaderboardStatTracker.GetHighestStatByStatGroup(PersonalStatGroupId).Rank;
 		}
 

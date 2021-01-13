@@ -37,8 +37,6 @@ namespace Coh2Stats
 		{
 			LeaderboardStat highest = null;
 
-			Console.WriteLine(leaderboardStats.Count); // TODO REMOVE
-
 			foreach (var x in leaderboardStats)
 			{
 				if (x.StatGroupId == statGroupId)
