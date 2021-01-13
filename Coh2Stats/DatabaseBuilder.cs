@@ -71,7 +71,7 @@ namespace Coh2Stats
 			int magic = 200;
 			while (players.Count > 0)
 			{
-				Console.WriteLine(players.Count);
+				Console.WriteLine("Fetching player summaries, {0} remaining", players.Count);
 
 				if (players.Count >= magic)
 				{
