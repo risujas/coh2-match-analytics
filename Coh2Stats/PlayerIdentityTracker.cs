@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
+// TODO load all players from all gamemodes, add filters for getting the subset of players that you want
+
 namespace Coh2Stats
 {
 	public class PlayerIdentity
