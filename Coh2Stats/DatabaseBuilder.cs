@@ -12,10 +12,10 @@ namespace Coh2Stats
 		{
 			MatchHistoryTracker.LoadMatchData();
 
-			if (!PlayerIdentityTracker.LoadPlayerList(playerList, 60))
+			if (!PlayerIdentityTracker.LoadPlayerList(60))
 			{
 				ParseLeaderboards(gameMode, 1, -1);
-				PlayerIdentityTracker.WritePlayerList(playerList);
+				PlayerIdentityTracker.WritePlayerList();
 			}
 
 			FetchPlayerDetails();

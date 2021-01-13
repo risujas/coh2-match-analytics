@@ -45,21 +45,23 @@ namespace Coh2Stats
 
 	class PlayerIdentityTracker
 	{
+		private const string playerListFilePath = "players.txt";
+
 		private static List<PlayerIdentity> playerIdentities = new List<PlayerIdentity>();
 		public static ReadOnlyCollection<PlayerIdentity> PlayerIdentities
 		{
 			get { return playerIdentities.AsReadOnly(); }
 		}
 
-		public static bool LoadPlayerList(string filePath, int dataExpirationMinutes)
+		public static bool LoadPlayerList(int dataExpirationMinutes)
 		{
-			if (!File.Exists(filePath))
+			if (!File.Exists(playerListFilePath))
 			{
 				Console.WriteLine("No existing player list found");
 				return false;
 			}
 
-			string text = File.ReadAllText(filePath);
+			string text = File.ReadAllText(playerListFilePath);
 			var json = JsonConvert.DeserializeObject<PlayerIdentityDataSet>(text);
 
 			DateTime dt = DateTime.UtcNow;
@@ -79,7 +81,7 @@ namespace Coh2Stats
 			return true;
 		}
 
-		public static void WritePlayerList(string filePath)
+		public static void WritePlayerList()
 		{
 			PlayerIdentityDataSet pids = new PlayerIdentityDataSet();
 			pids.playerIdentities = playerIdentities;
@@ -89,7 +91,7 @@ namespace Coh2Stats
 			pids.unixTimeStamp = dto.ToUnixTimeSeconds();
 
 			var text = JsonConvert.SerializeObject(pids, Formatting.Indented);
-			File.WriteAllText(filePath, text);
+			File.WriteAllText(playerListFilePath, text);
 		}
 
 		public static PlayerIdentity GetPlayerByProfileId(int profileId)
