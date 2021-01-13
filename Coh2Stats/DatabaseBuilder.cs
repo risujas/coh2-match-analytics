@@ -104,7 +104,7 @@ namespace Coh2Stats
 				var p = PlayerIdentityTracker.PlayerIdentities[i];
 				JsonRecentMatchHistory.GetBySteamId(p.Name);
 
-				Console.WriteLine("Fetched recent match history for {0} ({1})", p.Name, p.Alias);
+				Console.WriteLine("{0}/{1} Fetched recent match history for {2} ({3})", i, max, p.Name, p.Alias);
 			}
 		}
 	}
