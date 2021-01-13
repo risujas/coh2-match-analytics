@@ -27,7 +27,7 @@ namespace Coh2Stats
 		private void BuildPlayerList(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
 		{
 			ParseLeaderboards(matchTypeId, startingRank, maxRank);
-			ParsePlayerDetails();
+			FetchPlayerDetails();
 		}
 
 		private void ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
@@ -65,7 +65,7 @@ namespace Coh2Stats
 			}
 		}
 
-		private void ParsePlayerDetails()
+		private void FetchPlayerDetails()
 		{
 			var players = PlayerIdentityTracker.PlayerIdentities.ToList();
 			int magic = 200;
