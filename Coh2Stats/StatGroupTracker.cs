@@ -26,18 +26,15 @@ namespace Coh2Stats
 
 		public static StatGroup GetStatGroupById(int id)
 		{
-			StatGroup psg = null;
-
 			foreach (var x in statGroups)
 			{
 				if (x.Id == id)
 				{
-					psg = x;
-					break;
+					return x;
 				}
 			}
 
-			return psg;
+			return null;
 		}
 
 		public static void LogStatGroup(StatGroup psg)
