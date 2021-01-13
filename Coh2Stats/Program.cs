@@ -33,6 +33,7 @@ namespace Coh2Stats
 			foreach (var d in dict)
 			{
 				Console.WriteLine(d.Value + " " + d.Key);
+
 			}
 
 			Console.ReadLine();

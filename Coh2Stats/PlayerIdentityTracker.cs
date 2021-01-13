@@ -21,6 +21,11 @@ namespace Coh2Stats
 		{
 			return LeaderboardStatTracker.GetHighestStatByStatGroup(PersonalStatGroupId).Rank;
 		}
+
+		public void PrintPlayer()
+		{
+			Console.WriteLine(ProfileId + " " + Name + " " + PersonalStatGroupId + " " + Xp + " " + Level + " " + Country + " " + LeaderboardRegionId + " " + Alias);
+		}
 	}
 
 	class PlayerIdentityTracker
