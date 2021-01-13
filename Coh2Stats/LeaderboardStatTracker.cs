@@ -92,6 +92,21 @@ namespace Coh2Stats
 			return null;
 		}
 
+		public static List<LeaderboardStat> GetAllStatsByStatGroup(int statGroupId)
+		{
+			List<LeaderboardStat> stats = new List<LeaderboardStat>();
+
+			foreach (var x in leaderboardStats)
+			{
+				if (x.StatGroupId == statGroupId)
+				{
+					stats.Add(x);
+				}
+			}
+
+			return stats;
+		}
+
 		public static void LogStat(LeaderboardStat stat)
 		{
 			if (GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId) == null)

@@ -20,6 +20,16 @@ namespace Coh2Stats
 
 		public int GetHighestRank()
 		{
+			Console.WriteLine("________________________________");
+			Console.WriteLine(Name);
+			Console.WriteLine(Alias);
+
+			var stats = LeaderboardStatTracker.GetAllStatsByStatGroup(PersonalStatGroupId);
+			foreach (var s in stats)
+			{
+				Console.WriteLine("LB: " + s.LeaderboardId + " R: " + s.Rank);
+			}
+
 			return LeaderboardStatTracker.GetHighestStatByStatGroup(PersonalStatGroupId).Rank;
 		}
 

@@ -65,10 +65,10 @@ namespace Coh2Stats
 			int batchSize = 200;
 			while (players.Count > 0)
 			{
-				Console.WriteLine("Fetching player summaries, {0} remaining", players.Count); // TODO move
-
 				if (players.Count >= batchSize)
 				{
+					Console.WriteLine("Fetching player summaries, {0} remaining", players.Count);
+
 					var range = players.GetRange(0, batchSize);
 					players.RemoveRange(0, batchSize);
 
