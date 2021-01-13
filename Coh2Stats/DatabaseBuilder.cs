@@ -29,7 +29,7 @@ namespace Coh2Stats
 				{
 					continue;
 				}
-
+				
 				var probeResponse = JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
 				int batchStartingIndex = startingRank;
