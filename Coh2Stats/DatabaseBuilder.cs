@@ -62,15 +62,15 @@ namespace Coh2Stats
 		private void FetchPlayerDetails()
 		{
 			var players = PlayerIdentityTracker.PlayerIdentities.ToList();
-			int magic = 200;
+			int batchSize = 200;
 			while (players.Count > 0)
 			{
 				Console.WriteLine("Fetching player summaries, {0} remaining", players.Count); // TODO move
 
-				if (players.Count >= magic)
+				if (players.Count >= batchSize)
 				{
-					var range = players.GetRange(0, magic);
-					players.RemoveRange(0, magic);
+					var range = players.GetRange(0, batchSize);
+					players.RemoveRange(0, batchSize);
 
 					List<int> profileIds = new List<int>();
 					foreach (var p in range)
@@ -83,7 +83,7 @@ namespace Coh2Stats
 
 				else
 				{
-					magic = players.Count;
+					batchSize = players.Count;
 				}
 			}
 		}
