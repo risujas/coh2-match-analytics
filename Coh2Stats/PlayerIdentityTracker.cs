@@ -30,7 +30,13 @@ namespace Coh2Stats
 				Console.WriteLine("LB: " + s.LeaderboardId + " R: " + s.Rank);
 			}
 
-			return LeaderboardStatTracker.GetHighestStatByStatGroup(PersonalStatGroupId).Rank;
+			var stat = LeaderboardStatTracker.GetHighestStatByStatGroup(PersonalStatGroupId);
+			if (stat == null)
+			{
+				return int.MaxValue;
+			}
+
+			return stat.Rank;
 		}
 
 		public void PrintPlayer()
