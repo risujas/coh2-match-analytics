@@ -41,19 +41,26 @@ namespace Coh2Stats
 		{
 			if (!File.Exists(filePath))
 			{
+				Console.WriteLine("No existing player list found");
 				return false;
 			}
 
 			var lines = File.ReadAllLines(filePath);
-			var dataUnixTime = int.Parse(lines[0]);
+			int dataUnixTime = int.Parse(lines[0]);
+			int dataExpirationTime = dataUnixTime + (dataExpirationMinutes * 60);
 
 			DateTime dt = DateTime.UtcNow;
-			DateTimeOffset dto = new DateTimeOffset(dt).AddMinutes(-dataExpirationMinutes);
-			long cutoffUnixTime = dto.ToUnixTimeSeconds();
+			DateTimeOffset currentDto = new DateTimeOffset(dt);
+			long currentUnixTime = currentDto.ToUnixTimeSeconds();
 
-			if (dataUnixTime >= cutoffUnixTime)
+			if (currentUnixTime >= dataExpirationTime)
 			{
+				Console.WriteLine("Existing player list is outdated");
 				return false;
+			}
+			else
+			{
+				Console.WriteLine("Existing player list is valid");
 			}
 
 			var contents = File.ReadAllLines(filePath);
