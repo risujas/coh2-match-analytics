@@ -13,81 +13,15 @@ namespace Coh2Stats
 
 		public void Build(MatchTypeId gameMode)
 		{
-			if (!LoadPlayerList(playerList, 1))
+			if (!PlayerIdentityTracker.LoadPlayerList(playerList, 1))
 			{
 				BuildPlayerList(gameMode, 1, -1);
+				PlayerIdentityTracker.WritePlayerList(playerList);
 			}
 
 			PlayerIdentityTracker.SortPlayersByHighestRank();
 
 			BuildMatchList(20);
-		}
-
-		private bool LoadPlayerList(string filePath, int dataExpirationMinutes)
-		{
-			if (!File.Exists(filePath))
-			{
-				return false;
-			}
-
-			var lines = File.ReadAllLines(filePath);
-			var dataUnixTime = int.Parse(lines[0]);
-
-			DateTime dt = DateTime.UtcNow;
-			DateTimeOffset dto = new DateTimeOffset(dt).AddMinutes(-dataExpirationMinutes);
-			long cutoffUnixTime = dto.ToUnixTimeSeconds();
-
-			if (dataUnixTime >= cutoffUnixTime)
-			{
-				return false;
-			}
-
-			var contents = File.ReadAllLines(filePath);
-			for (int i = 1; i < contents.Length; i++)
-			{
-				var parts = contents[i].Split(' ');
-				var quoteOpen = contents[i].IndexOf('"');
-
-				PlayerIdentity player = new PlayerIdentity();
-				player.ProfileId = int.Parse(parts[0]);
-				player.Name = parts[1];
-				player.PersonalStatGroupId = int.Parse(parts[2]);
-				player.Xp = int.Parse(parts[3]);
-				player.Level = int.Parse(parts[4]);
-				player.Country = parts[5];
-				player.LeaderboardRegionId = int.Parse(parts[6]);
-
-				string alias = contents[i].Substring(quoteOpen + 1);
-				alias = alias.Substring(0, alias.Length - 1);
-				player.Alias = alias;
-
-				player.PrintPlayer();
-				PlayerIdentityTracker.LogPlayer(player);
-			}
-
-			return true;
-		}
-
-		private void WritePlayerList(string filePath)
-		{
-			File.Delete(filePath);
-
-			DateTime dt = DateTime.UtcNow;
-			DateTimeOffset dto = new DateTimeOffset(dt);
-			long dataUnixTime = dto.ToUnixTimeSeconds();
-
-			List<string> contents = new List<string>();
-			contents.Add(dataUnixTime.ToString());
-
-			var players = PlayerIdentityTracker.PlayerIdentities;
-			foreach (var p in players)
-			{
-				string line = "";
-				line += p.ProfileId + " " + p.Name + " " + p.PersonalStatGroupId + " " + p.Xp + " " + p.Level + " " + p.Country + " " + p.LeaderboardRegionId + " \"" + p.Alias + "\"";
-				contents.Add(line);
-			}
-
-			File.WriteAllLines(filePath, contents);
 		}
 
 		private void BuildPlayerList(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
@@ -150,7 +84,6 @@ namespace Coh2Stats
 				}
 			}
 
-			WritePlayerList(playerList);
 		}
 
 		private void BuildMatchList(int maxPlayersProcessed = -1)
