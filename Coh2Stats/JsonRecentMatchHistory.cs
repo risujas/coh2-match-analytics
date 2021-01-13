@@ -157,9 +157,16 @@ namespace Coh2Stats
 				PlayerIdentityTracker.LogPlayer(x);
 			}
 
+			int oldMatchCount = MatchHistoryTracker.GetNumLoggedMatches();
 			foreach (var mhs in response.MatchHistoryStats)
 			{
 				MatchHistoryTracker.LogMatch(mhs);
+			}
+			int newMatchCount = MatchHistoryTracker.GetNumLoggedMatches();
+
+			if (newMatchCount > oldMatchCount)
+			{
+				MatchHistoryTracker.WriteMatchData();
 			}
 
 			return response;

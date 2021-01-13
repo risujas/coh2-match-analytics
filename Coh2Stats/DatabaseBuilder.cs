@@ -10,6 +10,8 @@ namespace Coh2Stats
 
 		public void Build(MatchTypeId gameMode)
 		{
+			MatchHistoryTracker.LoadMatchData();
+
 			if (!PlayerIdentityTracker.LoadPlayerList(playerList, 60))
 			{
 				ParseLeaderboards(gameMode, 1, -1);
