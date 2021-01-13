@@ -83,14 +83,6 @@ namespace Coh2Stats
 			return playerIdentities.Count;
 		}
 
-		public static void PrintLoggedPlayers()
-		{
-			foreach (var p in playerIdentities)
-			{
-				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias + " " + p.GetHighestRank());
-			}
-		}
-
 		public static string GetPlayersForWebRequest()
 		{
 			List<string> names = new List<string>();
@@ -100,6 +92,14 @@ namespace Coh2Stats
 			}
 			string idString = "\"" + string.Join("\",\"", names) + "\"";
 			return idString;
+		}
+
+		public static void PrintLoggedPlayers()
+		{
+			foreach (var p in playerIdentities)
+			{
+				Console.WriteLine(p.Name + " " + p.ProfileId + " " + p.Alias + " " + p.GetHighestRank());
+			}
 		}
 
 		public static void SortPlayersByHighestRank()
