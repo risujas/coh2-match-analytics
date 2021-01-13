@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Coh2Stats
 {
@@ -62,7 +60,7 @@ namespace Coh2Stats
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
-			}	
+			}
 
 			return matchAnalyticsBundle;
 		}

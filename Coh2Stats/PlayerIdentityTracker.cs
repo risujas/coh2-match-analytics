@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Coh2Stats
@@ -170,7 +170,7 @@ namespace Coh2Stats
 		public static string GetPlayersForWebRequest()
 		{
 			List<string> names = new List<string>();
-			foreach(var p in playerIdentities)
+			foreach (var p in playerIdentities)
 			{
 				names.Add(p.Name);
 			}
