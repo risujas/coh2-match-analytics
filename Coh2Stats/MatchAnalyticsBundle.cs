@@ -8,10 +8,10 @@ namespace Coh2Stats
 	{
 		public List<JsonRecentMatchHistory.MatchHistoryStat> Matches = new List<JsonRecentMatchHistory.MatchHistoryStat>();
 
-		public static MatchAnalyticsBundle GetAllLoggedMatches()
+		public static MatchAnalyticsBundle GetAllLoggedMatches(Database db)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-			matchAnalyticsBundle.Matches = MatchHistoryTracker.Matches.ToList();
+			matchAnalyticsBundle.Matches = db.matchHistoryStats;
 			return matchAnalyticsBundle;
 		}
 
@@ -129,7 +129,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByPartialPlayerNickname(string nickname)
+		public MatchAnalyticsBundle FilterByPartialPlayerNickname(Database db, string nickname)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -137,7 +137,7 @@ namespace Coh2Stats
 			{
 				foreach (var rr in m.MatchHistoryReportResults)
 				{
-					string currentNick = PlayerIdentityTracker.GetPlayerByProfileId(rr.ProfileId).Alias;
+					string currentNick = db.GetPlayerByProfileId(rr.ProfileId).Alias;
 					if (currentNick.ToLower().Contains(nickname.ToLower()))
 					{
 						matchAnalyticsBundle.Matches.Add(m);
@@ -178,7 +178,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByMinimumHighRank(int minHighRank, bool requireOnAll)
+		public MatchAnalyticsBundle FilterByMinimumHighRank(Database db, int minHighRank, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -188,9 +188,9 @@ namespace Coh2Stats
 
 				foreach (var rr in m.MatchHistoryReportResults)
 				{
-					var identity = PlayerIdentityTracker.GetPlayerByProfileId(rr.ProfileId);
+					var identity = db.GetPlayerByProfileId(rr.ProfileId);
 					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)rr.RaceId, (MatchTypeId)m.MatchTypeId);
-					var lbs = LeaderboardStatTracker.GetStat(identity.PersonalStatGroupId, lbid);
+					var lbs = db.GetStat(identity.PersonalStatGroupId, lbid);
 
 					if (lbs == null)
 					{

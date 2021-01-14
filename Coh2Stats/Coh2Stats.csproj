@@ -46,20 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseBuilder.cs" />
-    <Compile Include="LeaderboardStatTracker.cs" />
+    <Compile Include="LeaderboardStat.cs" />
     <Compile Include="MatchAnalyticsBundle.cs" />
-    <Compile Include="PlayerIdentityTracker.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="PlayerIdentity.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="JsonAvailableLeaderboards.cs" />
-    <Compile Include="MatchHistoryTracker.cs" />
     <Compile Include="JsonLeaderboard.cs" />
     <Compile Include="JsonPersonalStat.cs" />
     <Compile Include="JsonPlayerSummaries.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JsonRecentMatchHistory.cs" />
-    <Compile Include="StatGroupTracker.cs" />
+    <Compile Include="StatGroup.cs" />
     <Compile Include="WebRequestHandler.cs" />
   </ItemGroup>
   <ItemGroup>

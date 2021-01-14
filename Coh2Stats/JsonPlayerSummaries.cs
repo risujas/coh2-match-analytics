@@ -56,14 +56,7 @@ namespace Coh2Stats
 
 			var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 
-			if (response.Result.Message == "SUCCESS")
-			{
-				foreach (var x in response.Avatars)
-				{
-					PlayerIdentityTracker.LogPlayer(x);
-				}
-			}
-			else
+			if (response.Result.Message != "SUCCESS")
 			{
 				throw new Exception(response.Result.Message + ": " + idString);
 			}

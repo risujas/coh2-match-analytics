@@ -6,12 +6,12 @@ namespace Coh2Stats
 	{
 		static void Main()
 		{
-			DatabaseBuilder db = new DatabaseBuilder();
-			db.Build(MatchTypeId._1v1_);
-			while(true)
-			{
-				db.ProcessMatches();
-			}
+			Database db = new Database();
+			db.LoadFromFile();
+
+			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db);
+
+			Console.ReadLine();
 		}
 	}
 }

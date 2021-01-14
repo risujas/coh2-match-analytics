@@ -24,24 +24,7 @@ namespace Coh2Stats
 			string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
 			string requestParams = "?title=coh2&profile_ids=[" + idString + "]";
 
-			var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
-
-			foreach (var sg in response.StatGroups)
-			{
-				foreach (var x in sg.Members)
-				{
-					PlayerIdentityTracker.LogPlayer(x);
-				}
-
-				StatGroupTracker.LogStatGroup(sg);
-			}
-
-			foreach (var lbs in response.LeaderboardStats)
-			{
-				LeaderboardStatTracker.LogStat(lbs);
-			}
-
-			return response;
+			return WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 		}
 	}
 }

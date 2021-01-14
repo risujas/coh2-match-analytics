@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
-	class JsonRecentMatchHistory
+	public class JsonRecentMatchHistory
 	{
 		public class Matchhistoryreportresult
 		{
@@ -138,38 +138,19 @@ namespace Coh2Stats
 			[JsonProperty("profiles")] public List<PlayerIdentity> Profiles { get; set; }
 		}
 
-		public static Root GetByProfileId(string profileId)
+		public static Root GetByProfileId(int profileId)
 		{
-			List<string> list = new List<string> { profileId };
+			List<int> list = new List<int> { profileId };
 			return GetByProfileId(list);
 		}
 
-		public static Root GetByProfileId(List<string> profileIds)
+		public static Root GetByProfileId(List<int> profileIds)
 		{
 			string idString = string.Join(",", profileIds);
 			string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
 			string requestParams = "?title=coh2&profile_ids=[" + idString + "]";
 
-			var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
-
-			foreach (var x in response.Profiles)
-			{
-				PlayerIdentityTracker.LogPlayer(x);
-			}
-
-			int oldMatchCount = MatchHistoryTracker.GetNumLoggedMatches();
-			foreach (var mhs in response.MatchHistoryStats)
-			{
-				MatchHistoryTracker.LogMatch(mhs);
-			}
-			int newMatchCount = MatchHistoryTracker.GetNumLoggedMatches();
-
-			if (newMatchCount > oldMatchCount)
-			{
-				MatchHistoryTracker.WriteMatchData();
-			}
-
-			return response;
+			return WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 		}
 	}
 }

@@ -3,7 +3,7 @@
 namespace Coh2Stats
 {
 	[Flags]
-	enum RaceFlag
+	public enum RaceFlag
 	{
 		German = 1,
 		Soviet = 2,
@@ -12,7 +12,7 @@ namespace Coh2Stats
 		British = 16
 	}
 
-	enum RaceId
+	public enum RaceId
 	{
 		German = 0,
 		Soviet = 1,
@@ -21,13 +21,13 @@ namespace Coh2Stats
 		British = 4
 	}
 
-	enum FactionId
+	public enum FactionId
 	{
 		Axis = 0,
 		Allies = 1
 	}
 
-	enum MatchTypeId
+	public enum MatchTypeId
 	{
 		_Custom_ = 0,
 		_1v1_ = 1,
@@ -49,7 +49,7 @@ namespace Coh2Stats
 		_CustomPublic_ = 22
 	}
 
-	enum LeaderboardId
+	public enum LeaderboardId
 	{
 		_CustomGerman_ = 0,
 		_CustomSoviet_ = 1,
@@ -108,7 +108,7 @@ namespace Coh2Stats
 		_4v4British_ = 54,
 	}
 
-	enum LeaderboardRegionId
+	public enum LeaderboardRegionId
 	{
 		Europe = 0,
 		MiddleEast = 1,
