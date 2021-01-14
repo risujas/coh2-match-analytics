@@ -7,6 +7,7 @@ namespace Coh2Stats
 	class DatabaseBuilder
 	{
 		private const string playerList = "players.txt";
+		List<PlayerIdentity> playerMatchHistoryQueue = new List<PlayerIdentity>();
 
 		public void Build(MatchTypeId gameMode)
 		{
@@ -20,7 +21,33 @@ namespace Coh2Stats
 
 			FetchPlayerDetails();
 			PlayerIdentityTracker.SortPlayersByHighestRank();
-			BuildMatchList(20);
+		}
+
+		public void ProcessMatches()
+		{
+			if (playerMatchHistoryQueue.Count == 0)
+			{
+				playerMatchHistoryQueue = PlayerIdentityTracker.PlayerIdentities.ToList();
+			}
+
+			int batchSize = 200;
+			if (playerMatchHistoryQueue.Count < batchSize)
+			{
+				batchSize = playerMatchHistoryQueue.Count;
+			}
+
+			var range = playerMatchHistoryQueue.GetRange(0, batchSize);
+			playerMatchHistoryQueue.RemoveRange(0, batchSize);
+
+			List<string> steamIds = new List<string>();
+			foreach (var p in playerMatchHistoryQueue)
+			{
+				steamIds.Add(p.Name);
+			}
+
+
+			Console.WriteLine("Getting match history for {0} players", batchSize);
+			JsonRecentMatchHistory.GetByProfileId(steamIds);
 		}
 
 		private void ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
@@ -90,23 +117,6 @@ namespace Coh2Stats
 				{
 					batchSize = players.Count;
 				}
-			}
-		}
-
-		private void BuildMatchList(int maxPlayersProcessed = -1)
-		{
-			int max = PlayerIdentityTracker.GetNumLoggedPlayers();
-			if (maxPlayersProcessed != -1)
-			{
-				max = maxPlayersProcessed;
-			}
-
-			for (int i = 0; i < max; i++)
-			{
-				var p = PlayerIdentityTracker.PlayerIdentities[i];
-				JsonRecentMatchHistory.GetBySteamId(p.Name);
-
-				Console.WriteLine("{0}/{1} Fetched recent match history for {2} ({3})", i, max, p.Name, p.Alias);
 			}
 		}
 	}

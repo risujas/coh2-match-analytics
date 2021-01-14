@@ -138,17 +138,17 @@ namespace Coh2Stats
 			[JsonProperty("profiles")] public List<PlayerIdentity> Profiles { get; set; }
 		}
 
-		public static Root GetBySteamId(string steamId)
+		public static Root GetByProfileId(string profileId)
 		{
-			List<string> list = new List<string> { steamId };
-			return GetBySteamId(list);
+			List<string> list = new List<string> { profileId };
+			return GetByProfileId(list);
 		}
 
-		public static Root GetBySteamId(List<string> steamIds)
+		public static Root GetByProfileId(List<string> profileIds)
 		{
-			string idString = "\"" + string.Join("\",\"", steamIds) + "\"";
+			string idString = string.Join(",", profileIds);
 			string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getRecentMatchHistory";
-			string requestParams = "?title=coh2&profile_names=[" + idString + "]";
+			string requestParams = "?title=coh2&profile_ids=[" + idString + "]";
 
 			var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 

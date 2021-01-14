@@ -8,34 +8,10 @@ namespace Coh2Stats
 		{
 			DatabaseBuilder db = new DatabaseBuilder();
 			db.Build(MatchTypeId._1v1_);
-
-			MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByMatchType(MatchTypeId._1v1_);
-			var games = mab.FilterByMatchType(MatchTypeId._1v1_);
-
-			var dict = games.GetOrderedMapPlayCount();
-			foreach (var d in dict)
+			while(true)
 			{
-				Console.WriteLine(d.Value + " " + d.Key);
+				db.ProcessMatches();
 			}
-
-			Console.WriteLine();
-
-			dict = games.FilterByMinimumHighRank(253333, false).GetOrderedMapPlayCount();
-			foreach (var d in dict)
-			{
-				Console.WriteLine(d.Value + " " + d.Key);
-			}
-
-			Console.WriteLine();
-
-			dict = games.FilterByMinimumHighRank(253333, true).GetOrderedMapPlayCount();
-			foreach (var d in dict)
-			{
-				Console.WriteLine(d.Value + " " + d.Key);
-
-			}
-
-			Console.ReadLine();
 		}
 	}
 }
