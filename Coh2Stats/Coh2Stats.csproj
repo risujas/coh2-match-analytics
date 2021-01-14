@@ -53,7 +53,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RelicJsonAPI.cs" />
+    <Compile Include="RelicAPI.cs" />
     <Compile Include="StatGroup.cs" />
     <Compile Include="WebRequestHandler.cs" />
   </ItemGroup>

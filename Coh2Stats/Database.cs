@@ -169,11 +169,11 @@ namespace Coh2Stats
 		{
 			if (!File.Exists(databaseFile))
 			{
-				Console.WriteLine("No player database found");
+				Console.WriteLine("No database found");
 				return false;
 			}
 
-			Console.WriteLine("Player database found...");
+			Console.WriteLine("Database found...");
 
 			string text = File.ReadAllText(databaseFile);
 			var json = JsonConvert.DeserializeObject<Database>(text);
@@ -187,6 +187,7 @@ namespace Coh2Stats
 			Console.WriteLine("{0} stat groups", statGroups.Count);
 			Console.WriteLine("{0} leaderboard stats", leaderboardStats.Count);
 			Console.WriteLine("{0} match history stats", matchHistoryStats.Count);
+			Console.WriteLine();
 
 			return true;
 		}
