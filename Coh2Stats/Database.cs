@@ -9,11 +9,11 @@ namespace Coh2Stats
 	public class Database
 	{
 		[JsonIgnore] private const string databaseFile = "data.txt";
-		[JsonIgnore] List<PlayerIdentity> matchHistoryProcessQueue = new List<PlayerIdentity>();
+		[JsonIgnore] List<RelicAPI.PlayerIdentity> matchHistoryProcessQueue = new List<RelicAPI.PlayerIdentity>();
 
-		public List<PlayerIdentity> playerIdentities = new List<PlayerIdentity>();
-		public List<StatGroup> statGroups = new List<StatGroup>();
-		public List<LeaderboardStat> leaderboardStats = new List<LeaderboardStat>();
+		public List<RelicAPI.PlayerIdentity> playerIdentities = new List<RelicAPI.PlayerIdentity>();
+		public List<RelicAPI.StatGroup> statGroups = new List<RelicAPI.StatGroup>();
+		public List<RelicAPI.LeaderboardStat> leaderboardStats = new List<RelicAPI.LeaderboardStat>();
 		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> matchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
 		// BUILDER METHODS
@@ -200,7 +200,7 @@ namespace Coh2Stats
 
 		// PLAYERIDENTITY ACCESS METHODS
 
-		public PlayerIdentity GetPlayerByProfileId(int profileId)
+		public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
 		{
 			foreach (var pi in playerIdentities)
 			{
@@ -213,7 +213,7 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public PlayerIdentity GetPlayerBySteamId(string steamId)
+		public RelicAPI.PlayerIdentity GetPlayerBySteamId(string steamId)
 		{
 			foreach (var pi in playerIdentities)
 			{
@@ -226,7 +226,7 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public PlayerIdentity GetPlayerByPersonalStatGroupId(int personalStatGroupId)
+		public RelicAPI.PlayerIdentity GetPlayerByPersonalStatGroupId(int personalStatGroupId)
 		{
 			foreach (var pi in playerIdentities)
 			{
@@ -239,7 +239,7 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public void LogPlayer(PlayerIdentity playerIdentity)
+		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
 			if (GetPlayerByProfileId(playerIdentity.ProfileId) == null)
 			{
@@ -256,7 +256,7 @@ namespace Coh2Stats
 
 		// STATGROUP ACCESS METHODS
 
-		public StatGroup GetStatGroupById(int id)
+		public RelicAPI.StatGroup GetStatGroupById(int id)
 		{
 			foreach (var x in statGroups)
 			{
@@ -269,7 +269,7 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public void LogStatGroup(StatGroup psg)
+		public void LogStatGroup(RelicAPI.StatGroup psg)
 		{
 			if (GetStatGroupById(psg.Id) == null)
 			{
@@ -279,9 +279,9 @@ namespace Coh2Stats
 
 		// LEADERBOARDSTAT ACCESS METHODS
 
-		public LeaderboardStat GetHighestStatByStatGroup(int statGroupId)
+		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId)
 		{
-			LeaderboardStat highest = null;
+			RelicAPI.LeaderboardStat highest = null;
 
 			foreach (var x in leaderboardStats)
 			{
@@ -302,9 +302,9 @@ namespace Coh2Stats
 			return highest;
 		}
 
-		public LeaderboardStat GetLowestStatByStatGroup(int statGroupId)
+		public RelicAPI.LeaderboardStat GetLowestStatByStatGroup(int statGroupId)
 		{
-			LeaderboardStat lowest = null;
+			RelicAPI.LeaderboardStat lowest = null;
 
 			foreach (var x in leaderboardStats)
 			{
@@ -325,7 +325,7 @@ namespace Coh2Stats
 			return lowest;
 		}
 
-		public LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
+		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
 			foreach (var x in leaderboardStats)
 			{
@@ -338,9 +338,9 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public List<LeaderboardStat> GetAllStatsByStatGroup(int statGroupId)
+		public List<RelicAPI.LeaderboardStat> GetAllStatsByStatGroup(int statGroupId)
 		{
-			List<LeaderboardStat> stats = new List<LeaderboardStat>();
+			List<RelicAPI.LeaderboardStat> stats = new List<RelicAPI.LeaderboardStat>();
 
 			foreach (var x in leaderboardStats)
 			{
@@ -353,7 +353,7 @@ namespace Coh2Stats
 			return stats;
 		}
 
-		public void LogStat(LeaderboardStat stat)
+		public void LogStat(RelicAPI.LeaderboardStat stat)
 		{
 			if (GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId) == null)
 			{
