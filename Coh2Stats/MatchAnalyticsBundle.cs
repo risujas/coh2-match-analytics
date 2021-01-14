@@ -6,7 +6,7 @@ namespace Coh2Stats
 {
 	class MatchAnalyticsBundle
 	{
-		public List<JsonRecentMatchHistory.MatchHistoryStat> Matches = new List<JsonRecentMatchHistory.MatchHistoryStat>();
+		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> Matches = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
 		public static MatchAnalyticsBundle GetAllLoggedMatches(Database db)
 		{

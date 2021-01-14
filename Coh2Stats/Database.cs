@@ -14,7 +14,7 @@ namespace Coh2Stats
 		public List<PlayerIdentity> playerIdentities = new List<PlayerIdentity>();
 		public List<StatGroup> statGroups = new List<StatGroup>();
 		public List<LeaderboardStat> leaderboardStats = new List<LeaderboardStat>();
-		public List<JsonRecentMatchHistory.MatchHistoryStat> matchHistoryStats = new List<JsonRecentMatchHistory.MatchHistoryStat>();
+		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> matchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
 		// BUILDER METHODS
 
@@ -48,7 +48,7 @@ namespace Coh2Stats
 			}
 
 			Console.WriteLine("Getting match history for {0} players", batchSize);
-			var response = JsonRecentMatchHistory.GetByProfileId(profileIds);
+			var response = RelicAPI.RecentMatchHistory.GetByProfileId(profileIds);
 
 			foreach (var x in response.Profiles)
 			{
@@ -77,7 +77,7 @@ namespace Coh2Stats
 					continue;
 				}
 
-				var probeResponse = JsonLeaderboard.GetById(leaderboardIndex, 1, 1);
+				var probeResponse = RelicAPI.Leaderboard.GetById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
 				int batchStartingIndex = startingRank;
 
@@ -96,7 +96,7 @@ namespace Coh2Stats
 						batchSize = difference + 1;
 					}
 
-					var response = JsonLeaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
+					var response = RelicAPI.Leaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
 
 					foreach (var sg in response.StatGroups)
 					{
@@ -138,7 +138,7 @@ namespace Coh2Stats
 						profileIds.Add(p.ProfileId);
 					}
 
-					var response = JsonPersonalStat.GetByProfileId(profileIds);
+					var response = RelicAPI.PersonalStat.GetByProfileId(profileIds);
 
 					foreach (var sg in response.StatGroups)
 					{
@@ -362,7 +362,7 @@ namespace Coh2Stats
 
 		// MATCHHISTORYSTAT ACCCESS METHODS
 
-		public void LogMatch(JsonRecentMatchHistory.MatchHistoryStat matchHistoryStat)
+		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
 			if (GetById(matchHistoryStat.Id) == null)
 			{
@@ -370,7 +370,7 @@ namespace Coh2Stats
 			}
 		}
 
-		public JsonRecentMatchHistory.MatchHistoryStat GetById(int id)
+		public RelicAPI.RecentMatchHistory.MatchHistoryStat GetById(int id)
 		{
 			foreach (var m in matchHistoryStats)
 			{
