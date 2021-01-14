@@ -16,6 +16,11 @@ namespace Coh2Stats
 			}
 
 			var totalGames = mab.FilterByRace(raceFlag);
+			if (totalGames.Matches.Count == 0)
+			{
+				return;
+			}
+
 			var totalWins = totalGames.FilterByResult(true, factionId);
 			double totalWinRate = (double)totalWins.Matches.Count / (double)totalGames.Matches.Count;
 
@@ -27,7 +32,13 @@ namespace Coh2Stats
 			{
 				string map = m.Key;
 				int playCount = m.Value;
-				int winCount = mapsByWinCount[map];
+
+				int winCount = 0;
+				if (mapsByWinCount.ContainsKey(map))
+				{
+					winCount = mapsByWinCount[map];
+				}
+
 				double winRate = (double)winCount / (double)playCount;
 				mapsByWinRate.Add(map, winRate);
 			}
@@ -39,7 +50,13 @@ namespace Coh2Stats
 			Console.WriteLine("--------------------------------");
 			foreach (var m in mapsByWinRate)
 			{
-				Console.WriteLine("{0:0.00} ({2}/{3})\t{1}", m.Value, m.Key, mapsByWinCount[m.Key], mapsByPlayCount[m.Key]);
+				int winCount = 0;
+				if (mapsByWinCount.ContainsKey(m.Key))
+				{
+					winCount = mapsByWinCount[m.Key];
+				}
+
+				Console.WriteLine("{0:0.00} ({2}/{3})\t{1}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
 			}
 			Console.WriteLine();
 		}
@@ -49,15 +66,23 @@ namespace Coh2Stats
 			CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
 			Database db = new Database();
-			db.LoadFromFile();
+			db.LoadPlayerDatabase();
+			db.LoadMatchDatabase();
+
+			db.FindNewPlayers(MatchTypeId._1v1_);
+			
+			while(true)
+			{
+				db.ProcessMatches();
+			}
 
 			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db)
-				.FilterByMatchType(MatchTypeId._1v1_).FilterByDescription("AUTOMATCH").FilterByRace(RaceFlag.WGerman | RaceFlag.British);
+				.FilterByMatchType(MatchTypeId._1v1_).FilterByDescription("AUTOMATCH");
 
-			//AnalyzeWinRatesByRace(mab, RaceFlag.German);
+			AnalyzeWinRatesByRace(mab, RaceFlag.German);
 			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
-			//AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
-			//AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
+			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
+			AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
 			AnalyzeWinRatesByRace(mab, RaceFlag.British);
 
 			Console.ReadLine();

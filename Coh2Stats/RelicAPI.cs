@@ -18,9 +18,9 @@ namespace Coh2Stats.RelicAPI
 		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
 		[JsonProperty("country")] public string Country { get; set; }
 
-		public int GetHighestRank(Database db)
+		public int GetHighestRank(Database db, MatchTypeId matchTypeId)
 		{
-			var stat = db.GetHighestStatByStatGroup(PersonalStatGroupId);
+			var stat = db.GetHighestStatByStatGroup(PersonalStatGroupId, matchTypeId);
 			if (stat == null)
 			{
 				return int.MaxValue;

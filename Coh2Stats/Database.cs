@@ -8,13 +8,15 @@ namespace Coh2Stats
 {
 	public class Database
 	{
-		[JsonIgnore] private const string databaseFile = "data.txt";
+		[JsonIgnore] private const string playerDatabaseFile = "playerData.txt";
+		[JsonIgnore] private const string matchDatabaseFile = "matchData.txt";
 		[JsonIgnore] List<RelicAPI.PlayerIdentity> matchHistoryProcessQueue = new List<RelicAPI.PlayerIdentity>();
 
 		public List<RelicAPI.PlayerIdentity> playerIdentities = new List<RelicAPI.PlayerIdentity>();
 		public List<RelicAPI.StatGroup> statGroups = new List<RelicAPI.StatGroup>();
 		public List<RelicAPI.LeaderboardStat> leaderboardStats = new List<RelicAPI.LeaderboardStat>();
-		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> matchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
+
+		[JsonIgnore] public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> matchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
 		// BUILDER METHODS
 
@@ -22,7 +24,7 @@ namespace Coh2Stats
 		{
 			ParseLeaderboards(gameMode, 1, -1);
 			FetchPlayerDetails();
-			SortPlayersByHighestRank();
+			SortPlayersByHighestRank(gameMode);
 		}
 
 		public void ProcessMatches()
@@ -64,7 +66,8 @@ namespace Coh2Stats
 
 			if (newMatchCount > oldMatchCount)
 			{
-				WriteToFile();
+				WritePlayerDatabase();
+				WriteMatchDatabase();
 			}
 		}
 
@@ -165,37 +168,60 @@ namespace Coh2Stats
 
 		// FILE HANDLING METHODS
 
-		public bool LoadFromFile()
+		public bool LoadPlayerDatabase()
 		{
-			if (!File.Exists(databaseFile))
+			if (!File.Exists(playerDatabaseFile))
 			{
-				Console.WriteLine("No database found");
+				Console.WriteLine("No player database found");
 				return false;
 			}
 
-			Console.WriteLine("Database found...");
+			Console.WriteLine("Player database found...");
 
-			string text = File.ReadAllText(databaseFile);
+			string text = File.ReadAllText(playerDatabaseFile);
 			var json = JsonConvert.DeserializeObject<Database>(text);
 
 			playerIdentities = json.playerIdentities;
 			statGroups = json.statGroups;
 			leaderboardStats = json.leaderboardStats;
-			matchHistoryStats = json.matchHistoryStats;
 
 			Console.WriteLine("{0} player identities", playerIdentities.Count);
 			Console.WriteLine("{0} stat groups", statGroups.Count);
 			Console.WriteLine("{0} leaderboard stats", leaderboardStats.Count);
+			Console.WriteLine();
+
+			return true;
+		}
+
+		public void WritePlayerDatabase()
+		{
+			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
+			File.WriteAllText(playerDatabaseFile, text);
+		}
+
+		public bool LoadMatchDatabase()
+		{
+			if (!File.Exists(matchDatabaseFile))
+			{
+				Console.WriteLine("No match database found");
+				return false;
+			}
+
+			Console.WriteLine("Match database found...");
+
+			string text = File.ReadAllText(matchDatabaseFile);
+			matchHistoryStats = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
+
 			Console.WriteLine("{0} match history stats", matchHistoryStats.Count);
 			Console.WriteLine();
 
 			return true;
 		}
 
-		public void WriteToFile()
+		public void WriteMatchDatabase()
 		{
-			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
-			File.WriteAllText(databaseFile, text);
+			var text = JsonConvert.SerializeObject(matchHistoryStats, Formatting.Indented);
+			File.WriteAllText(matchDatabaseFile, text);
 		}
 
 		// PLAYERIDENTITY ACCESS METHODS
@@ -247,11 +273,11 @@ namespace Coh2Stats
 			}
 		}
 
-		public void SortPlayersByHighestRank()
+		public void SortPlayersByHighestRank(MatchTypeId matchTypeId)
 		{
 			Console.WriteLine("Sorting player list by best rank");
 
-			playerIdentities = playerIdentities.OrderBy(p => p.GetHighestRank(this)).ToList();
+			playerIdentities = playerIdentities.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
 		}
 
 		// STATGROUP ACCESS METHODS
@@ -279,20 +305,20 @@ namespace Coh2Stats
 
 		// LEADERBOARDSTAT ACCESS METHODS
 
-		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId)
+		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId, MatchTypeId matchTypeId)
 		{
 			RelicAPI.LeaderboardStat highest = null;
 
 			foreach (var x in leaderboardStats)
 			{
-				if (x.StatGroupId == statGroupId)
+				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)x.LeaderboardId, matchTypeId))
 				{
 					if (highest == null)
 					{
 						highest = x;
 					}
 
-					else if (x.Rank < highest.Rank)
+					else if (x.Rank < highest.Rank && x.Rank >= 1)
 					{
 						highest = x;
 					}

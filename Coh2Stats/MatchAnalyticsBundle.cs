@@ -178,7 +178,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByMinimumHighRank(Database db, int minHighRank, bool requireOnAll)
+		public MatchAnalyticsBundle FilterByMinimumRank(Database db, int minRank, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -197,7 +197,7 @@ namespace Coh2Stats
 						continue;
 					}
 
-					if (lbs.Rank <= minHighRank && lbs.Rank > 0)
+					if (lbs.Rank <= minRank && lbs.Rank > 0)
 					{
 						numGoodPlayers++;
 					}
