@@ -37,7 +37,7 @@ namespace Coh2Stats
 		}
 	}
 
-	public class PlayerIdentityDataSet
+	public class PlayerDataSet
 	{
 		public List<PlayerIdentity> playerIdentities = new List<PlayerIdentity>();
 		public long unixTimeStamp = 0;
@@ -62,7 +62,7 @@ namespace Coh2Stats
 			}
 
 			string text = File.ReadAllText(playerListFilePath);
-			var json = JsonConvert.DeserializeObject<PlayerIdentityDataSet>(text);
+			var json = JsonConvert.DeserializeObject<PlayerDataSet>(text);
 
 			DateTime dt = DateTime.UtcNow;
 			DateTimeOffset currentDto = new DateTimeOffset(dt);
@@ -83,7 +83,7 @@ namespace Coh2Stats
 
 		public static void WritePlayerList()
 		{
-			PlayerIdentityDataSet pids = new PlayerIdentityDataSet();
+			PlayerDataSet pids = new PlayerDataSet();
 			pids.playerIdentities = playerIdentities;
 
 			DateTime dt = DateTime.UtcNow;
