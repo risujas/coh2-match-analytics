@@ -220,6 +220,22 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
+		public MatchAnalyticsBundle FilterByCommander(CommanderServerId commanderServerId)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				int id = (int)commanderServerId;
+				if (m.HasMatchHistoryItem(id))
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();

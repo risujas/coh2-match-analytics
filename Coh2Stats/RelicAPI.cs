@@ -200,6 +200,18 @@ namespace Coh2Stats.RelicAPI
 			[JsonProperty("matchhistoryitems")] public List<Matchhistoryitem> MatchHistoryItems { get; set; }
 			[JsonProperty("matchurls")] public List<object> MatchUrls { get; set; }
 
+			public bool HasMatchHistoryItem(int id)
+			{
+				foreach (var i in MatchHistoryItems)
+				{
+					if (i.ItemDefinitionId == id)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+
 			public bool HasAxisVictory()
 			{
 				foreach (var x in MatchHistoryReportResults)

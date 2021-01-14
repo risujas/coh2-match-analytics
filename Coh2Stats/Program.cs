@@ -52,13 +52,13 @@ namespace Coh2Stats
 			db.LoadFromFile();
 
 			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db)
-				.FilterByMatchType(MatchTypeId._1v1_).FilterByCompletionTime(1593561600, 1610599515).FilterByDescription("AUTOMATCH");
+				.FilterByMatchType(MatchTypeId._1v1_).FilterByCompletionTime(1593561600, 1610599515).FilterByDescription("AUTOMATCH").FilterByCommander(CommanderServerId.OsttruppenDoctrine);
 
 			AnalyzeWinRatesByRace(mab, RaceFlag.German);
-			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
+			//AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
 			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
-			AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
-			AnalyzeWinRatesByRace(mab, RaceFlag.British);
+			//AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
+			//AnalyzeWinRatesByRace(mab, RaceFlag.British);
 
 			Console.ReadLine();
 		}
