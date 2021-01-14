@@ -27,7 +27,7 @@ namespace Coh2Stats
 			SortPlayersByHighestRank(gameMode);
 		}
 
-		public void ProcessMatches()
+		public void ProcessMatches(MatchTypeId matchTypeId)
 		{
 			if (matchHistoryProcessQueue.Count == 0)
 			{
@@ -60,7 +60,10 @@ namespace Coh2Stats
 			int oldMatchCount = matchHistoryStats.Count;
 			foreach (var mhs in response.MatchHistoryStats)
 			{
-				LogMatch(mhs);
+				if (mhs.MatchTypeId == (int)matchTypeId)
+				{
+					LogMatch(mhs);
+				}
 			}
 			int newMatchCount = matchHistoryStats.Count;
 

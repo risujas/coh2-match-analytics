@@ -73,7 +73,7 @@ namespace Coh2Stats
 			
 			while(true)
 			{
-				db.ProcessMatches();
+				db.ProcessMatches(MatchTypeId._1v1_);
 			}
 
 			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db)
