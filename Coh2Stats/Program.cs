@@ -35,11 +35,11 @@ namespace Coh2Stats
 			mapsByWinRate = mapsByWinRate.OrderByDescending(m => m.Value).ToDictionary(m => m.Key, m => m.Value);
 
 			Console.WriteLine("{0} win rates:", raceFlag.ToString());
-			Console.WriteLine("{0:0.000} overall ({1} / {2})", totalWinRate, totalWins.Matches.Count, totalGames.Matches.Count);
+			Console.WriteLine("{0:0.00} ({1}/{2})\toverall", totalWinRate, totalWins.Matches.Count, totalGames.Matches.Count);
 			Console.WriteLine("--------------------------------");
 			foreach (var m in mapsByWinRate)
 			{
-				Console.WriteLine("{0:0.000} {1}", m.Value, m.Key);
+				Console.WriteLine("{0:0.00} ({2}/{3})\t{1}", m.Value, m.Key, mapsByWinCount[m.Key], mapsByPlayCount[m.Key]);
 			}
 			Console.WriteLine();
 		}
@@ -52,13 +52,13 @@ namespace Coh2Stats
 			db.LoadFromFile();
 
 			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db)
-				.FilterByMatchType(MatchTypeId._1v1_).FilterByCompletionTime(1593561600, 1610599515).FilterByDescription("AUTOMATCH").FilterByCommander(CommanderServerId.OsttruppenDoctrine);
+				.FilterByMatchType(MatchTypeId._1v1_).FilterByDescription("AUTOMATCH").FilterByRace(RaceFlag.WGerman | RaceFlag.British);
 
-			AnalyzeWinRatesByRace(mab, RaceFlag.German);
-			//AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
-			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
+			//AnalyzeWinRatesByRace(mab, RaceFlag.German);
+			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
+			//AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
 			//AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
-			//AnalyzeWinRatesByRace(mab, RaceFlag.British);
+			AnalyzeWinRatesByRace(mab, RaceFlag.British);
 
 			Console.ReadLine();
 		}
