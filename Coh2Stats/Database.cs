@@ -24,14 +24,14 @@ namespace Coh2Stats
 		{
 			ParseLeaderboards(gameMode, 1, -1);
 			FetchPlayerDetails();
-			SortPlayersByHighestRank(gameMode);
 		}
 
-		public void ProcessMatches(MatchTypeId matchTypeId)
+		public void ProcessMatches(MatchTypeId matchTypeId, int maxPlayers)
 		{
 			if (matchHistoryProcessQueue.Count == 0)
 			{
-				matchHistoryProcessQueue = playerIdentities;
+				SortPlayersByHighestRank(matchTypeId);
+				matchHistoryProcessQueue = playerIdentities.GetRange(0, maxPlayers);
 			}
 
 			int batchSize = 200;
@@ -49,7 +49,7 @@ namespace Coh2Stats
 				profileIds.Add(p.ProfileId);
 			}
 
-			Console.WriteLine("Getting match history for {0} players", batchSize);
+			Console.WriteLine("Getting match history for {0} players... {1} remaining", batchSize, matchHistoryProcessQueue.Count);
 			var response = RelicAPI.RecentMatchHistory.GetByProfileId(profileIds);
 
 			foreach (var x in response.Profiles)

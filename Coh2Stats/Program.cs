@@ -46,8 +46,8 @@ namespace Coh2Stats
 			mapsByWinRate = mapsByWinRate.OrderByDescending(m => m.Value).ToDictionary(m => m.Key, m => m.Value);
 
 			Console.WriteLine("{0} win rates:", raceFlag.ToString());
-			Console.WriteLine("{0:0.00} ({1}/{2})\toverall", totalWinRate, totalWins.Matches.Count, totalGames.Matches.Count);
-			Console.WriteLine("--------------------------------");
+			Console.WriteLine("{0:0.00}     {1} / {2,5}", totalWinRate, totalWins.Matches.Count, totalGames.Matches.Count);
+			Console.WriteLine("----------------------------------------------------------------");
 			foreach (var m in mapsByWinRate)
 			{
 				int winCount = 0;
@@ -56,7 +56,7 @@ namespace Coh2Stats
 					winCount = mapsByWinCount[m.Key];
 				}
 
-				Console.WriteLine("{0:0.00} ({2}/{3})\t{1}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+				Console.WriteLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
 			}
 			Console.WriteLine();
 		}
@@ -69,15 +69,16 @@ namespace Coh2Stats
 			db.LoadPlayerDatabase();
 			db.LoadMatchDatabase();
 
-			db.FindNewPlayers(MatchTypeId._1v1_);
+			
+			//db.FindNewPlayers(MatchTypeId._1v1_);
 			
 			while(true)
 			{
-				db.ProcessMatches(MatchTypeId._1v1_);
+				db.ProcessMatches(MatchTypeId._1v1_, 7994);
 			}
+			
 
-			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db)
-				.FilterByMatchType(MatchTypeId._1v1_).FilterByDescription("AUTOMATCH");
+			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByCompletionTime(1593561600, 1610630030).FilterByStartGameTime(1593561600, 1610641551);
 
 			AnalyzeWinRatesByRace(mab, RaceFlag.German);
 			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
