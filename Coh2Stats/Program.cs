@@ -69,14 +69,12 @@ namespace Coh2Stats
 			db.LoadPlayerDatabase();
 			db.LoadMatchDatabase();
 
-			
-			//db.FindNewPlayers(MatchTypeId._1v1_);
+			db.FindNewPlayers(MatchTypeId._1v1_);
 			
 			while(true)
 			{
-				db.ProcessMatches(MatchTypeId._1v1_, 7994);
+				db.ProcessMatches(MatchTypeId._1v1_, 8000);
 			}
-			
 
 			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByCompletionTime(1593561600, 1610630030).FilterByStartGameTime(1593561600, 1610641551);
 

@@ -22,8 +22,8 @@ namespace Coh2Stats
 
 		public void FindNewPlayers(MatchTypeId gameMode)
 		{
-			ParseLeaderboards(gameMode, 1, -1);
-			FetchPlayerDetails();
+			var players = ParseLeaderboards(gameMode, 1, -1);
+			FetchPlayerDetails(players);
 		}
 
 		public void ProcessMatches(MatchTypeId matchTypeId, int maxPlayers)
@@ -74,8 +74,10 @@ namespace Coh2Stats
 			}
 		}
 
-		private void ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
+		private List<RelicAPI.PlayerIdentity> ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
 		{
+			List<RelicAPI.PlayerIdentity> foundPlayers = new List<RelicAPI.PlayerIdentity>();
+
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
 				if (LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)leaderboardIndex, matchTypeId) == false)
@@ -108,6 +110,7 @@ namespace Coh2Stats
 					{
 						foreach (var x in sg.Members)
 						{
+							foundPlayers.Add(x);
 							LogPlayer(x);
 						}
 
@@ -123,11 +126,12 @@ namespace Coh2Stats
 					batchStartingIndex += batchSize;
 				}
 			}
+
+			return foundPlayers;
 		}
 
-		private void FetchPlayerDetails()
+		private void FetchPlayerDetails(List<RelicAPI.PlayerIdentity> players)
 		{
-			var players = playerIdentities.ToList();
 			int batchSize = 200;
 			while (players.Count > 0)
 			{
