@@ -76,7 +76,7 @@ namespace Coh2Stats
 
 		private List<RelicAPI.PlayerIdentity> ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
 		{
-			List<RelicAPI.PlayerIdentity> foundPlayers = new List<RelicAPI.PlayerIdentity>();
+			int numPlayersBefore = playerIdentities.Count;
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
@@ -110,7 +110,6 @@ namespace Coh2Stats
 					{
 						foreach (var x in sg.Members)
 						{
-							foundPlayers.Add(x);
 							LogPlayer(x);
 						}
 
@@ -127,7 +126,11 @@ namespace Coh2Stats
 				}
 			}
 
-			return foundPlayers;
+			int numPlayersAfter = playerIdentities.Count;
+			int playerCountDiff = numPlayersAfter - numPlayersBefore;
+			var newPlayers = playerIdentities.GetRange(numPlayersBefore, playerCountDiff);
+
+			return newPlayers;
 		}
 
 		private void FetchPlayerDetails(List<RelicAPI.PlayerIdentity> players)
