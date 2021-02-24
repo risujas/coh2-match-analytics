@@ -127,11 +127,11 @@ namespace Coh2Stats
 						while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
 
 						Stopwatch sw = Stopwatch.StartNew();
-						double operationInterval = 1200;
+						double sessionInterval = 1200;
 
-						while (sw.Elapsed.TotalSeconds < operationInterval)
+						while (sw.Elapsed.TotalSeconds < sessionInterval)
 						{
-							double difference = operationInterval - sw.Elapsed.TotalSeconds;
+							double difference = sessionInterval - sw.Elapsed.TotalSeconds;
 							Console.WriteLine("Resuming operations in {0} seconds", difference);
 						}
 					}
