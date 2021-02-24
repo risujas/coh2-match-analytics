@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Coh2Stats
@@ -115,7 +116,7 @@ namespace Coh2Stats
 				if (selection == 1)
 				{
 					db.FindNewPlayers(MatchTypeId._1v1_);
-					while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true) ;
+					while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
 				}
 
 				if (selection == 2)
@@ -123,7 +124,16 @@ namespace Coh2Stats
 					while (true)
 					{
 						db.FindNewPlayers(MatchTypeId._1v1_);
-						while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true) ;
+						while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
+
+						Stopwatch sw = Stopwatch.StartNew();
+						double operationInterval = 3600;
+
+						while (sw.Elapsed.TotalSeconds < operationInterval)
+						{
+							double difference = operationInterval - sw.Elapsed.TotalSeconds;
+							Console.WriteLine("Resuming operations in {0} seconds", difference);
+						}
 					}
 				}
 
