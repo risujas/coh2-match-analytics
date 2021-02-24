@@ -203,7 +203,11 @@ namespace Coh2Stats
 
 			Console.WriteLine("Player database found...");
 
-			string text = File.ReadAllText(playerDatabaseFile);
+			const string temporaryCopiedFile = "temp_player_db";
+			File.Copy(playerDatabaseFile, temporaryCopiedFile);
+			string text = File.ReadAllText(temporaryCopiedFile);
+			File.Delete(temporaryCopiedFile);
+
 			var json = JsonConvert.DeserializeObject<Database>(text);
 
 			playerIdentities = json.playerIdentities;
@@ -233,7 +237,11 @@ namespace Coh2Stats
 
 			Console.WriteLine("Match database found...");
 
-			string text = File.ReadAllText(matchDatabaseFile);
+			const string temporaryCopiedFile = "temp_match_db";
+			File.Copy(matchDatabaseFile, temporaryCopiedFile);
+			string text = File.ReadAllText(temporaryCopiedFile);
+			File.Delete(temporaryCopiedFile);
+
 			matchHistoryStats = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
 
 			Console.WriteLine("{0} match history stats", matchHistoryStats.Count);
