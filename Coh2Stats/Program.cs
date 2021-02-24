@@ -104,27 +104,38 @@ namespace Coh2Stats
 
 		static void Main()
 		{
-			int selection = ModeSelection();
-
 			Database db = new Database();
 			db.LoadPlayerDatabase();
 			db.LoadMatchDatabase();
 
-			if (selection == 1)
+			while (true)
 			{
-				while (true)
+				int selection = ModeSelection();
+
+				if (selection == 1)
 				{
 					db.FindNewPlayers(MatchTypeId._1v1_);
-					while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
+					while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true) ;
+				}
+
+				if (selection == 2)
+				{
+					int rankFloor = 0;
+					int rankCap = 0;
+
+					Console.Write("Rank floor: ");
+					bool goodParse1 = int.TryParse(Console.ReadLine(), out rankFloor);
+
+					Console.Write("Rank cap: ");
+					bool goodParse2 = int.TryParse(Console.ReadLine(), out rankCap);
+
+					if (goodParse1 && goodParse2)
+					{
+						PrintInformationPerRank(db, rankFloor, rankCap);
+						Console.ReadLine();
+					}
 				}
 			}
-
-			if (selection == 2)
-			{
-				PrintInformationPerRank(db, 1, 3000);
-			}
-
-			Console.ReadLine();
 		}
 	}
 }
