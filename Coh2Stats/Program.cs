@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Diagnostics;
-using System.Threading;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 namespace Coh2Stats
 {
@@ -117,7 +117,7 @@ namespace Coh2Stats
 				if (selection == 1)
 				{
 					db.FindNewPlayers(MatchTypeId._1v1_);
-					while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
+					while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true) ;
 				}
 
 				if (selection == 2)
@@ -125,7 +125,7 @@ namespace Coh2Stats
 					while (true)
 					{
 						db.FindNewPlayers(MatchTypeId._1v1_);
-						while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
+						while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true) ;
 
 						Stopwatch sw = Stopwatch.StartNew();
 						double sessionInterval = 1200;
@@ -146,8 +146,8 @@ namespace Coh2Stats
 
 				if (selection == 3)
 				{
-					int rankFloor = 0;
-					int rankCap = 0;
+					int rankFloor;
+					int rankCap;
 
 					Console.Write("Rank floor: ");
 					bool goodParse1 = int.TryParse(Console.ReadLine(), out rankFloor);
