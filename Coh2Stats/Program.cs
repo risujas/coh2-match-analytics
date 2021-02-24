@@ -86,18 +86,18 @@ namespace Coh2Stats
 		{
 			CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
-			int selection = 0;
-
+			int selection;
 			do
 			{
 				Console.Clear();
-				Console.WriteLine("1 - Match history tallying mode");
-				Console.WriteLine("2 - Data printing mode");
+				Console.WriteLine("1 - Match history logging");
+				Console.WriteLine("2 - Match history logging (repeat)");
+				Console.WriteLine("3 - Data printing");
 				Console.Write("Please choose your desired mode: ");
 
 				int.TryParse(Console.ReadLine(), out selection);
 
-			} while (selection != 1 && selection != 2);
+			} while (selection != 1 && selection != 2 && selection != 3);
 
 			return selection;
 		}
@@ -119,6 +119,15 @@ namespace Coh2Stats
 				}
 
 				if (selection == 2)
+				{
+					while (true)
+					{
+						db.FindNewPlayers(MatchTypeId._1v1_);
+						while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true) ;
+					}
+				}
+
+				if (selection == 3)
 				{
 					int rankFloor = 0;
 					int rankCap = 0;
