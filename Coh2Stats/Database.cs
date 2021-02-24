@@ -46,24 +46,27 @@ namespace Coh2Stats
 			matchHistoryProcessQueue.RemoveRange(0, batchSize);
 
 			List<int> profileIds = new List<int>();
-			foreach (var p in range)
+			for (int i = 0; i < range.Count; i++)
 			{
-				profileIds.Add(p.ProfileId);
+				var x = range[i];
+				profileIds.Add(x.ProfileId);
 			}
 
 			var response = RelicAPI.RecentMatchHistory.GetByProfileId(profileIds);
 
-			foreach (var x in response.Profiles)
+			for (int i = 0; i < response.Profiles.Count; i++)
 			{
+				var x = response.Profiles[i];
 				LogPlayer(x);
 			}
 
 			int oldMatchCount = matchHistoryStats.Count;
-			foreach (var mhs in response.MatchHistoryStats)
+			for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 			{
-				if (mhs.MatchTypeId == (int)matchTypeId)
+				var x = response.MatchHistoryStats[i];
+				if (x.MatchTypeId == (int)matchTypeId)
 				{
-					LogMatch(mhs);
+					LogMatch(x);
 				}
 			}
 			int newMatchCount = matchHistoryStats.Count;
@@ -117,18 +120,21 @@ namespace Coh2Stats
 
 					var response = RelicAPI.Leaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
 
-					foreach (var sg in response.StatGroups)
+					for (int i = 0; i < response.StatGroups.Count; i++)
 					{
-						foreach (var x in sg.Members)
+						var sg = response.StatGroups[i];
+						for (int j = 0; j < sg.Members.Count; j++)
 						{
+							var x = sg.Members[j];
 							LogPlayer(x);
 						}
 
 						LogStatGroup(sg);
 					}
 
-					foreach (var lbs in response.LeaderboardStats)
+					for (int i = 0; i < response.LeaderboardStats.Count; i++)
 					{
+						var lbs = response.LeaderboardStats[i];
 						LogStat(lbs);
 					}
 
@@ -156,26 +162,24 @@ namespace Coh2Stats
 					var range = players.GetRange(0, batchSize);
 					players.RemoveRange(0, batchSize);
 
-					List<int> profileIds = new List<int>();
-					foreach (var p in range)
-					{
-						profileIds.Add(p.ProfileId);
-					}
-
+					List<int> profileIds = range.Select(p => p.ProfileId).ToList();
 					var response = RelicAPI.PersonalStat.GetByProfileId(profileIds);
 
-					foreach (var sg in response.StatGroups)
+					for (int i = 0; i < response.StatGroups.Count; i++)
 					{
-						foreach (var x in sg.Members)
+						var sg = response.StatGroups[i];
+						for (int j = 0; j < sg.Members.Count; j++)
 						{
+							var x = sg.Members[j];
 							LogPlayer(x);
 						}
 
 						LogStatGroup(sg);
 					}
 
-					foreach (var lbs in response.LeaderboardStats)
+					for (int i = 0; i < response.LeaderboardStats.Count; i++)
 					{
+						var lbs = response.LeaderboardStats[i];
 						LogStat(lbs);
 					}
 				}
@@ -247,11 +251,12 @@ namespace Coh2Stats
 
 		public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
 		{
-			foreach (var pi in playerIdentities)
+			for (int i = 0; i < playerIdentities.Count; i++)
 			{
-				if (pi.ProfileId == profileId)
+				var x = playerIdentities[i];
+				if (x.ProfileId == profileId)
 				{
-					return pi;
+					return x;
 				}
 			}
 
@@ -260,11 +265,13 @@ namespace Coh2Stats
 
 		public RelicAPI.PlayerIdentity GetPlayerBySteamId(string steamId)
 		{
-			foreach (var pi in playerIdentities)
+			for (int i = 0; i < playerIdentities.Count; i++)
 			{
-				if (pi.Name == steamId)
+				var x = playerIdentities[i];
+
+				if (x.Name == steamId)
 				{
-					return pi;
+					return x;
 				}
 			}
 
@@ -273,11 +280,13 @@ namespace Coh2Stats
 
 		public RelicAPI.PlayerIdentity GetPlayerByPersonalStatGroupId(int personalStatGroupId)
 		{
-			foreach (var pi in playerIdentities)
+			for (int i = 0; i < playerIdentities.Count; i++)
 			{
-				if (pi.PersonalStatGroupId == personalStatGroupId)
+				var x = playerIdentities[i];
+
+				if (x.PersonalStatGroupId == personalStatGroupId)
 				{
-					return pi;
+					return x;
 				}
 			}
 
@@ -324,8 +333,10 @@ namespace Coh2Stats
 
 		public RelicAPI.StatGroup GetStatGroupById(int id)
 		{
-			foreach (var x in statGroups)
+			for (int i = 0; i < statGroups.Count; i++)
 			{
+				var x = statGroups[i];
+
 				if (x.Id == id)
 				{
 					return x;
@@ -349,8 +360,10 @@ namespace Coh2Stats
 		{
 			RelicAPI.LeaderboardStat highest = null;
 
-			foreach (var x in leaderboardStats)
+			for (int i = 0; i < leaderboardStats.Count; i++)
 			{
+				var x = leaderboardStats[i];
+
 				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)x.LeaderboardId, matchTypeId))
 				{
 					if (highest == null)
@@ -372,8 +385,10 @@ namespace Coh2Stats
 		{
 			RelicAPI.LeaderboardStat lowest = null;
 
-			foreach (var x in leaderboardStats)
+			for (int i = 0; i < leaderboardStats.Count; i++)
 			{
+				var x = leaderboardStats[i];
+
 				if (x.StatGroupId == statGroupId)
 				{
 					if (lowest == null)
@@ -393,8 +408,10 @@ namespace Coh2Stats
 
 		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
-			foreach (var x in leaderboardStats)
+			for (int i = 0; i < leaderboardStats.Count; i++)
 			{
+				var x = leaderboardStats[i];
+
 				if (x.StatGroupId == statGroupId && x.LeaderboardId == (int)leaderboardId)
 				{
 					return x;
@@ -408,8 +425,10 @@ namespace Coh2Stats
 		{
 			List<RelicAPI.LeaderboardStat> stats = new List<RelicAPI.LeaderboardStat>();
 
-			foreach (var x in leaderboardStats)
+			for (int i = 0; i < leaderboardStats.Count; i++)
 			{
+				var x = leaderboardStats[i];
+
 				if (x.StatGroupId == statGroupId)
 				{
 					stats.Add(x);
@@ -439,11 +458,13 @@ namespace Coh2Stats
 
 		public RelicAPI.RecentMatchHistory.MatchHistoryStat GetById(int id)
 		{
-			foreach (var m in matchHistoryStats)
+			for (int i = 0; i < matchHistoryStats.Count; i++)
 			{
-				if (m.Id == id)
+				var x = matchHistoryStats[i];
+
+				if (x.Id == id)
 				{
-					return m;
+					return x;
 				}
 			}
 

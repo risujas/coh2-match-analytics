@@ -202,9 +202,10 @@ namespace Coh2Stats.RelicAPI
 
 			public bool HasMatchHistoryItem(int id)
 			{
-				foreach (var i in MatchHistoryItems)
+				for (int i = 0; i < MatchHistoryItems.Count; i++)
 				{
-					if (i.ItemDefinitionId == id)
+					var x = MatchHistoryItems[i];
+					if (x.ItemDefinitionId == id)
 					{
 						return true;
 					}
@@ -214,8 +215,9 @@ namespace Coh2Stats.RelicAPI
 
 			public bool HasAxisVictory()
 			{
-				foreach (var x in MatchHistoryReportResults)
+				for (int i = 0; i < MatchHistoryReportResults.Count; i++)
 				{
+					var x = MatchHistoryReportResults[i];
 					if (x.RaceId == (int)RaceId.German || x.RaceId == (int)RaceId.WGerman)
 					{
 						if (x.ResultType == 1)
@@ -247,8 +249,9 @@ namespace Coh2Stats.RelicAPI
 				bool hasAef = false;
 				bool hasBritish = false;
 
-				foreach (var x in MatchHistoryReportResults)
+				for (int i = 0; i < MatchHistoryReportResults.Count; i++)
 				{
+					var x = MatchHistoryReportResults[i];
 					if (x.RaceId == (int)RaceId.German)
 					{
 						hasGerman = true;
