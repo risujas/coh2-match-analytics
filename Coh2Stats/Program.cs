@@ -127,7 +127,7 @@ namespace Coh2Stats
 						while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
 
 						Stopwatch sw = Stopwatch.StartNew();
-						double operationInterval = 3600;
+						double operationInterval = 1200;
 
 						while (sw.Elapsed.TotalSeconds < operationInterval)
 						{
