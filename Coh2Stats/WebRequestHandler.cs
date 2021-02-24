@@ -25,7 +25,7 @@ namespace Coh2Stats
 				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 				int maxAttempts = 10;
-				bool failedRequest = false;
+				int attemptInterval = 1000;
 
 				for (int i = 1; i <= maxAttempts; i++)
 				{
@@ -38,19 +38,13 @@ namespace Coh2Stats
 
 					catch (Exception e)
 					{
-						Thread.Sleep(1000);
+						Thread.Sleep(attemptInterval);
 
 						if (i == maxAttempts)
 						{
-							failedRequest = true;
-							break;
+							throw e;
 						}
 					}
-				}
-
-				if (failedRequest)
-				{
-					throw new Exception("Failed web request: " + requestUrl + " : " + requestParams);
 				}
 
 				return responseString;
