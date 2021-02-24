@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Diagnostics;
+using System.Threading;
 using System.Linq;
 
 namespace Coh2Stats
@@ -132,7 +133,13 @@ namespace Coh2Stats
 						while (sw.Elapsed.TotalSeconds < sessionInterval)
 						{
 							double difference = sessionInterval - sw.Elapsed.TotalSeconds;
-							Console.WriteLine("Resuming operations in {0} seconds", difference);
+							int intDiff = (int)difference;
+
+							if (intDiff % 60 == 0)
+							{
+								Console.WriteLine("Resuming operations in {0:0} seconds", difference);
+								Thread.Sleep(1000);
+							}
 						}
 					}
 				}
