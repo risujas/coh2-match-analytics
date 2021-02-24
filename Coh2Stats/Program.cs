@@ -61,28 +61,68 @@ namespace Coh2Stats
 			Console.WriteLine();
 		}
 
-		static void Main()
+		static public void PrintInformationPerRank(Database db, int rankFloor, int rankCap)
 		{
-			CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+			Console.WriteLine("Ranks {0} - {1}", rankFloor, rankCap);
 
-			Database db = new Database();
-			db.LoadPlayerDatabase();
-			db.LoadMatchDatabase();
-
-			db.FindNewPlayers(MatchTypeId._1v1_);
-			
-			while(true)
-			{
-				db.ProcessMatches(MatchTypeId._1v1_, 8000);
-			}
-
-			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByCompletionTime(1593561600, 1610630030).FilterByStartGameTime(1593561600, 1610641551);
+			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByStartGameTime(1612389600, -1).FilterByDescription("AUTOMATCH").FilterByRank(db, rankFloor, rankCap, true);
 
 			AnalyzeWinRatesByRace(mab, RaceFlag.German);
 			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
 			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
 			AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
 			AnalyzeWinRatesByRace(mab, RaceFlag.British);
+
+			Console.WriteLine();
+			var playCounts = mab.GetOrderedMapPlayCount();
+			foreach (var p in playCounts)
+			{
+				Console.WriteLine(p.Value + " " + p.Key);
+			}
+			Console.WriteLine();
+		}
+
+		static public int ModeSelection()
+		{
+			CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+
+			int selection = 0;
+
+			do
+			{
+				Console.Clear();
+				Console.WriteLine("1 - Match history tallying mode");
+				Console.WriteLine("2 - Data printing mode");
+				Console.Write("Please choose your desired mode: ");
+
+				int.TryParse(Console.ReadLine(), out selection);
+
+			} while (selection != 1 && selection != 2);
+
+			return selection;
+		}
+
+		static void Main()
+		{
+			int selection = ModeSelection();
+
+			Database db = new Database();
+			db.LoadPlayerDatabase();
+			db.LoadMatchDatabase();
+
+			if (selection == 1)
+			{
+				while (true)
+				{
+					db.FindNewPlayers(MatchTypeId._1v1_);
+					while (db.ProcessMatches(MatchTypeId._1v1_, 50000) == true);
+				}
+			}
+
+			if (selection == 2)
+			{
+				PrintInformationPerRank(db, 1, 3000);
+			}
 
 			Console.ReadLine();
 		}

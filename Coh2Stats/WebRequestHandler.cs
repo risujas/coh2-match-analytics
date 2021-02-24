@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using Newtonsoft.Json;
 
 namespace Coh2Stats
@@ -15,7 +16,7 @@ namespace Coh2Stats
 	{
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)
 		{
-			string responseString;
+			string responseString = "";
 
 			HttpClient client;
 			using (client = new HttpClient())
@@ -23,19 +24,38 @@ namespace Coh2Stats
 				client.BaseAddress = new Uri(requestUrl);
 				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-				HttpResponseMessage responseObject = client.GetAsync(requestParams).Result;
-				if (responseObject.IsSuccessStatusCode)
-				{
-					responseString = responseObject.Content.ReadAsStringAsync().Result;
+				int maxAttempts = 10;
+				bool failedRequest = false;
 
-				}
-				else
+				for (int i = 1; i <= maxAttempts; i++)
 				{
-					throw new Exception((int)responseObject.StatusCode + " (" + responseObject.ReasonPhrase + ")");
+					try
+					{
+						HttpResponseMessage responseObject = client.GetAsync(requestParams).Result;
+						responseString = responseObject.Content.ReadAsStringAsync().Result;
+						break;
+					}
+
+					catch (Exception e)
+					{
+						Thread.Sleep(1000);
+
+						if (i == maxAttempts)
+						{
+							failedRequest = true;
+							break;
+						}
+					}
 				}
+
+				if (failedRequest)
+				{
+					throw new Exception("Failed web request: " + requestUrl + " : " + requestParams);
+				}
+
+				return responseString;
 			}
 
-			return responseString;
 		}
 
 		public static T GetStructuredJsonResponse<T>(string requestUrl, string requestParams)

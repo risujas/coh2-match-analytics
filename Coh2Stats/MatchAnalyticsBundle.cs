@@ -84,6 +84,16 @@ namespace Coh2Stats
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
+			if (startGameTimeBegin == -1)
+			{
+				startGameTimeBegin = 0;
+			}
+
+			if (startGameTimeEnd == -1)
+			{
+				startGameTimeEnd = int.MaxValue;
+			}
+
 			foreach (var m in Matches)
 			{
 				if (m.StartGameTime >= startGameTimeBegin && m.StartGameTime <= startGameTimeEnd)
@@ -178,7 +188,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByMinimumRank(Database db, int minRank, bool requireOnAll)
+		public MatchAnalyticsBundle FilterByRank(Database db, int rankFloor, int rankCap, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -197,7 +207,7 @@ namespace Coh2Stats
 						continue;
 					}
 
-					if (lbs.Rank <= minRank && lbs.Rank > 0)
+					if (lbs.Rank <= rankCap && lbs.Rank >= rankFloor)
 					{
 						numGoodPlayers++;
 					}

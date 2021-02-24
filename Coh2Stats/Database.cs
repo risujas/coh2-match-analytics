@@ -26,12 +26,12 @@ namespace Coh2Stats
 			FetchPlayerDetails(players);
 		}
 
-		public void ProcessMatches(MatchTypeId matchTypeId, int maxPlayers)
+		public bool ProcessMatches(MatchTypeId matchTypeId, int maxPlayers)
 		{
 			if (matchHistoryProcessQueue.Count == 0)
 			{
 				SortPlayersByHighestRank(matchTypeId);
-				matchHistoryProcessQueue = playerIdentities.GetRange(0, maxPlayers);
+				matchHistoryProcessQueue = playerIdentities.GetRange(0, maxPlayers).Where(p => p.GetHighestRank(this, matchTypeId) != int.MaxValue).ToList(); // TODO something more efficient
 			}
 
 			int batchSize = 200;
@@ -39,6 +39,8 @@ namespace Coh2Stats
 			{
 				batchSize = matchHistoryProcessQueue.Count;
 			}
+
+			Console.Write("Getting match history for {0} players...", matchHistoryProcessQueue.Count);
 
 			var range = matchHistoryProcessQueue.GetRange(0, batchSize);
 			matchHistoryProcessQueue.RemoveRange(0, batchSize);
@@ -49,7 +51,6 @@ namespace Coh2Stats
 				profileIds.Add(p.ProfileId);
 			}
 
-			Console.WriteLine("Getting match history for {0} players... {1} remaining", batchSize, matchHistoryProcessQueue.Count);
 			var response = RelicAPI.RecentMatchHistory.GetByProfileId(profileIds);
 
 			foreach (var x in response.Profiles)
@@ -67,11 +68,21 @@ namespace Coh2Stats
 			}
 			int newMatchCount = matchHistoryStats.Count;
 
+			int difference = newMatchCount - oldMatchCount;
+			Console.WriteLine(" +{0}", difference);
+
 			if (newMatchCount > oldMatchCount)
 			{
 				WritePlayerDatabase();
 				WriteMatchDatabase();
 			}
+
+			if (matchHistoryProcessQueue.Count == 0)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		private List<RelicAPI.PlayerIdentity> ParseLeaderboards(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
@@ -198,7 +209,6 @@ namespace Coh2Stats
 			Console.WriteLine("{0} player identities", playerIdentities.Count);
 			Console.WriteLine("{0} stat groups", statGroups.Count);
 			Console.WriteLine("{0} leaderboard stats", leaderboardStats.Count);
-			Console.WriteLine();
 
 			return true;
 		}
@@ -223,7 +233,6 @@ namespace Coh2Stats
 			matchHistoryStats = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
 
 			Console.WriteLine("{0} match history stats", matchHistoryStats.Count);
-			Console.WriteLine();
 
 			return true;
 		}
@@ -287,7 +296,28 @@ namespace Coh2Stats
 		{
 			Console.WriteLine("Sorting player list by best rank");
 
-			playerIdentities = playerIdentities.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
+			List<RelicAPI.PlayerIdentity> rankedPlayers = new List<RelicAPI.PlayerIdentity>();
+			List<RelicAPI.PlayerIdentity> unrankedPlayers = new List<RelicAPI.PlayerIdentity>();
+
+			for (int i = 0; i < playerIdentities.Count; i++)
+			{
+				var p = playerIdentities[i];
+				if (p.GetHighestRank(this, matchTypeId) == int.MaxValue)
+				{
+					unrankedPlayers.Add(p);
+				}
+				else
+				{
+					rankedPlayers.Add(p);
+				}
+			}
+
+			rankedPlayers = rankedPlayers.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
+
+			var combinedPlayers = rankedPlayers;
+			combinedPlayers.AddRange(unrankedPlayers);
+
+			playerIdentities = combinedPlayers;
 		}
 
 		// STATGROUP ACCESS METHODS
@@ -391,7 +421,7 @@ namespace Coh2Stats
 
 		public void LogStat(RelicAPI.LeaderboardStat stat)
 		{
-			if (GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId) == null)
+			if (GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId) == null) // TODO check if this prevents stats from being updated
 			{
 				leaderboardStats.Add(stat);
 			}

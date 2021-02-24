@@ -74,16 +74,16 @@ namespace Coh2Stats
 		ArmoredAssaultTactics = 5923,
 		TerrorTactics = 5925,
 
-		 OverwatchDoctrine = 450495,
-		 BreakthroughDoctrine = 186419,
-		 EliteArmoredDoctrine = 257800,
-		 FeuersturmDoctrine = 450494,
-		 FortificationsDoctrine = 259929,
-		 GrandOffensiveDoctrine = 452452,
-		 LuftwaffeGroundForcesDoctrine = 186418,
-		 ScavengeDoctrine = 259657,
-		 ScavengeDoctrineJesulinEdition = 451591,
-		 SpecialOperationsDoctrine = 186417
+		OverwatchDoctrine = 450495,
+		BreakthroughDoctrine = 186419,
+		EliteArmoredDoctrine = 257800,
+		FeuersturmDoctrine = 450494,
+		FortificationsDoctrine = 259929,
+		GrandOffensiveDoctrine = 452452,
+		LuftwaffeGroundForcesDoctrine = 186418,
+		ScavengeDoctrine = 259657,
+		ScavengeDoctrineJesulinEdition = 451591,
+		SpecialOperationsDoctrine = 186417
 	}
 
 	[Flags]
