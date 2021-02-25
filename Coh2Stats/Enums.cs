@@ -204,7 +204,7 @@ namespace Coh2Stats
 		Unknown = 7
 	}
 
-	class LeaderboardCompatibility
+	internal class LeaderboardCompatibility
 	{
 		public static bool LeaderboardBelongsWithMatchType(LeaderboardId leaderboardId, MatchTypeId matchTypeId)
 		{

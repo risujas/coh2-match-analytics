@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Coh2Stats
 {
-	class MatchAnalyticsBundle
+	internal class MatchAnalyticsBundle
 	{
 		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> Matches = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 

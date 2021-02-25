@@ -57,7 +57,7 @@ namespace Coh2Stats.RelicAPI
 		[JsonProperty("lastMatchDate")] public int LastMatchDate { get; set; }
 	}
 
-	class Leaderboard
+	internal class Leaderboard
 	{
 		public class Root
 		{
@@ -86,7 +86,7 @@ namespace Coh2Stats.RelicAPI
 		}
 	}
 
-	class AvailableLeaderboards
+	internal class AvailableLeaderboards
 	{
 		public class Leaderboardmap
 		{
@@ -319,7 +319,7 @@ namespace Coh2Stats.RelicAPI
 		}
 	}
 
-	class PersonalStat
+	internal class PersonalStat
 	{
 		public class Root
 		{
@@ -344,7 +344,7 @@ namespace Coh2Stats.RelicAPI
 		}
 	}
 
-	class PlayerSummaries
+	internal class PlayerSummaries
 	{
 		public class Player
 		{

@@ -7,9 +7,9 @@ using System.Threading;
 
 namespace Coh2Stats
 {
-	class Program
+	internal class Program
 	{
-		static public void AnalyzeWinRatesByRace(MatchAnalyticsBundle mab, RaceFlag raceFlag)
+		public static void AnalyzeWinRatesByRace(MatchAnalyticsBundle mab, RaceFlag raceFlag)
 		{
 			FactionId factionId = FactionId.Allies;
 			if (raceFlag == RaceFlag.German || raceFlag == RaceFlag.WGerman)
@@ -24,7 +24,7 @@ namespace Coh2Stats
 			}
 
 			var totalWins = totalGames.FilterByResult(true, factionId);
-			double totalWinRate = (double)totalWins.Matches.Count / (double)totalGames.Matches.Count;
+			double totalWinRate = totalWins.Matches.Count / (double)totalGames.Matches.Count;
 
 			var mapsByPlayCount = totalGames.GetOrderedMapPlayCount();
 			var mapsByWinCount = totalWins.GetOrderedMapPlayCount();
@@ -41,7 +41,7 @@ namespace Coh2Stats
 					winCount = mapsByWinCount[map];
 				}
 
-				double winRate = (double)winCount / (double)playCount;
+				double winRate = winCount / (double)playCount;
 				mapsByWinRate.Add(map, winRate);
 			}
 
@@ -63,7 +63,7 @@ namespace Coh2Stats
 			Console.WriteLine();
 		}
 
-		static public void PrintInformationPerRank(Database db, double percentile)
+		public static void PrintInformationPerRank(Database db, double percentile)
 		{
 			Console.WriteLine("Match data for top {0}% of players", percentile);
 
@@ -83,7 +83,7 @@ namespace Coh2Stats
 			Console.WriteLine();
 		}
 
-		static public int ModeSelection()
+		public static int ModeSelection()
 		{
 			CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
@@ -103,7 +103,7 @@ namespace Coh2Stats
 			return selection;
 		}
 
-		static void Main()
+		private static void Main()
 		{
 			MatchTypeId matchType = MatchTypeId._1v1_;
 

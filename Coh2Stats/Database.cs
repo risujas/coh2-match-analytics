@@ -482,7 +482,7 @@ namespace Coh2Stats
 
 			return null;
 		}
-		
+
 		// OTHER METHODS
 
 		public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)

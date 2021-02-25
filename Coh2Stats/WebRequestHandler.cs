@@ -12,7 +12,7 @@ namespace Coh2Stats
 		[JsonProperty("message")] public string Message { get; set; }
 	}
 
-	class WebRequestHandler
+	internal class WebRequestHandler
 	{
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)
 		{
