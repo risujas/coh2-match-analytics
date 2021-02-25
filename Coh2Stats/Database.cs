@@ -8,6 +8,7 @@ namespace Coh2Stats
 {
 	public class Database
 	{
+		// TODO package these 3 classes into one so Database doesn't need to be serialized
 		public List<RelicAPI.PlayerIdentity> PlayerIdentities = new List<RelicAPI.PlayerIdentity>();
 		public List<RelicAPI.StatGroup> StatGroups = new List<RelicAPI.StatGroup>();
 		public List<RelicAPI.LeaderboardStat> LeaderboardStats = new List<RelicAPI.LeaderboardStat>();
