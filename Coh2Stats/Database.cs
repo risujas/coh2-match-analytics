@@ -322,10 +322,12 @@ namespace Coh2Stats
 
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
-			if (GetPlayerByProfileId(playerIdentity.ProfileId) == null)
+			var oldPlayerIdentity = GetPlayerByProfileId(playerIdentity.ProfileId);
+			if (oldPlayerIdentity != null)
 			{
-				PlayerIdentities.Add(playerIdentity);
+				PlayerIdentities.Remove(oldPlayerIdentity);
 			}
+			PlayerIdentities.Add(playerIdentity);
 		}
 
 		public void SortPlayersByHighestRank(MatchTypeId matchTypeId)
