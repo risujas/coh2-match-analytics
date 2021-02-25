@@ -17,7 +17,9 @@ namespace Coh2Stats
 		[JsonIgnore] private const string playerDatabaseFile = "playerData.txt";
 		[JsonIgnore] private const string matchDatabaseFile = "matchData.txt";
 		[JsonIgnore] private List<RelicAPI.PlayerIdentity> matchHistoryProcessQueue = new List<RelicAPI.PlayerIdentity>();
+
 		[JsonIgnore] private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
+
 
 		// BUILDER METHODS
 

@@ -75,7 +75,6 @@ namespace Coh2Stats
 			AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
 			AnalyzeWinRatesByRace(mab, RaceFlag.British);
 
-			Console.WriteLine();
 			var playCounts = mab.GetOrderedMapPlayCount();
 			foreach (var p in playCounts)
 			{
@@ -148,9 +147,9 @@ namespace Coh2Stats
 
 				if (selection == 3)
 				{
-
 					Console.Write("Top percentile: ");
 					bool goodParse = double.TryParse(Console.ReadLine(), out double percentile);
+					Console.Clear();
 
 					var german = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.German, matchType);
 					var soviet = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.Soviet, matchType);
