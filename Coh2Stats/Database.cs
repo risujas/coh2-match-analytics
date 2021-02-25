@@ -35,6 +35,7 @@ namespace Coh2Stats
 			FetchPlayerDetails(players);
 			SortPlayersByHighestRank(gameMode);
 
+			// TODO figure out why this prints a file with "unsorted" player identities
 			WritePlayerDatabase();
 		}
 
