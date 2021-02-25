@@ -83,7 +83,7 @@ namespace Coh2Stats
 			Console.WriteLine();
 		}
 
-		public static int ModeSelection()
+		public static int RunModeSelection()
 		{
 			CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
@@ -103,77 +103,90 @@ namespace Coh2Stats
 			return selection;
 		}
 
+		public static void RunModeOperations(Database db, int selectedMode)
+		{
+			MatchTypeId matchType = MatchTypeId._1v1_; // TODO
+
+			if (selectedMode == 1)
+			{
+				db.FindNewPlayers(matchType);
+				while (db.ProcessMatches(matchType, 50000) == true) ;
+			}
+
+			if (selectedMode == 2)
+			{
+				while (true)
+				{
+					db.FindNewPlayers(matchType);
+					while (db.ProcessMatches(matchType, 50000) == true) ;
+
+					Stopwatch sw = Stopwatch.StartNew();
+					double sessionInterval = 1200;
+
+					while (sw.Elapsed.TotalSeconds < sessionInterval)
+					{
+						double difference = sessionInterval - sw.Elapsed.TotalSeconds;
+						int intDiff = (int)difference;
+
+						if (intDiff % 60 == 0)
+						{
+							Console.WriteLine("Resuming operations in {0:0} seconds", difference);
+							Thread.Sleep(1000);
+						}
+					}
+				}
+			}
+
+			if (selectedMode == 3)
+			{
+				Console.Write("Top percentile: ");
+				bool goodParse = double.TryParse(Console.ReadLine(), out double percentile);
+				Console.Clear();
+
+				var german = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.German, matchType);
+				var soviet = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.Soviet, matchType);
+				var wgerman = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.WGerman, matchType);
+				var aef = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.AEF, matchType);
+				var british = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.British, matchType);
+
+				int germanRanks = db.GetLeaderboardRankByPercentile(german, percentile);
+				int sovietRanks = db.GetLeaderboardRankByPercentile(soviet, percentile);
+				int wgermanRanks = db.GetLeaderboardRankByPercentile(wgerman, percentile);
+				int aefRanks = db.GetLeaderboardRankByPercentile(aef, percentile);
+				int britishRanks = db.GetLeaderboardRankByPercentile(british, percentile);
+
+				Console.WriteLine("{0} ranks: top {1}", german.ToString(), germanRanks);
+				Console.WriteLine("{0} ranks: top {1}", soviet.ToString(), sovietRanks);
+				Console.WriteLine("{0} ranks: top {1}", wgerman.ToString(), wgermanRanks);
+				Console.WriteLine("{0} ranks: top {1}", aef.ToString(), aefRanks);
+				Console.WriteLine("{0} ranks: top {1}", british.ToString(), britishRanks);
+
+				if (goodParse)
+				{
+					PrintInformationPerRank(db, percentile);
+					Console.ReadLine();
+				}
+			}
+		}
+
 		private static void Main()
 		{
-			MatchTypeId matchType = MatchTypeId._1v1_;
-
 			Database db = new Database();
 			db.LoadPlayerDatabase();
 			db.LoadMatchDatabase();
 
 			while (true)
 			{
-				int selection = ModeSelection();
-
-				if (selection == 1)
+				try
 				{
-					db.FindNewPlayers(matchType);
-					while (db.ProcessMatches(matchType, 50000) == true) ;
+					int selectedMode = RunModeSelection();
+					RunModeOperations(db, selectedMode);
 				}
 
-				if (selection == 2)
+				catch (Exception e)
 				{
-					while (true)
-					{
-						db.FindNewPlayers(matchType);
-						while (db.ProcessMatches(matchType, 50000) == true) ;
-
-						Stopwatch sw = Stopwatch.StartNew();
-						double sessionInterval = 1200;
-
-						while (sw.Elapsed.TotalSeconds < sessionInterval)
-						{
-							double difference = sessionInterval - sw.Elapsed.TotalSeconds;
-							int intDiff = (int)difference;
-
-							if (intDiff % 60 == 0)
-							{
-								Console.WriteLine("Resuming operations in {0:0} seconds", difference);
-								Thread.Sleep(1000);
-							}
-						}
-					}
-				}
-
-				if (selection == 3)
-				{
-					Console.Write("Top percentile: ");
-					bool goodParse = double.TryParse(Console.ReadLine(), out double percentile);
-					Console.Clear();
-
-					var german = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.German, matchType);
-					var soviet = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.Soviet, matchType);
-					var wgerman = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.WGerman, matchType);
-					var aef = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.AEF, matchType);
-					var british = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.British, matchType);
-
-					int germanRanks = db.GetLeaderboardRankByPercentile(german, percentile);
-					int sovietRanks = db.GetLeaderboardRankByPercentile(soviet, percentile);
-					int wgermanRanks = db.GetLeaderboardRankByPercentile(wgerman, percentile);
-					int aefRanks = db.GetLeaderboardRankByPercentile(aef, percentile);
-					int britishRanks = db.GetLeaderboardRankByPercentile(british, percentile);
-
-					Console.WriteLine("{0} ranks: top {1}", german.ToString(), germanRanks);
-					Console.WriteLine("{0} ranks: top {1}", soviet.ToString(), sovietRanks);
-					Console.WriteLine("{0} ranks: top {1}", wgerman.ToString(), wgermanRanks);
-					Console.WriteLine("{0} ranks: top {1}", aef.ToString(), aefRanks);
-					Console.WriteLine("{0} ranks: top {1}", british.ToString(), britishRanks);
-
-					if (goodParse)
-					{
-						PrintInformationPerRank(db, percentile);
-						Console.ReadLine();
-					}
+					Console.WriteLine(e.Message);
+					Console.ReadLine();
 				}
 			}
 		}
