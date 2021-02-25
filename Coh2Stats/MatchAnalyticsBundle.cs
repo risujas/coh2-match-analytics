@@ -188,6 +188,8 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
+		// TODO add "FilterByPercentile" - alternative to rank filtering that also takes differences in ladder size into consideration (i.e. Brit ladder only having 1500 players while OKW has 3300)
+
 		public MatchAnalyticsBundle FilterByRank(Database db, int rankFloor, int rankCap, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
