@@ -470,15 +470,11 @@ namespace Coh2Stats
 		public void LogStat(RelicAPI.LeaderboardStat stat)
 		{
 			var oldStat = GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId);
-			if (oldStat == null)
-			{
-				LeaderboardStats.Add(stat);
-			}
-			else
+			if (oldStat != null)
 			{
 				LeaderboardStats.Remove(oldStat);
-				LeaderboardStats.Add(stat);
 			}
+			LeaderboardStats.Add(stat);
 		}
 
 		// MATCHHISTORYSTAT ACCCESS METHODS
