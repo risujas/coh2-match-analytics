@@ -38,6 +38,8 @@ namespace Coh2Stats
 
 					catch (Exception e)
 					{
+						Console.Write(e.Message);
+
 						Thread.Sleep(attemptInterval);
 
 						if (i == maxAttempts)
