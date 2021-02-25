@@ -467,8 +467,14 @@ namespace Coh2Stats
 
 		public void LogStat(RelicAPI.LeaderboardStat stat)
 		{
-			if (GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId) == null) // TODO check if this prevents stats from being updated
+			var oldStat = GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId);
+			if (oldStat == null)
 			{
+				LeaderboardStats.Add(stat);
+			}
+			else
+			{
+				LeaderboardStats.Remove(oldStat);
 				LeaderboardStats.Add(stat);
 			}
 		}
