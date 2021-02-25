@@ -373,12 +373,14 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public void LogStatGroup(RelicAPI.StatGroup psg)
+		public void LogStatGroup(RelicAPI.StatGroup statGroup)
 		{
-			if (GetStatGroupById(psg.Id) == null)
+			var oldStatGroup = GetStatGroupById(statGroup.Id);
+			if (oldStatGroup != null)
 			{
-				StatGroups.Add(psg);
+				StatGroups.Remove(oldStatGroup);
 			}
+			StatGroups.Add(statGroup);
 		}
 
 		// LEADERBOARDSTAT ACCESS METHODS
