@@ -33,6 +33,7 @@ namespace Coh2Stats
 		{
 			var players = GetNewPlayers(gameMode, 1, -1);
 			FetchPlayerDetails(players);
+			SortPlayersByHighestRank(gameMode);
 
 			WritePlayerDatabase();
 		}
@@ -41,7 +42,6 @@ namespace Coh2Stats
 		{
 			if (matchHistoryProcessQueue.Count == 0)
 			{
-				SortPlayersByHighestRank(matchTypeId);
 				matchHistoryProcessQueue = PlayerIdentities.GetRange(0, maxPlayers).Where(p => p.GetHighestRank(this, matchTypeId) != int.MaxValue).ToList(); // TODO something more efficient
 			}
 
@@ -85,14 +85,13 @@ namespace Coh2Stats
 			int difference = newMatchCount - oldMatchCount;
 			Console.WriteLine(" +{0}", difference);
 
-			if (newMatchCount > oldMatchCount)
-			{
-				WritePlayerDatabase();
-				WriteMatchDatabase();
-			}
-
 			if (matchHistoryProcessQueue.Count == 0)
 			{
+				SortPlayersByHighestRank(matchTypeId);
+
+				WritePlayerDatabase();
+				WriteMatchDatabase();
+
 				return false;
 			}
 
