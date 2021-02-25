@@ -14,12 +14,17 @@ namespace Coh2Stats
 
 		[JsonIgnore] public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
+		[JsonIgnore] private readonly string databaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
 		[JsonIgnore] private const string playerDatabaseFile = "playerData.txt";
 		[JsonIgnore] private const string matchDatabaseFile = "matchData.txt";
 		[JsonIgnore] private List<RelicAPI.PlayerIdentity> matchHistoryProcessQueue = new List<RelicAPI.PlayerIdentity>();
 
 		[JsonIgnore] private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
 
+		public Database()
+		{
+			Directory.CreateDirectory(databaseFolder);
+		}
 
 		// BUILDER METHODS
 
@@ -27,6 +32,8 @@ namespace Coh2Stats
 		{
 			var players = GetNewPlayers(gameMode, 1, -1);
 			FetchPlayerDetails(players);
+
+			WritePlayerDatabase();
 		}
 
 		public bool ProcessMatches(MatchTypeId matchTypeId, int maxPlayers)
@@ -207,7 +214,8 @@ namespace Coh2Stats
 
 		public bool LoadPlayerDatabase()
 		{
-			if (!File.Exists(playerDatabaseFile))
+			string fullPath = databaseFolder + "\\" + playerDatabaseFile;
+			if (!File.Exists(fullPath))
 			{
 				Console.WriteLine("No player database found");
 				return false;
@@ -215,7 +223,7 @@ namespace Coh2Stats
 
 			Console.WriteLine("Player database found...");
 
-			string text = File.ReadAllText(playerDatabaseFile);
+			string text = File.ReadAllText(fullPath);
 			var json = JsonConvert.DeserializeObject<Database>(text);
 
 			PlayerIdentities = json.PlayerIdentities;
@@ -231,13 +239,17 @@ namespace Coh2Stats
 
 		public void WritePlayerDatabase()
 		{
+			Directory.CreateDirectory(databaseFolder);
+
 			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
-			File.WriteAllText(playerDatabaseFile, text);
+			string fullPath = databaseFolder + "\\" + playerDatabaseFile;
+			File.WriteAllText(fullPath, text);
 		}
 
 		public bool LoadMatchDatabase()
 		{
-			if (!File.Exists(matchDatabaseFile))
+			string fullPath = databaseFolder + "\\" + matchDatabaseFile;
+			if (!File.Exists(fullPath))
 			{
 				Console.WriteLine("No match database found");
 				return false;
@@ -245,7 +257,7 @@ namespace Coh2Stats
 
 			Console.WriteLine("Match database found...");
 
-			string text = File.ReadAllText(matchDatabaseFile);
+			string text = File.ReadAllText(fullPath);
 			MatchHistoryStats = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
 
 			Console.WriteLine("{0} match history stats", MatchHistoryStats.Count);
@@ -255,8 +267,11 @@ namespace Coh2Stats
 
 		public void WriteMatchDatabase()
 		{
+			Directory.CreateDirectory(databaseFolder);
+
 			var text = JsonConvert.SerializeObject(MatchHistoryStats, Formatting.Indented);
-			File.WriteAllText(matchDatabaseFile, text);
+			string fullPath = databaseFolder + "\\" + matchDatabaseFile;
+			File.WriteAllText(fullPath, text);
 		}
 
 		// PLAYERIDENTITY ACCESS METHODS
