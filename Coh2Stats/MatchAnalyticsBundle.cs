@@ -11,7 +11,7 @@ namespace Coh2Stats
 		public static MatchAnalyticsBundle GetAllLoggedMatches(Database db)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-			matchAnalyticsBundle.Matches = db.matchHistoryStats;
+			matchAnalyticsBundle.Matches = db.MatchHistoryStats;
 			return matchAnalyticsBundle;
 		}
 
@@ -188,7 +188,48 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		// TODO add "FilterByPercentile" - alternative to rank filtering that also takes differences in ladder size into consideration (i.e. Brit ladder only having 1500 players while OKW has 3300)
+		public MatchAnalyticsBundle FilterByTopPercentile(Database db, double topPercentile, bool requireOnAll)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				int numGoodPlayers = 0;
+
+				foreach (var rr in m.MatchHistoryReportResults)
+				{
+					var identity = db.GetPlayerByProfileId(rr.ProfileId);
+					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)rr.RaceId, (MatchTypeId)m.MatchTypeId);
+					var lbs = db.GetStat(identity.PersonalStatGroupId, lbid);
+
+					if (lbs == null)
+					{
+						continue;
+					}
+
+					int cutoffRank = db.GetLeaderboardRankByPercentile(lbid, topPercentile);
+					if (lbs.Rank <= cutoffRank)
+					{
+						numGoodPlayers++;
+					}
+				}
+
+				if (numGoodPlayers > 0)
+				{
+					if (!requireOnAll)
+					{
+						matchAnalyticsBundle.Matches.Add(m);
+					}
+
+					else if (requireOnAll && numGoodPlayers == m.MaxPlayers)
+					{
+						matchAnalyticsBundle.Matches.Add(m);
+					}
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
 
 		public MatchAnalyticsBundle FilterByRank(Database db, int rankFloor, int rankCap, bool requireOnAll)
 		{
