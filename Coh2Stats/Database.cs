@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Coh2Stats
 {
@@ -333,7 +334,9 @@ namespace Coh2Stats
 		public void SortPlayersByHighestRank(MatchTypeId matchTypeId)
 		{
 			Console.WriteLine("Sorting player list by best rank");
+			Stopwatch sw = Stopwatch.StartNew();
 
+			/*
 			List<RelicAPI.PlayerIdentity> rankedPlayers = new List<RelicAPI.PlayerIdentity>();
 			List<RelicAPI.PlayerIdentity> unrankedPlayers = new List<RelicAPI.PlayerIdentity>();
 
@@ -356,6 +359,12 @@ namespace Coh2Stats
 			combinedPlayers.AddRange(unrankedPlayers);
 
 			PlayerIdentities = combinedPlayers;
+			*/
+
+			PlayerIdentities = PlayerIdentities.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
+			//268
+			Console.WriteLine(sw.Elapsed.TotalSeconds);
+			Console.ReadLine();
 		}
 
 		// STATGROUP ACCESS METHODS
