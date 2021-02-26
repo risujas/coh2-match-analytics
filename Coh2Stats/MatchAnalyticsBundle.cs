@@ -192,18 +192,27 @@ namespace Coh2Stats
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
-			foreach (var m in Matches)
+			for (int i = 0; i < Matches.Count; i++)
 			{
+				var match = Matches[i];
+
 				int numGoodPlayers = 0;
 
-				foreach (var rr in m.MatchHistoryReportResults)
+				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
 				{
-					var identity = db.GetPlayerByProfileId(rr.ProfileId);
-					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)rr.RaceId, (MatchTypeId)m.MatchTypeId);
+					var report = match.MatchHistoryReportResults[j];
+
+					var identity = db.GetPlayerByProfileId(report.ProfileId);
+					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId);
 					var lbs = db.GetStat(identity.PersonalStatGroupId, lbid);
 
 					if (lbs == null)
 					{
+						if (requireOnAll)
+						{
+							break;
+						}
+
 						continue;
 					}
 
@@ -212,18 +221,23 @@ namespace Coh2Stats
 					{
 						numGoodPlayers++;
 					}
+
+					else if (requireOnAll)
+					{
+						break;
+					}
 				}
 
 				if (numGoodPlayers > 0)
 				{
 					if (!requireOnAll)
 					{
-						matchAnalyticsBundle.Matches.Add(m);
+						matchAnalyticsBundle.Matches.Add(match);
 					}
 
-					else if (requireOnAll && numGoodPlayers == m.MaxPlayers)
+					else if (requireOnAll && numGoodPlayers == match.MaxPlayers)
 					{
-						matchAnalyticsBundle.Matches.Add(m);
+						matchAnalyticsBundle.Matches.Add(match);
 					}
 				}
 			}
@@ -235,18 +249,27 @@ namespace Coh2Stats
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
-			foreach (var m in Matches)
+			for (int i = 0; i < Matches.Count; i++)
 			{
+				var match = Matches[i];
+
 				int numGoodPlayers = 0;
 
-				foreach (var rr in m.MatchHistoryReportResults)
+				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
 				{
-					var identity = db.GetPlayerByProfileId(rr.ProfileId);
-					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)rr.RaceId, (MatchTypeId)m.MatchTypeId);
+					var report = match.MatchHistoryReportResults[j];
+
+					var identity = db.GetPlayerByProfileId(report.ProfileId);
+					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId);
 					var lbs = db.GetStat(identity.PersonalStatGroupId, lbid);
 
 					if (lbs == null)
 					{
+						if (requireOnAll)
+						{
+							break;
+						}
+
 						continue;
 					}
 
@@ -254,18 +277,23 @@ namespace Coh2Stats
 					{
 						numGoodPlayers++;
 					}
+
+					else if (requireOnAll)
+					{
+						break;
+					}
 				}
 
 				if (numGoodPlayers > 0)
 				{
 					if (!requireOnAll)
 					{
-						matchAnalyticsBundle.Matches.Add(m);
+						matchAnalyticsBundle.Matches.Add(match);
 					}
 
-					else if (requireOnAll && numGoodPlayers == m.MaxPlayers)
+					else if (requireOnAll && numGoodPlayers == match.MaxPlayers)
 					{
-						matchAnalyticsBundle.Matches.Add(m);
+						matchAnalyticsBundle.Matches.Add(match);
 					}
 				}
 			}
