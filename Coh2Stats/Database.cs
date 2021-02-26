@@ -334,37 +334,7 @@ namespace Coh2Stats
 		public void SortPlayersByHighestRank(MatchTypeId matchTypeId)
 		{
 			Console.WriteLine("Sorting player list by best rank");
-			Stopwatch sw = Stopwatch.StartNew();
-
-			/*
-			List<RelicAPI.PlayerIdentity> rankedPlayers = new List<RelicAPI.PlayerIdentity>();
-			List<RelicAPI.PlayerIdentity> unrankedPlayers = new List<RelicAPI.PlayerIdentity>();
-
-			for (int i = 0; i < PlayerIdentities.Count; i++)
-			{
-				var p = PlayerIdentities[i];
-				if (p.GetHighestRank(this, matchTypeId) == int.MaxValue)
-				{
-					unrankedPlayers.Add(p);
-				}
-				else
-				{
-					rankedPlayers.Add(p);
-				}
-			}
-
-			rankedPlayers = rankedPlayers.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
-
-			var combinedPlayers = rankedPlayers;
-			combinedPlayers.AddRange(unrankedPlayers);
-
-			PlayerIdentities = combinedPlayers;
-			*/
-
 			PlayerIdentities = PlayerIdentities.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
-			//268
-			Console.WriteLine(sw.Elapsed.TotalSeconds);
-			Console.ReadLine();
 		}
 
 		// STATGROUP ACCESS METHODS
