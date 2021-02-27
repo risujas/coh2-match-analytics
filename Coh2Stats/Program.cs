@@ -9,6 +9,8 @@ namespace Coh2Stats
 {
 	internal class Program
 	{
+		const long relevantTimeCutoff = 1614376800;
+
 		public static void AnalyzeWinRatesByRace(MatchAnalyticsBundle mab, RaceFlag raceFlag)
 		{
 			FactionId factionId = FactionId.Allies;
@@ -67,7 +69,7 @@ namespace Coh2Stats
 		{
 			Console.WriteLine("Match data for top {0}% of players", percentile);
 
-			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByStartGameTime(1612389600, -1).FilterByDescription("AUTOMATCH").FilterByTopPercentile(db, percentile, true);
+			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByStartGameTime((int)relevantTimeCutoff, -1).FilterByDescription("AUTOMATCH").FilterByTopPercentile(db, percentile, true);
 
 			AnalyzeWinRatesByRace(mab, RaceFlag.German);
 			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
@@ -110,7 +112,7 @@ namespace Coh2Stats
 			if (selectedMode == 1)
 			{
 				db.ProcessPlayers(matchType);
-				while (db.ProcessMatches(matchType) == true) ;
+				while (db.ProcessMatches(matchType, relevantTimeCutoff) == true) ;
 			}
 
 			if (selectedMode == 2)
@@ -118,7 +120,7 @@ namespace Coh2Stats
 				while (true)
 				{
 					db.ProcessPlayers(matchType);
-					while (db.ProcessMatches(matchType) == true) ;
+					while (db.ProcessMatches(matchType, relevantTimeCutoff) == true) ;
 
 					Stopwatch sw = Stopwatch.StartNew();
 					double sessionInterval = 1200;

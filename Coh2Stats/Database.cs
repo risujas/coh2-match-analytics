@@ -31,16 +31,25 @@ namespace Coh2Stats
 
 		public void ProcessPlayers(MatchTypeId gameMode)
 		{
-			var players = GetNewPlayers(gameMode, 1, -1);
-			players.AddRange(PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList());
-			UpdatePlayerDetails(players);
+			var newPlayers = GetNewPlayers(gameMode, 1, -1);
+			var knownRankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
 
+			for (int i = 0; i < newPlayers.Count; i++)
+			{
+				var x = newPlayers[i];
+
+				if (knownRankedPlayers.Contains(x) == false)
+				{
+					knownRankedPlayers.Add(x);
+				}
+			}
+
+			UpdatePlayerDetails(newPlayers);
 			SortPlayersByHighestRank(gameMode);
-
 			WritePlayerDatabase();
 		}
 
-		public bool ProcessMatches(MatchTypeId gameMode)
+		public bool ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
 		{
 			if (matchHistoryProcessQueue.Count == 0)
 			{
