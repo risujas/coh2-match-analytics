@@ -39,11 +39,11 @@ namespace Coh2Stats
 			WritePlayerDatabase();
 		}
 
-		public bool ProcessMatches(MatchTypeId matchTypeId, int maxPlayers)
+		public bool ProcessMatches(MatchTypeId matchTypeId)
 		{
 			if (matchHistoryProcessQueue.Count == 0)
 			{
-				matchHistoryProcessQueue = PlayerIdentities.GetRange(0, maxPlayers).Where(p => p.GetHighestRank(this, matchTypeId) != int.MaxValue).ToList(); // TODO something more efficient
+				matchHistoryProcessQueue = PlayerIdentities.Where(p => p.GetHighestRank(this, matchTypeId) != int.MaxValue).ToList(); // TODO something more efficient
 			}
 
 			int batchSize = 200;

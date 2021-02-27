@@ -110,7 +110,7 @@ namespace Coh2Stats
 			if (selectedMode == 1)
 			{
 				db.FindNewPlayers(matchType);
-				while (db.ProcessMatches(matchType, 50000) == true) ;
+				while (db.ProcessMatches(matchType) == true) ;
 			}
 
 			if (selectedMode == 2)
@@ -118,7 +118,7 @@ namespace Coh2Stats
 				while (true)
 				{
 					db.FindNewPlayers(matchType);
-					while (db.ProcessMatches(matchType, 50000) == true) ;
+					while (db.ProcessMatches(matchType) == true) ;
 
 					Stopwatch sw = Stopwatch.StartNew();
 					double sessionInterval = 1200;
