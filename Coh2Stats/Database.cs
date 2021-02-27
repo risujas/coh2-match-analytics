@@ -30,20 +30,22 @@ namespace Coh2Stats
 
 		// BUILDER METHODS
 
-		public void FindNewPlayers(MatchTypeId gameMode)
+		public void ProcessPlayers(MatchTypeId gameMode)
 		{
 			var players = GetNewPlayers(gameMode, 1, -1);
+			players.AddRange(PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList());
 			FetchPlayerDetails(players);
+
 			SortPlayersByHighestRank(gameMode);
 
 			WritePlayerDatabase();
 		}
 
-		public bool ProcessMatches(MatchTypeId matchTypeId)
+		public bool ProcessMatches(MatchTypeId gameMode)
 		{
 			if (matchHistoryProcessQueue.Count == 0)
 			{
-				matchHistoryProcessQueue = PlayerIdentities.Where(p => p.GetHighestRank(this, matchTypeId) != int.MaxValue).ToList(); // TODO something more efficient
+				matchHistoryProcessQueue = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList(); // TODO something more efficient
 			}
 
 			int batchSize = 200;
@@ -76,7 +78,7 @@ namespace Coh2Stats
 			for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 			{
 				var x = response.MatchHistoryStats[i];
-				if (x.MatchTypeId == (int)matchTypeId)
+				if (x.MatchTypeId == (int)gameMode)
 				{
 					LogMatch(x);
 				}
@@ -88,7 +90,7 @@ namespace Coh2Stats
 
 			if (matchHistoryProcessQueue.Count == 0)
 			{
-				SortPlayersByHighestRank(matchTypeId);
+				SortPlayersByHighestRank(gameMode);
 
 				WritePlayerDatabase();
 				WriteMatchDatabase();
@@ -99,13 +101,13 @@ namespace Coh2Stats
 			return true;
 		}
 
-		private List<RelicAPI.PlayerIdentity> GetNewPlayers(MatchTypeId matchTypeId, int startingRank = 1, int maxRank = -1)
+		private List<RelicAPI.PlayerIdentity> GetNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
 		{
 			int numPlayersBefore = PlayerIdentities.Count;
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)leaderboardIndex, matchTypeId) == false)
+				if (LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)leaderboardIndex, gameMode) == false)
 				{
 					continue;
 				}
@@ -366,7 +368,7 @@ namespace Coh2Stats
 
 		// LEADERBOARDSTAT ACCESS METHODS
 
-		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId, MatchTypeId matchTypeId)
+		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId, MatchTypeId gameMode)
 		{
 			RelicAPI.LeaderboardStat highest = null;
 
@@ -374,7 +376,7 @@ namespace Coh2Stats
 			{
 				var x = LeaderboardStats[i];
 
-				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)x.LeaderboardId, matchTypeId))
+				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)x.LeaderboardId, gameMode))
 				{
 					if (highest == null)
 					{

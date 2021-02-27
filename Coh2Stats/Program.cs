@@ -109,7 +109,7 @@ namespace Coh2Stats
 
 			if (selectedMode == 1)
 			{
-				db.FindNewPlayers(matchType);
+				db.ProcessPlayers(matchType);
 				while (db.ProcessMatches(matchType) == true) ;
 			}
 
@@ -117,7 +117,7 @@ namespace Coh2Stats
 			{
 				while (true)
 				{
-					db.FindNewPlayers(matchType);
+					db.ProcessPlayers(matchType);
 					while (db.ProcessMatches(matchType) == true) ;
 
 					Stopwatch sw = Stopwatch.StartNew();
