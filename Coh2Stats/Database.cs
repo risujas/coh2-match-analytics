@@ -34,7 +34,7 @@ namespace Coh2Stats
 		{
 			var players = GetNewPlayers(gameMode, 1, -1);
 			players.AddRange(PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList());
-			FetchPlayerDetails(players);
+			UpdatePlayerDetails(players);
 
 			SortPlayersByHighestRank(gameMode);
 
@@ -172,7 +172,7 @@ namespace Coh2Stats
 			return newPlayers;
 		}
 
-		private void FetchPlayerDetails(List<RelicAPI.PlayerIdentity> players)
+		private void UpdatePlayerDetails(List<RelicAPI.PlayerIdentity> players)
 		{
 			int batchSize = 200;
 			while (players.Count > 0)
