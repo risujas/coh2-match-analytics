@@ -45,7 +45,7 @@ namespace Coh2Stats
 			}
 
 			UpdatePlayerDetails(newPlayers);
-			SortPlayersByHighestRank(gameMode);
+
 			WritePlayerDatabase();
 		}
 
@@ -98,8 +98,6 @@ namespace Coh2Stats
 
 			if (matchHistoryProcessQueue.Count == 0)
 			{
-				SortPlayersByHighestRank(gameMode);
-
 				WritePlayerDatabase();
 				WriteMatchDatabase();
 
@@ -301,35 +299,35 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public RelicAPI.PlayerIdentity GetPlayerBySteamId(string steamId)
-		{
-			for (int i = 0; i < PlayerIdentities.Count; i++)
-			{
-				var x = PlayerIdentities[i];
+		//public RelicAPI.PlayerIdentity GetPlayerBySteamId(string steamId)
+		//{
+		//	for (int i = 0; i < PlayerIdentities.Count; i++)
+		//	{
+		//		var x = PlayerIdentities[i];
 
-				if (x.Name == steamId)
-				{
-					return x;
-				}
-			}
+		//		if (x.Name == steamId)
+		//		{
+		//			return x;
+		//		}
+		//	}
 
-			return null;
-		}
+		//	return null;
+		//}
 
-		public RelicAPI.PlayerIdentity GetPlayerByPersonalStatGroupId(int personalStatGroupId)
-		{
-			for (int i = 0; i < PlayerIdentities.Count; i++)
-			{
-				var x = PlayerIdentities[i];
+		//public RelicAPI.PlayerIdentity GetPlayerByPersonalStatGroupId(int personalStatGroupId)
+		//{
+		//	for (int i = 0; i < PlayerIdentities.Count; i++)
+		//	{
+		//		var x = PlayerIdentities[i];
 
-				if (x.PersonalStatGroupId == personalStatGroupId)
-				{
-					return x;
-				}
-			}
+		//		if (x.PersonalStatGroupId == personalStatGroupId)
+		//		{
+		//			return x;
+		//		}
+		//	}
 
-			return null;
-		}
+		//	return null;
+		//}
 
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
@@ -341,11 +339,11 @@ namespace Coh2Stats
 			PlayerIdentities.Add(playerIdentity);
 		}
 
-		public void SortPlayersByHighestRank(MatchTypeId matchTypeId)
-		{
-			Console.WriteLine("Sorting player list by best rank");
-			PlayerIdentities = PlayerIdentities.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
-		}
+		//public void SortPlayersByHighestRank(MatchTypeId matchTypeId)
+		//{
+		//	Console.WriteLine("Sorting player list by best rank");
+		//	PlayerIdentities = PlayerIdentities.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
+		//}
 
 		// STATGROUP ACCESS METHODS
 
@@ -401,30 +399,31 @@ namespace Coh2Stats
 			return highest;
 		}
 
-		public RelicAPI.LeaderboardStat GetLowestStatByStatGroup(int statGroupId)
-		{
-			RelicAPI.LeaderboardStat lowest = null;
+		// fix not implemented
+		//public RelicAPI.LeaderboardStat GetLowestStatByStatGroup(int statGroupId)
+		//{
+		//	RelicAPI.LeaderboardStat lowest = null;
 
-			for (int i = 0; i < LeaderboardStats.Count; i++)
-			{
-				var x = LeaderboardStats[i];
+		//	for (int i = 0; i < LeaderboardStats.Count; i++)
+		//	{
+		//		var x = LeaderboardStats[i];
 
-				if (x.StatGroupId == statGroupId)
-				{
-					if (lowest == null)
-					{
-						lowest = x;
-					}
+		//		if (x.StatGroupId == statGroupId)
+		//		{
+		//			if (lowest == null)
+		//			{
+		//				lowest = x;
+		//			}
 
-					else if (x.Rank > lowest.Rank)
-					{
-						lowest = x;
-					}
-				}
-			}
+		//			else if (x.Rank > lowest.Rank)
+		//			{
+		//				lowest = x;
+		//			}
+		//		}
+		//	}
 
-			return lowest;
-		}
+		//	return lowest;
+		//}
 
 		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
@@ -441,22 +440,22 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public List<RelicAPI.LeaderboardStat> GetAllStatsByStatGroup(int statGroupId)
-		{
-			List<RelicAPI.LeaderboardStat> stats = new List<RelicAPI.LeaderboardStat>();
+		//public List<RelicAPI.LeaderboardStat> GetAllStatsByStatGroup(int statGroupId)
+		//{
+		//	List<RelicAPI.LeaderboardStat> stats = new List<RelicAPI.LeaderboardStat>();
 
-			for (int i = 0; i < LeaderboardStats.Count; i++)
-			{
-				var x = LeaderboardStats[i];
+		//	for (int i = 0; i < LeaderboardStats.Count; i++)
+		//	{
+		//		var x = LeaderboardStats[i];
 
-				if (x.StatGroupId == statGroupId)
-				{
-					stats.Add(x);
-				}
-			}
+		//		if (x.StatGroupId == statGroupId)
+		//		{
+		//			stats.Add(x);
+		//		}
+		//	}
 
-			return stats;
-		}
+		//	return stats;
+		//}
 
 		public void LogStat(RelicAPI.LeaderboardStat stat)
 		{
