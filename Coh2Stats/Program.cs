@@ -9,7 +9,7 @@ namespace Coh2Stats
 {
 	internal class Program
 	{
-		const long relevantTimeCutoff = 1614376800;
+		private const long relevantTimeCutoff = 1614376800;
 
 		public static void AnalyzeWinRatesByRace(MatchAnalyticsBundle mab, RaceFlag raceFlag)
 		{
