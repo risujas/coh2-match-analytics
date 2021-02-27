@@ -86,7 +86,7 @@ namespace Coh2Stats
 			for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 			{
 				var x = response.MatchHistoryStats[i];
-				if (x.MatchTypeId == (int)gameMode)
+				if (x.MatchTypeId == (int)gameMode && x.StartGameTime >= startedAfterTimestamp)
 				{
 					LogMatch(x);
 				}
