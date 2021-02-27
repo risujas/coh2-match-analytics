@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Diagnostics;
 
 namespace Coh2Stats
 {
@@ -383,7 +382,7 @@ namespace Coh2Stats
 						highest = x;
 					}
 
-					else if ( (highest.Rank == -1) || x.Rank < highest.Rank && x.Rank >= 1)
+					else if ((highest.Rank == -1) || x.Rank < highest.Rank && x.Rank >= 1)
 					{
 						highest = x;
 					}
