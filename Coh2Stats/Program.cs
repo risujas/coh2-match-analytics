@@ -132,7 +132,7 @@ namespace Coh2Stats
 
 						if (intDiff % 60 == 0)
 						{
-							Console.WriteLine("Resuming operations in {0:0} seconds", difference);
+							Logger.WriteLine("Resuming operations in {0:0} seconds", difference);
 							Thread.Sleep(1000);
 						}
 					}

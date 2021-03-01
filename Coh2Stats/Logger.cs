@@ -11,31 +11,26 @@ namespace Coh2Stats
 	{
 		private const string logFile = "log.txt";
 
-		public static void WriteLine(string text)
-		{
-			DateTime dt = DateTime.Now;
-
-			string time = dt.ToLongTimeString();
-			string message = time + " - " + text;
-
-			Console.WriteLine(message);
-			var file = File.AppendText(logFile);
-			file.WriteLine(message);
-			file.Close();
-		}
-
 		public static void WriteLine(string text, params object[] args)
 		{
 			DateTime dt = DateTime.Now;
 
-			text = string.Format(text, args);
-			string time = dt.ToLongTimeString();
-			string message = time + " - " + text;
+			if (args.Length > 0)
+			{
+				text = string.Format(text, args);
+			}
 
+			string time = dt.ToLongTimeString();
+			string message = "[" + time + "]	" + text;
+
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine(message);
-			var file = File.AppendText(logFile);
-			file.WriteLine(message);
-			file.Close();
+			Console.ResetColor();
+
+			using (StreamWriter file = File.AppendText(logFile))
+			{
+				file.WriteLine(message);
+			}
 		}
 	}
 }

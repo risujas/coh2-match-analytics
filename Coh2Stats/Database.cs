@@ -62,7 +62,7 @@ namespace Coh2Stats
 				batchSize = matchHistoryProcessQueue.Count;
 			}
 
-			Console.Write("Getting match history for {0} players...", matchHistoryProcessQueue.Count);
+			Logger.WriteLine("Retrieving match history for {0} players", matchHistoryProcessQueue.Count);
 
 			var range = matchHistoryProcessQueue.GetRange(0, batchSize);
 			matchHistoryProcessQueue.RemoveRange(0, batchSize);
@@ -94,7 +94,7 @@ namespace Coh2Stats
 			int newMatchCount = MatchHistoryStats.Count;
 
 			int difference = newMatchCount - oldMatchCount;
-			Console.WriteLine(" +{0}", difference);
+			Logger.WriteLine("{0} new matches found", difference);
 
 			if (matchHistoryProcessQueue.Count == 0)
 			{
@@ -166,7 +166,7 @@ namespace Coh2Stats
 						LogStat(lbs);
 					}
 
-					Console.WriteLine("Parsing leaderboard #{0}: {1} - {2} ({3} total)", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1, PlayerIdentities.Count);
+					Logger.WriteLine("Parsing leaderboard #{0}: {1} - {2} ({3} total)", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1, PlayerIdentities.Count);
 					batchStartingIndex += batchSize;
 				}
 			}
@@ -185,7 +185,7 @@ namespace Coh2Stats
 			{
 				if (players.Count >= batchSize)
 				{
-					Console.WriteLine("Fetching player summaries, {0} remaining", players.Count);
+					Logger.WriteLine("Updating player details, {0} remaining", players.Count);
 
 					var range = players.GetRange(0, batchSize);
 					players.RemoveRange(0, batchSize);
@@ -226,11 +226,11 @@ namespace Coh2Stats
 			string fullPath = databaseFolder + "\\" + playerDatabaseFile;
 			if (!File.Exists(fullPath))
 			{
-				Console.WriteLine("No player database found");
+				Logger.WriteLine("No player database found");
 				return false;
 			}
 
-			Console.WriteLine("Player database found...");
+			Logger.WriteLine("Player database found...");
 
 			string text = File.ReadAllText(fullPath);
 			var json = JsonConvert.DeserializeObject<Database>(text);
@@ -239,9 +239,9 @@ namespace Coh2Stats
 			StatGroups = json.StatGroups;
 			LeaderboardStats = json.LeaderboardStats;
 
-			Console.WriteLine("{0} player identities", PlayerIdentities.Count);
-			Console.WriteLine("{0} stat groups", StatGroups.Count);
-			Console.WriteLine("{0} leaderboard stats", LeaderboardStats.Count);
+			Logger.WriteLine("{0} player identities", PlayerIdentities.Count);
+			Logger.WriteLine("{0} stat groups", StatGroups.Count);
+			Logger.WriteLine("{0} leaderboard stats", LeaderboardStats.Count);
 
 			return true;
 		}
@@ -260,16 +260,16 @@ namespace Coh2Stats
 			string fullPath = databaseFolder + "\\" + matchDatabaseFile;
 			if (!File.Exists(fullPath))
 			{
-				Console.WriteLine("No match database found");
+				Logger.WriteLine("No match database found");
 				return false;
 			}
 
-			Console.WriteLine("Match database found...");
+			Logger.WriteLine("Match database found...");
 
 			string text = File.ReadAllText(fullPath);
 			MatchHistoryStats = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
 
-			Console.WriteLine("{0} match history stats", MatchHistoryStats.Count);
+			Logger.WriteLine("{0} match history stats", MatchHistoryStats.Count);
 
 			return true;
 		}
@@ -299,36 +299,6 @@ namespace Coh2Stats
 			return null;
 		}
 
-		//public RelicAPI.PlayerIdentity GetPlayerBySteamId(string steamId)
-		//{
-		//	for (int i = 0; i < PlayerIdentities.Count; i++)
-		//	{
-		//		var x = PlayerIdentities[i];
-
-		//		if (x.Name == steamId)
-		//		{
-		//			return x;
-		//		}
-		//	}
-
-		//	return null;
-		//}
-
-		//public RelicAPI.PlayerIdentity GetPlayerByPersonalStatGroupId(int personalStatGroupId)
-		//{
-		//	for (int i = 0; i < PlayerIdentities.Count; i++)
-		//	{
-		//		var x = PlayerIdentities[i];
-
-		//		if (x.PersonalStatGroupId == personalStatGroupId)
-		//		{
-		//			return x;
-		//		}
-		//	}
-
-		//	return null;
-		//}
-
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
 			var oldPlayerIdentity = GetPlayerByProfileId(playerIdentity.ProfileId);
@@ -338,12 +308,6 @@ namespace Coh2Stats
 			}
 			PlayerIdentities.Add(playerIdentity);
 		}
-
-		//public void SortPlayersByHighestRank(MatchTypeId matchTypeId)
-		//{
-		//	Console.WriteLine("Sorting player list by best rank");
-		//	PlayerIdentities = PlayerIdentities.OrderBy(p => p.GetHighestRank(this, matchTypeId)).ToList();
-		//}
 
 		// STATGROUP ACCESS METHODS
 
@@ -399,32 +363,6 @@ namespace Coh2Stats
 			return highest;
 		}
 
-		// fix not implemented
-		//public RelicAPI.LeaderboardStat GetLowestStatByStatGroup(int statGroupId)
-		//{
-		//	RelicAPI.LeaderboardStat lowest = null;
-
-		//	for (int i = 0; i < LeaderboardStats.Count; i++)
-		//	{
-		//		var x = LeaderboardStats[i];
-
-		//		if (x.StatGroupId == statGroupId)
-		//		{
-		//			if (lowest == null)
-		//			{
-		//				lowest = x;
-		//			}
-
-		//			else if (x.Rank > lowest.Rank)
-		//			{
-		//				lowest = x;
-		//			}
-		//		}
-		//	}
-
-		//	return lowest;
-		//}
-
 		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
 			for (int i = 0; i < LeaderboardStats.Count; i++)
@@ -440,23 +378,6 @@ namespace Coh2Stats
 			return null;
 		}
 
-		//public List<RelicAPI.LeaderboardStat> GetAllStatsByStatGroup(int statGroupId)
-		//{
-		//	List<RelicAPI.LeaderboardStat> stats = new List<RelicAPI.LeaderboardStat>();
-
-		//	for (int i = 0; i < LeaderboardStats.Count; i++)
-		//	{
-		//		var x = LeaderboardStats[i];
-
-		//		if (x.StatGroupId == statGroupId)
-		//		{
-		//			stats.Add(x);
-		//		}
-		//	}
-
-		//	return stats;
-		//}
-
 		public void LogStat(RelicAPI.LeaderboardStat stat)
 		{
 			var oldStat = GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId);
@@ -467,7 +388,7 @@ namespace Coh2Stats
 			LeaderboardStats.Add(stat);
 		}
 
-		// MATCHHISTORYSTAT ACCCESS METHODS
+		// MATCHHISTORYSTAT ACCESS METHODS
 
 		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
