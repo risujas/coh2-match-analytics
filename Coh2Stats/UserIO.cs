@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace Coh2Stats
 {
-	static class UserIO
+	internal static class UserIO
 	{
 		private const string logFile = "log.txt";
 
