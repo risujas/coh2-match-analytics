@@ -129,7 +129,7 @@ namespace Coh2Stats
 
 						if (intDiff % 60 == 0)
 						{
-							UserIO.WriteLogLine("Resuming operations in {0:0} seconds", difference);
+							UserIO.WriteLogLine("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program.", difference);
 							Thread.Sleep(1000);
 						}
 					}
