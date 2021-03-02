@@ -45,7 +45,7 @@ namespace Coh2Stats
 				}
 			}
 
-			UpdatePlayerDetails(newPlayers);
+			UpdatePlayerDetails(knownRankedPlayers);
 
 			WritePlayerDatabase();
 		}
