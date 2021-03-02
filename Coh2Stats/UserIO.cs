@@ -16,7 +16,7 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] >>        " + text;
+			string message = "[" + time + "] >>\t" + text;
 
 			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine(message);
@@ -37,7 +37,7 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] >>        " + text;
+			string message = "[" + time + "] >>\t" + text;
 
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine(message);
@@ -50,7 +50,7 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] <<        ";
+			string message = "[" + time + "] <<\t";
 
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
 
@@ -86,7 +86,7 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] <<        ";
+			string message = "[" + time + "] <<\t";
 
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
 

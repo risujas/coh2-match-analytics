@@ -14,6 +14,7 @@ namespace Coh2Stats
 		public List<RelicAPI.LeaderboardStat> LeaderboardStats = new List<RelicAPI.LeaderboardStat>();
 
 		[JsonIgnore] public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
+		[JsonIgnore] private int oldMatchCount = 0;
 
 		[JsonIgnore] private readonly string databaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
 		[JsonIgnore] private const string playerDatabaseFile = "playerData.txt";
@@ -54,6 +55,7 @@ namespace Coh2Stats
 			if (matchHistoryProcessQueue.Count == 0)
 			{
 				matchHistoryProcessQueue = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList(); // TODO something more efficient
+				oldMatchCount = MatchHistoryStats.Count;
 			}
 
 			int batchSize = 200;
@@ -82,7 +84,6 @@ namespace Coh2Stats
 				LogPlayer(x);
 			}
 
-			int oldMatchCount = MatchHistoryStats.Count;
 			for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 			{
 				var x = response.MatchHistoryStats[i];
@@ -91,13 +92,12 @@ namespace Coh2Stats
 					LogMatch(x);
 				}
 			}
-			int newMatchCount = MatchHistoryStats.Count;
-
-			int difference = newMatchCount - oldMatchCount;
-			UserIO.WriteLogLine("{0} new matches found", difference);
-
 			if (matchHistoryProcessQueue.Count == 0)
 			{
+				int newMatchCount = MatchHistoryStats.Count;
+				int difference = newMatchCount - oldMatchCount;
+				UserIO.WriteLogLine("{0} new matches found", difference);
+
 				WritePlayerDatabase();
 				WriteMatchDatabase();
 
@@ -168,7 +168,7 @@ namespace Coh2Stats
 						LogStat(lbs);
 					}
 
-					UserIO.WriteLogLine("Parsing leaderboard #{0}: {1} - {2} ({3} total)", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1, PlayerIdentities.Count);
+					UserIO.WriteLogLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
 					batchStartingIndex += batchSize;
 				}
 			}
@@ -176,6 +176,8 @@ namespace Coh2Stats
 			int numPlayersAfter = PlayerIdentities.Count;
 			int playerCountDiff = numPlayersAfter - numPlayersBefore;
 			var newPlayers = PlayerIdentities.GetRange(numPlayersBefore, playerCountDiff);
+
+			UserIO.WriteLogLine("{0} new players found", playerCountDiff);
 
 			return newPlayers;
 		}
