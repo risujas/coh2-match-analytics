@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.cs" />
+    <Compile Include="UserIO.cs" />
     <Compile Include="MatchAnalyticsBundle.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Enums.cs" />

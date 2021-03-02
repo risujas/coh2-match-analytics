@@ -49,9 +49,9 @@ namespace Coh2Stats
 
 			mapsByWinRate = mapsByWinRate.OrderByDescending(m => m.Value).ToDictionary(m => m.Key, m => m.Value);
 
-			Console.WriteLine("{0} win rates:", raceFlag.ToString());
-			Console.WriteLine("{0:0.00}     {1} / {2,5}", totalWinRate, totalWins.Matches.Count, totalGames.Matches.Count);
-			Console.WriteLine("----------------------------------------------------------------");
+			UserIO.PrintUILine("{0} win rates:", raceFlag.ToString());
+			UserIO.PrintUILine("{0:0.00}     {1} / {2,5}", totalWinRate, totalWins.Matches.Count, totalGames.Matches.Count);
+			UserIO.PrintUILine("----------------------------------------------------------------");
 			foreach (var m in mapsByWinRate)
 			{
 				int winCount = 0;
@@ -60,14 +60,13 @@ namespace Coh2Stats
 					winCount = mapsByWinCount[m.Key];
 				}
 
-				Console.WriteLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+				UserIO.PrintUILine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
 			}
-			Console.WriteLine();
 		}
 
 		public static void PrintInformationPerRank(Database db, double percentile)
 		{
-			Console.WriteLine("Match data for top {0}% of players", percentile);
+			UserIO.PrintUILine("Match data for top {0}% of players", percentile);
 
 			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByStartGameTime((int)relevantTimeCutoff, -1).FilterByDescription("AUTOMATCH").FilterByTopPercentile(db, percentile, true);
 
@@ -80,29 +79,18 @@ namespace Coh2Stats
 			var playCounts = mab.GetOrderedMapPlayCount();
 			foreach (var p in playCounts)
 			{
-				Console.WriteLine(p.Value + " " + p.Key);
+				UserIO.PrintUILine(p.Value + " " + p.Key);
 			}
-			Console.WriteLine();
 		}
 
 		public static int RunModeSelection()
 		{
-			CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+			UserIO.PrintUILine("1 - Match history logging");
+			UserIO.PrintUILine("2 - Match history logging (repeat)");
+			UserIO.PrintUILine("3 - Data printing (top players by percentile)");
+			UserIO.PrintUILine("Please choose an operating mode.");
 
-			int selection;
-			do
-			{
-				Console.Clear();
-				Console.WriteLine("1 - Match history logging");
-				Console.WriteLine("2 - Match history logging (repeat)");
-				Console.WriteLine("3 - Data printing (top players by percentile)");
-				Console.Write("Please choose your desired mode: ");
-
-				int.TryParse(Console.ReadLine(), out selection);
-
-			} while (selection != 1 && selection != 2 && selection != 3);
-
-			return selection;
+			return UserIO.RunIntegerSelection(1, 3);
 		}
 
 		public static void RunModeOperations(Database db, int selectedMode)
@@ -132,7 +120,7 @@ namespace Coh2Stats
 
 						if (intDiff % 60 == 0)
 						{
-							Logger.WriteLine("Resuming operations in {0:0} seconds", difference);
+							UserIO.WriteLogLine("Resuming operations in {0:0} seconds", difference);
 							Thread.Sleep(1000);
 						}
 					}
@@ -141,9 +129,8 @@ namespace Coh2Stats
 
 			if (selectedMode == 3)
 			{
-				Console.Write("Top percentile: ");
-				bool goodParse = double.TryParse(Console.ReadLine(), out double percentile);
-				Console.Clear();
+				UserIO.PrintUILine("Top percentile: ");
+				double percentile = UserIO.RunFloatingPointInput();
 
 				var german = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.German, matchType);
 				var soviet = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.Soviet, matchType);
@@ -157,17 +144,13 @@ namespace Coh2Stats
 				int aefRanks = db.GetLeaderboardRankByPercentile(aef, percentile);
 				int britishRanks = db.GetLeaderboardRankByPercentile(british, percentile);
 
-				Console.WriteLine("{0} ranks: top {1}", german.ToString(), germanRanks);
-				Console.WriteLine("{0} ranks: top {1}", soviet.ToString(), sovietRanks);
-				Console.WriteLine("{0} ranks: top {1}", wgerman.ToString(), wgermanRanks);
-				Console.WriteLine("{0} ranks: top {1}", aef.ToString(), aefRanks);
-				Console.WriteLine("{0} ranks: top {1}", british.ToString(), britishRanks);
+				UserIO.PrintUILine("{0} ranks: top {1}", german.ToString(), germanRanks);
+				UserIO.PrintUILine("{0} ranks: top {1}", soviet.ToString(), sovietRanks);
+				UserIO.PrintUILine("{0} ranks: top {1}", wgerman.ToString(), wgermanRanks);
+				UserIO.PrintUILine("{0} ranks: top {1}", aef.ToString(), aefRanks);
+				UserIO.PrintUILine("{0} ranks: top {1}", british.ToString(), britishRanks);
 
-				if (goodParse)
-				{
-					PrintInformationPerRank(db, percentile);
-					Console.ReadLine();
-				}
+				PrintInformationPerRank(db, percentile);
 			}
 		}
 
@@ -179,17 +162,8 @@ namespace Coh2Stats
 
 			while (true)
 			{
-				try
-				{
-					int selectedMode = RunModeSelection();
-					RunModeOperations(db, selectedMode);
-				}
-
-				catch (Exception e)
-				{
-					Console.WriteLine(e.Message);
-					Console.ReadLine();
-				}
+				int selectedMode = RunModeSelection();
+				RunModeOperations(db, selectedMode);
 			}
 		}
 	}

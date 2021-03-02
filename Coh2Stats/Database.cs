@@ -62,7 +62,7 @@ namespace Coh2Stats
 				batchSize = matchHistoryProcessQueue.Count;
 			}
 
-			Logger.WriteLine("Retrieving match history for {0} players", matchHistoryProcessQueue.Count);
+			UserIO.WriteLogLine("Retrieving match history for {0} players", matchHistoryProcessQueue.Count);
 
 			var range = matchHistoryProcessQueue.GetRange(0, batchSize);
 			matchHistoryProcessQueue.RemoveRange(0, batchSize);
@@ -94,7 +94,7 @@ namespace Coh2Stats
 			int newMatchCount = MatchHistoryStats.Count;
 
 			int difference = newMatchCount - oldMatchCount;
-			Logger.WriteLine("{0} new matches found", difference);
+			UserIO.WriteLogLine("{0} new matches found", difference);
 
 			if (matchHistoryProcessQueue.Count == 0)
 			{
@@ -166,7 +166,7 @@ namespace Coh2Stats
 						LogStat(lbs);
 					}
 
-					Logger.WriteLine("Parsing leaderboard #{0}: {1} - {2} ({3} total)", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1, PlayerIdentities.Count);
+					UserIO.WriteLogLine("Parsing leaderboard #{0}: {1} - {2} ({3} total)", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1, PlayerIdentities.Count);
 					batchStartingIndex += batchSize;
 				}
 			}
@@ -185,7 +185,7 @@ namespace Coh2Stats
 			{
 				if (players.Count >= batchSize)
 				{
-					Logger.WriteLine("Updating player details, {0} remaining", players.Count);
+					UserIO.WriteLogLine("Updating player details, {0} remaining", players.Count);
 
 					var range = players.GetRange(0, batchSize);
 					players.RemoveRange(0, batchSize);
@@ -226,11 +226,11 @@ namespace Coh2Stats
 			string fullPath = databaseFolder + "\\" + playerDatabaseFile;
 			if (!File.Exists(fullPath))
 			{
-				Logger.WriteLine("No player database found");
+				UserIO.WriteLogLine("No player database found");
 				return false;
 			}
 
-			Logger.WriteLine("Player database found...");
+			UserIO.WriteLogLine("Player database found...");
 
 			string text = File.ReadAllText(fullPath);
 			var json = JsonConvert.DeserializeObject<Database>(text);
@@ -239,9 +239,9 @@ namespace Coh2Stats
 			StatGroups = json.StatGroups;
 			LeaderboardStats = json.LeaderboardStats;
 
-			Logger.WriteLine("{0} player identities", PlayerIdentities.Count);
-			Logger.WriteLine("{0} stat groups", StatGroups.Count);
-			Logger.WriteLine("{0} leaderboard stats", LeaderboardStats.Count);
+			UserIO.WriteLogLine("{0} player identities", PlayerIdentities.Count);
+			UserIO.WriteLogLine("{0} stat groups", StatGroups.Count);
+			UserIO.WriteLogLine("{0} leaderboard stats", LeaderboardStats.Count);
 
 			return true;
 		}
@@ -260,16 +260,16 @@ namespace Coh2Stats
 			string fullPath = databaseFolder + "\\" + matchDatabaseFile;
 			if (!File.Exists(fullPath))
 			{
-				Logger.WriteLine("No match database found");
+				UserIO.WriteLogLine("No match database found");
 				return false;
 			}
 
-			Logger.WriteLine("Match database found...");
+			UserIO.WriteLogLine("Match database found...");
 
 			string text = File.ReadAllText(fullPath);
 			MatchHistoryStats = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
 
-			Logger.WriteLine("{0} match history stats", MatchHistoryStats.Count);
+			UserIO.WriteLogLine("{0} match history stats", MatchHistoryStats.Count);
 
 			return true;
 		}
