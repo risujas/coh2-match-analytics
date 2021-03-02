@@ -109,6 +109,8 @@ namespace Coh2Stats
 
 		private List<RelicAPI.PlayerIdentity> GetNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
 		{
+			UserIO.WriteLogLine("Finding new players");
+
 			int numPlayersBefore = PlayerIdentities.Count;
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
@@ -230,7 +232,7 @@ namespace Coh2Stats
 				return false;
 			}
 
-			UserIO.WriteLogLine("Player database found...");
+			UserIO.WriteLogLine("Player database found");
 
 			string text = File.ReadAllText(fullPath);
 			var json = JsonConvert.DeserializeObject<Database>(text);
@@ -248,6 +250,8 @@ namespace Coh2Stats
 
 		public void WritePlayerDatabase()
 		{
+			UserIO.WriteLogLine("Writing player database");
+
 			Directory.CreateDirectory(databaseFolder);
 
 			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
@@ -264,7 +268,7 @@ namespace Coh2Stats
 				return false;
 			}
 
-			UserIO.WriteLogLine("Match database found...");
+			UserIO.WriteLogLine("Match database found");
 
 			string text = File.ReadAllText(fullPath);
 			MatchHistoryStats = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
@@ -276,6 +280,8 @@ namespace Coh2Stats
 
 		public void WriteMatchDatabase()
 		{
+			UserIO.WriteLogLine("Writing match database");
+
 			Directory.CreateDirectory(databaseFolder);
 
 			var text = JsonConvert.SerializeObject(MatchHistoryStats, Formatting.Indented);
