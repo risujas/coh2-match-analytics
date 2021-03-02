@@ -92,10 +92,10 @@ namespace Coh2Stats
 
 		public static int RunModeSelection()
 		{
-			UserIO.PrintUIPromptLine("1 - Match history logging");
-			UserIO.PrintUIPromptLine("2 - Match history logging (repeat)");
-			UserIO.PrintUIPromptLine("3 - Data printing (top players by percentile)");
-			UserIO.PrintUIPromptLine("Please choose an operating mode.");
+			UserIO.PrintUIPromptLine("1 - Match logging");
+			UserIO.PrintUIPromptLine("2 - Match logging (repeating)");
+			UserIO.PrintUIPromptLine("3 - Match analysis");
+			UserIO.PrintUIPromptLine("Please select  an operating mode.");
 
 			int selection = UserIO.RunIntegerSelection(1, 3);
 
