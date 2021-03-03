@@ -114,7 +114,7 @@ namespace Coh2Stats
 			if (operatingMode == 1)
 			{
 				db.ProcessPlayers(gameMode);
-				while (db.ProcessMatches(gameMode, relevantTimeCutoff) == true) ;
+				db.ProcessMatches(gameMode, relevantTimeCutoff);
 			}
 
 			if (operatingMode == 2)
@@ -122,7 +122,7 @@ namespace Coh2Stats
 				while (true)
 				{
 					db.ProcessPlayers(gameMode);
-					while (db.ProcessMatches(gameMode, relevantTimeCutoff) == true) ;
+					db.ProcessMatches(gameMode, relevantTimeCutoff);
 
 					Stopwatch sw = Stopwatch.StartNew();
 					double sessionInterval = 1200;

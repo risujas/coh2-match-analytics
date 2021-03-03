@@ -14,12 +14,10 @@ namespace Coh2Stats
 		public List<RelicAPI.LeaderboardStat> LeaderboardStats = new List<RelicAPI.LeaderboardStat>();
 
 		[JsonIgnore] public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
-		[JsonIgnore] private int oldMatchCount = 0;
 
 		[JsonIgnore] private readonly string databaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
 		[JsonIgnore] private const string playerDatabaseFile = "playerData.txt";
 		[JsonIgnore] private const string matchDatabaseFile = "matchData.txt";
-		[JsonIgnore] private List<RelicAPI.PlayerIdentity> matchHistoryProcessQueue = new List<RelicAPI.PlayerIdentity>();
 
 		[JsonIgnore] private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
 
@@ -59,61 +57,55 @@ namespace Coh2Stats
 			WritePlayerDatabase();
 		}
 
-		public bool ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
+		public void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
 		{
-			if (matchHistoryProcessQueue.Count == 0)
+			var playersToBeProcessed = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList(); // TODO something more efficient
+			int oldMatchCount = MatchHistoryStats.Count;
+
+			while (playersToBeProcessed.Count > 0)
 			{
-				matchHistoryProcessQueue = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList(); // TODO something more efficient
-				oldMatchCount = MatchHistoryStats.Count;
-			}
-
-			int batchSize = 200;
-			if (matchHistoryProcessQueue.Count < batchSize)
-			{
-				batchSize = matchHistoryProcessQueue.Count;
-			}
-
-			UserIO.WriteLogLine("Retrieving match history for {0} players", matchHistoryProcessQueue.Count);
-
-			var range = matchHistoryProcessQueue.GetRange(0, batchSize);
-			matchHistoryProcessQueue.RemoveRange(0, batchSize);
-
-			List<int> profileIds = new List<int>();
-			for (int i = 0; i < range.Count; i++)
-			{
-				var x = range[i];
-				profileIds.Add(x.ProfileId);
-			}
-
-			var response = RelicAPI.RecentMatchHistory.GetByProfileId(profileIds);
-
-			for (int i = 0; i < response.Profiles.Count; i++)
-			{
-				var x = response.Profiles[i];
-				LogPlayer(x);
-			}
-
-			for (int i = 0; i < response.MatchHistoryStats.Count; i++)
-			{
-				var x = response.MatchHistoryStats[i];
-				if (x.MatchTypeId == (int)gameMode && x.StartGameTime >= startedAfterTimestamp)
+				int batchSize = 200;
+				if (playersToBeProcessed.Count < batchSize)
 				{
-					LogMatch(x);
+					batchSize = playersToBeProcessed.Count;
+				}
+
+				UserIO.WriteLogLine("Retrieving match history for {0} players", playersToBeProcessed.Count);
+
+				var range = playersToBeProcessed.GetRange(0, batchSize);
+				playersToBeProcessed.RemoveRange(0, batchSize);
+
+				List<int> profileIds = new List<int>();
+				for (int i = 0; i < range.Count; i++)
+				{
+					var x = range[i];
+					profileIds.Add(x.ProfileId);
+				}
+
+				var response = RelicAPI.RecentMatchHistory.GetByProfileId(profileIds);
+
+				for (int i = 0; i < response.Profiles.Count; i++)
+				{
+					var x = response.Profiles[i];
+					LogPlayer(x);
+				}
+
+				for (int i = 0; i < response.MatchHistoryStats.Count; i++)
+				{
+					var x = response.MatchHistoryStats[i];
+					if (x.MatchTypeId == (int)gameMode && x.StartGameTime >= startedAfterTimestamp)
+					{
+						LogMatch(x);
+					}
 				}
 			}
-			if (matchHistoryProcessQueue.Count == 0)
-			{
-				int newMatchCount = MatchHistoryStats.Count;
-				int difference = newMatchCount - oldMatchCount;
-				UserIO.WriteLogLine("{0} new matches found", difference);
 
-				WritePlayerDatabase();
-				WriteMatchDatabase(gameMode);
+			int newMatchCount = MatchHistoryStats.Count;
+			int difference = newMatchCount - oldMatchCount;
+			UserIO.WriteLogLine("{0} new matches found", difference);
 
-				return false;
-			}
-
-			return true;
+			WritePlayerDatabase();
+			WriteMatchDatabase(gameMode);
 		}
 
 		private List<RelicAPI.PlayerIdentity> GetNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
