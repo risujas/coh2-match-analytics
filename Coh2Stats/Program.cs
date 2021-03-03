@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Globalization;
 
-// TODO add separate match databases for different gamemodes 
-
 namespace Coh2Stats
 {
 	internal class Program
@@ -182,7 +180,7 @@ namespace Coh2Stats
 
 			Database db = new Database();
 			db.LoadPlayerDatabase();
-			db.LoadMatchDatabase();
+			db.LoadMatchDatabase(gameMode);
 
 			while (true)
 			{

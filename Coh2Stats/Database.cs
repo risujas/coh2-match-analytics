@@ -108,7 +108,7 @@ namespace Coh2Stats
 				UserIO.WriteLogLine("{0} new matches found", difference);
 
 				WritePlayerDatabase();
-				WriteMatchDatabase();
+				WriteMatchDatabase(gameMode);
 
 				return false;
 			}
@@ -270,9 +270,9 @@ namespace Coh2Stats
 			File.WriteAllText(fullPath, text);
 		}
 
-		public bool LoadMatchDatabase()
+		public bool LoadMatchDatabase(MatchTypeId gameMode)
 		{
-			string fullPath = databaseFolder + "\\" + matchDatabaseFile;
+			string fullPath = databaseFolder + "\\" + gameMode.ToString() + matchDatabaseFile;
 			if (!File.Exists(fullPath))
 			{
 				UserIO.WriteLogLine("No match database found");
@@ -289,14 +289,14 @@ namespace Coh2Stats
 			return true;
 		}
 
-		public void WriteMatchDatabase()
+		public void WriteMatchDatabase(MatchTypeId gameMode)
 		{
 			UserIO.WriteLogLine("Writing match database");
 
 			Directory.CreateDirectory(databaseFolder);
 
 			var text = JsonConvert.SerializeObject(MatchHistoryStats, Formatting.Indented);
-			string fullPath = databaseFolder + "\\" + matchDatabaseFile;
+			string fullPath = databaseFolder + "\\" + gameMode.ToString() + matchDatabaseFile;
 			File.WriteAllText(fullPath, text);
 		}
 
