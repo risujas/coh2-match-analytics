@@ -18,7 +18,13 @@ namespace Coh2Stats.RelicAPI
 		public int GetHighestRank(Database db, MatchTypeId matchTypeId)
 		{
 			var stat = db.GetHighestStatByStatGroup(PersonalStatGroupId, matchTypeId);
+
 			if (stat == null)
+			{
+				return int.MaxValue;
+			}
+
+			if (stat.Rank < 1)
 			{
 				return int.MaxValue;
 			}
