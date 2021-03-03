@@ -90,34 +90,41 @@ namespace Coh2Stats
 			UserIO.WriteLogLine("");
 		}
 
-		public static int RunModeSelection()
+		public static MatchTypeId RunGameModeSelection()
+		{
+			UserIO.PrintUIPromptLine("1 - 1v1 automatch");
+			UserIO.PrintUIPromptLine("2 - 2v2 automatch");
+			UserIO.PrintUIPromptLine("3 - 3v3 automatch");
+			UserIO.PrintUIPromptLine("4 - 4v4 automatch");
+			UserIO.PrintUIPromptLine("Please select a game mode.");
+
+			return (MatchTypeId)UserIO.RunIntegerSelection(1, 4);
+		}
+
+		public static int RunOperatingModeSelection()
 		{
 			UserIO.PrintUIPromptLine("1 - Match logging");
 			UserIO.PrintUIPromptLine("2 - Match logging (repeating)");
 			UserIO.PrintUIPromptLine("3 - Match analysis");
-			UserIO.PrintUIPromptLine("Please select  an operating mode.");
+			UserIO.PrintUIPromptLine("Please select an operating mode.");
 
-			int selection = UserIO.RunIntegerSelection(1, 3);
-
-			return selection;
+			return UserIO.RunIntegerSelection(1, 3);
 		}
 
-		public static void RunModeOperations(Database db, int selectedMode)
+		public static void RunModeOperations(Database db, int operatingMode, MatchTypeId gameMode)
 		{
-			MatchTypeId matchType = MatchTypeId._1v1_; // TODO
-
-			if (selectedMode == 1)
+			if (operatingMode == 1)
 			{
-				db.ProcessPlayers(matchType);
-				while (db.ProcessMatches(matchType, relevantTimeCutoff) == true) ;
+				db.ProcessPlayers(gameMode);
+				while (db.ProcessMatches(gameMode, relevantTimeCutoff) == true) ;
 			}
 
-			if (selectedMode == 2)
+			if (operatingMode == 2)
 			{
 				while (true)
 				{
-					db.ProcessPlayers(matchType);
-					while (db.ProcessMatches(matchType, relevantTimeCutoff) == true) ;
+					db.ProcessPlayers(gameMode);
+					while (db.ProcessMatches(gameMode, relevantTimeCutoff) == true) ;
 
 					Stopwatch sw = Stopwatch.StartNew();
 					double sessionInterval = 1200;
@@ -136,16 +143,16 @@ namespace Coh2Stats
 				}
 			}
 
-			if (selectedMode == 3)
+			if (operatingMode == 3)
 			{
 				UserIO.PrintUIPromptLine("Please select the top percentile of players you want to include in the results (0-100). ");
 				double percentile = UserIO.RunFloatingPointInput();
 
-				var german = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.German, matchType);
-				var soviet = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.Soviet, matchType);
-				var wgerman = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.WGerman, matchType);
-				var aef = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.AEF, matchType);
-				var british = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.British, matchType);
+				var german = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.German, gameMode);
+				var soviet = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.Soviet, gameMode);
+				var wgerman = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.WGerman, gameMode);
+				var aef = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.AEF, gameMode);
+				var british = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.British, gameMode);
 
 				int germanRanks = db.GetLeaderboardRankByPercentile(german, percentile);
 				int sovietRanks = db.GetLeaderboardRankByPercentile(soviet, percentile);
@@ -171,14 +178,16 @@ namespace Coh2Stats
 			DateTime dt = DateTime.Now;
 			UserIO.WriteLogLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
 
+			MatchTypeId gameMode = RunGameModeSelection();
+
 			Database db = new Database();
 			db.LoadPlayerDatabase();
 			db.LoadMatchDatabase();
 
 			while (true)
 			{
-				int selectedMode = RunModeSelection();
-				RunModeOperations(db, selectedMode);
+				int operatingMode = RunOperatingModeSelection();
+				RunModeOperations(db, operatingMode, gameMode);
 			}
 		}
 	}
