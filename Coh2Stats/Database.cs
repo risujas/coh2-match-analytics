@@ -34,7 +34,6 @@ namespace Coh2Stats
 		{
 			var newPlayers = GetNewPlayers(gameMode, 1, -1);
 			var knownRankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
-			UserIO.WriteLogLine("Old: {0} New: {1}", knownRankedPlayers.Count, newPlayers.Count);
 
 			for (int i = 0; i < newPlayers.Count; i++)
 			{
