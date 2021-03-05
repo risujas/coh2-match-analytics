@@ -28,7 +28,7 @@ namespace Coh2Stats
 			}
 		}
 
-		public static void PrintUIPromptLine(string text, params object[] args)
+		public static void PrintUIPrompt(string text, params object[] args)
 		{
 			if (args.Length > 0)
 			{
@@ -80,6 +80,53 @@ namespace Coh2Stats
 			return selection;
 		}
 
+		public static char RunCharSelection(params char[] options)
+		{
+			char selection = ' ';
+
+			DateTime dt = DateTime.Now;
+			string time = dt.ToLongTimeString();
+			string message = "[" + time + "] <<\t";
+
+			Console.ForegroundColor = ConsoleColor.DarkYellow;
+
+			bool good = false;
+			while (!good)
+			{
+				Console.Write(message);
+				string input = Console.ReadLine();
+
+				bool goodParse = char.TryParse(input, out char result);
+				if (!goodParse)
+				{
+					continue;
+				}
+
+				result = char.ToLower(result);
+
+				bool matchFound = false;
+				for (int i = 0; i < options.Length; i++)
+				{
+					if (result == char.ToLower(options[i]))
+					{
+						matchFound = true;
+						break;
+					}
+				}
+				if (!matchFound)
+				{
+					continue;
+				}
+
+				selection = result;
+				good = true;
+			}
+
+			Console.ResetColor();
+
+			return selection;
+		}
+
 		public static double RunFloatingPointInput()
 		{
 			double floatInput = 0;
@@ -109,6 +156,20 @@ namespace Coh2Stats
 			Console.ResetColor();
 
 			return floatInput;
+		}
+
+		public static string RunStringInput()
+		{
+			DateTime dt = DateTime.Now;
+			string time = dt.ToLongTimeString();
+			string message = "[" + time + "] <<\t";
+
+			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.Write(message);
+			string input = Console.ReadLine();
+			Console.ResetColor();
+
+			return input;
 		}
 	}
 }

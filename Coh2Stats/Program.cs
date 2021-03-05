@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Globalization;
+using System.IO;
 
 namespace Coh2Stats
 {
@@ -65,11 +66,21 @@ namespace Coh2Stats
 			}
 		}
 
-		public static void PrintInformationPerRank(Database db, double percentile)
+		public static void SaveResultsToFile(string fileName)
 		{
-			UserIO.WriteLogLine("Analyzing match data for top {0}% of players", percentile);
+			string finalFolder = Database.DatabaseFolder + "\\exports";
 
-			var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByStartGameTime((int)relevantTimeCutoff, -1).FilterByDescription("AUTOMATCH").FilterByTopPercentile(db, percentile, true);
+			Directory.CreateDirectory(Database.DatabaseFolder);
+			Directory.CreateDirectory(finalFolder);
+
+			File.Create(finalFolder + "\\" + fileName + ".txt");
+
+			// TODO implement this
+		}
+
+		public static void RunInteractiveAnalysis(Database db, MatchAnalyticsBundle mab, string filterHistory = "")
+		{
+			UserIO.WriteLogLine("Filter history: " + filterHistory);
 
 			AnalyzeWinRatesByRace(mab, RaceFlag.German);
 			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
@@ -86,27 +97,120 @@ namespace Coh2Stats
 			}
 
 			UserIO.WriteLogLine("");
+
+			UserIO.PrintUIPrompt("Q - Finish running the interactive analysis");
+			UserIO.PrintUIPrompt("S - Export the current results into a file");
+			UserIO.PrintUIPrompt("1 - Filter by top percentile of players");
+			UserIO.PrintUIPrompt("2 - Filter by faction");
+			UserIO.PrintUIPrompt("Please select an operation.");
+
+			char operation = UserIO.RunCharSelection('Q', 'S', '1', '2', '3');
+			operation = char.ToLower(operation);
+
+			if (operation == 'q')
+			{
+				return;
+			}
+
+			if (operation == 's')
+			{
+				DateTime dt = DateTime.UtcNow;
+				DateTimeOffset dto = new DateTimeOffset(dt);
+				long unixTime = dto.ToUnixTimeSeconds();
+
+				string fileName = unixTime.ToString() + filterHistory;
+				SaveResultsToFile(fileName);
+
+				RunInteractiveAnalysis(db, mab, filterHistory);
+			}
+
+			if (operation == '1')
+			{
+				UserIO.PrintUIPrompt("Please select the percentile of top players to be included in the results.");
+				double percentile = UserIO.RunFloatingPointInput();
+
+				mab = mab.FilterByTopPercentile(db, percentile, true);
+				RunInteractiveAnalysis(db, mab, filterHistory + ",t%-" + percentile);
+			}
+
+			if (operation == '2')
+			{
+				UserIO.PrintUIPrompt("W - Wehrmacht Ostheer");
+				UserIO.PrintUIPrompt("S - Soviet Union");
+				UserIO.PrintUIPrompt("U - United States Forces");
+				UserIO.PrintUIPrompt("O - Oberkommando West");
+				UserIO.PrintUIPrompt("B - British Forces");
+				UserIO.PrintUIPrompt("Input the factions you want to be included in the results. You can input multiple factions by separating the characters with commas or spaces.");
+
+				bool goodParse = false;
+				List<string> partsList = null;
+
+				while (!goodParse)
+				{
+					string input = UserIO.RunStringInput();
+					var parts = input.Split(',', ' ');
+
+					for (int i = 0; i < parts.Length; i++)
+					{
+						parts[i] = parts[i].ToLower().Trim();
+					}
+
+					partsList = parts.ToList();
+
+					if (partsList.Contains("w") || partsList.Contains("s") || partsList.Contains("u") || partsList.Contains("o") || partsList.Contains("b"))
+					{
+						goodParse = true;
+					}
+				}
+
+				if (partsList.Contains("w"))
+				{
+					mab = mab.FilterByRace(RaceFlag.German);
+				}
+
+				if (partsList.Contains("s"))
+				{
+					mab = mab.FilterByRace(RaceFlag.Soviet);
+				}
+
+				if (partsList.Contains("u"))
+				{
+					mab = mab.FilterByRace(RaceFlag.AEF);
+				}
+
+				if (partsList.Contains("o"))
+				{
+					mab = mab.FilterByRace(RaceFlag.WGerman);
+				}
+
+				if (partsList.Contains("b"))
+				{
+					mab = mab.FilterByRace(RaceFlag.British);
+				}
+
+				RunInteractiveAnalysis(db, mab, filterHistory + ",r-" + string.Join("", partsList));
+			}
 		}
 
 		public static MatchTypeId RunGameModeSelection()
 		{
-			UserIO.PrintUIPromptLine("1 - 1v1 automatch");
-			UserIO.PrintUIPromptLine("2 - 2v2 automatch");
-			UserIO.PrintUIPromptLine("3 - 3v3 automatch");
-			UserIO.PrintUIPromptLine("4 - 4v4 automatch");
-			UserIO.PrintUIPromptLine("Please select a game mode.");
+			UserIO.PrintUIPrompt("1 - 1v1 automatch");
+			UserIO.PrintUIPrompt("2 - 2v2 automatch");
+			UserIO.PrintUIPrompt("3 - 3v3 automatch");
+			UserIO.PrintUIPrompt("4 - 4v4 automatch");
+			UserIO.PrintUIPrompt("Please select a game mode.");
 
 			return (MatchTypeId)UserIO.RunIntegerSelection(1, 4);
 		}
 
 		public static int RunOperatingModeSelection()
 		{
-			UserIO.PrintUIPromptLine("1 - Match logging");
-			UserIO.PrintUIPromptLine("2 - Match logging (repeating)");
-			UserIO.PrintUIPromptLine("3 - Match analysis");
-			UserIO.PrintUIPromptLine("Please select an operating mode.");
+			UserIO.PrintUIPrompt("1 - Match logging");
+			UserIO.PrintUIPrompt("2 - Match logging (repeating)");
+			UserIO.PrintUIPrompt("3 - Match analysis");
+			UserIO.PrintUIPrompt("Please select an operating mode.");
 
-			return UserIO.RunIntegerSelection(1, 3);
+			return UserIO.RunIntegerSelection(1, 4);
 		}
 
 		public static void RunModeOperations(Database db, int operatingMode, MatchTypeId gameMode)
@@ -143,10 +247,8 @@ namespace Coh2Stats
 
 			if (operatingMode == 3)
 			{
-				UserIO.PrintUIPromptLine("Please select the top percentile of players you want to include in the results (0-100). ");
-				double percentile = UserIO.RunFloatingPointInput();
-
-				PrintInformationPerRank(db, percentile);
+				MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches(db);
+				RunInteractiveAnalysis(db, mab);
 			}
 		}
 

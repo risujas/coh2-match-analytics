@@ -15,15 +15,15 @@ namespace Coh2Stats
 
 		[JsonIgnore] public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
-		[JsonIgnore] private readonly string databaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
-		[JsonIgnore] private const string playerDatabaseFile = "playerData.txt";
-		[JsonIgnore] private const string matchDatabaseFile = "matchData.txt";
+		[JsonIgnore] public static readonly string DatabaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
+		[JsonIgnore] public const string PlayerDatabaseFile = "playerData.txt";
+		[JsonIgnore] public const string MatchDatabaseFile = "matchData.txt";
 
 		[JsonIgnore] private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
 
 		public Database()
 		{
-			Directory.CreateDirectory(databaseFolder);
+			Directory.CreateDirectory(DatabaseFolder);
 		}
 
 		// BUILDER METHODS
@@ -228,7 +228,7 @@ namespace Coh2Stats
 
 		public bool LoadPlayerDatabase()
 		{
-			string fullPath = databaseFolder + "\\" + playerDatabaseFile;
+			string fullPath = DatabaseFolder + "\\" + PlayerDatabaseFile;
 			if (!File.Exists(fullPath))
 			{
 				UserIO.WriteLogLine("No player database found");
@@ -255,16 +255,16 @@ namespace Coh2Stats
 		{
 			UserIO.WriteLogLine("Writing player database");
 
-			Directory.CreateDirectory(databaseFolder);
+			Directory.CreateDirectory(DatabaseFolder);
 
 			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
-			string fullPath = databaseFolder + "\\" + playerDatabaseFile;
+			string fullPath = DatabaseFolder + "\\" + PlayerDatabaseFile;
 			File.WriteAllText(fullPath, text);
 		}
 
 		public bool LoadMatchDatabase(MatchTypeId gameMode)
 		{
-			string fullPath = databaseFolder + "\\" + gameMode.ToString() + matchDatabaseFile;
+			string fullPath = DatabaseFolder + "\\" + gameMode.ToString() + MatchDatabaseFile;
 			if (!File.Exists(fullPath))
 			{
 				UserIO.WriteLogLine("No match database found");
@@ -285,10 +285,10 @@ namespace Coh2Stats
 		{
 			UserIO.WriteLogLine("Writing match database");
 
-			Directory.CreateDirectory(databaseFolder);
+			Directory.CreateDirectory(DatabaseFolder);
 
 			var text = JsonConvert.SerializeObject(MatchHistoryStats, Formatting.Indented);
-			string fullPath = databaseFolder + "\\" + gameMode.ToString() + matchDatabaseFile;
+			string fullPath = DatabaseFolder + "\\" + gameMode.ToString() + MatchDatabaseFile;
 			File.WriteAllText(fullPath, text);
 		}
 
