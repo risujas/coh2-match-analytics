@@ -146,24 +146,6 @@ namespace Coh2Stats
 				UserIO.PrintUIPromptLine("Please select the top percentile of players you want to include in the results (0-100). ");
 				double percentile = UserIO.RunFloatingPointInput();
 
-				var german = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.German, gameMode);
-				var soviet = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.Soviet, gameMode);
-				var wgerman = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.WGerman, gameMode);
-				var aef = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.AEF, gameMode);
-				var british = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(RaceId.British, gameMode);
-
-				int germanRanks = db.GetLeaderboardRankByPercentile(german, percentile);
-				int sovietRanks = db.GetLeaderboardRankByPercentile(soviet, percentile);
-				int wgermanRanks = db.GetLeaderboardRankByPercentile(wgerman, percentile);
-				int aefRanks = db.GetLeaderboardRankByPercentile(aef, percentile);
-				int britishRanks = db.GetLeaderboardRankByPercentile(british, percentile);
-
-				UserIO.WriteLogLine("{0} ranks: top {1}", german.ToString(), germanRanks);
-				UserIO.WriteLogLine("{0} ranks: top {1}", soviet.ToString(), sovietRanks);
-				UserIO.WriteLogLine("{0} ranks: top {1}", wgerman.ToString(), wgermanRanks);
-				UserIO.WriteLogLine("{0} ranks: top {1}", aef.ToString(), aefRanks);
-				UserIO.WriteLogLine("{0} ranks: top {1}", british.ToString(), britishRanks);
-
 				PrintInformationPerRank(db, percentile);
 			}
 		}
