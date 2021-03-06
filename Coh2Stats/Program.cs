@@ -102,7 +102,7 @@ namespace Coh2Stats
 			}
 		}
 
-		public static void SaveResultsToFile(string fileName)
+		public static void SaveResultsToFile(MatchAnalyticsBundle mab, string fileName)
 		{
 			string finalFolder = Database.ApplicationDataFolder + "\\exports";
 
@@ -155,7 +155,7 @@ namespace Coh2Stats
 				long unixTime = dto.ToUnixTimeSeconds();
 
 				string fileName = unixTime.ToString() + filterHistory;
-				SaveResultsToFile(fileName);
+				SaveResultsToFile(mab, fileName);
 
 				RunInteractiveAnalysis(db, mab, filterHistory);
 			}
