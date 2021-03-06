@@ -56,17 +56,17 @@ namespace Coh2Stats
 				factionId = FactionId.Axis;
 			}
 
-			var totalGames = mab.FilterByRequiredRaces(raceFlag);
-			if (totalGames.Matches.Count == 0)
+			var allGames = mab.FilterByRequiredRaces(raceFlag);
+			if (allGames.Matches.Count == 0)
 			{
 				return;
 			}
 
-			var totalWins = totalGames.FilterByResult(true, factionId);
-			double totalWinRate = totalWins.Matches.Count / (double)totalGames.Matches.Count;
+			var wonGames = allGames.FilterByResult(true, factionId);
+			double totalWinRate = wonGames.Matches.Count / (double)allGames.Matches.Count;
 
-			var mapsByPlayCount = totalGames.GetOrderedMapPlayCount();
-			var mapsByWinCount = totalWins.GetOrderedMapPlayCount();
+			var mapsByPlayCount = allGames.GetOrderedMapPlayCount();
+			var mapsByWinCount = wonGames.GetOrderedMapPlayCount();
 			Dictionary<string, double> mapsByWinRate = new Dictionary<string, double>();
 
 			foreach (var m in mapsByPlayCount)
@@ -88,7 +88,7 @@ namespace Coh2Stats
 
 			UserIO.WriteLogLine("");
 			UserIO.WriteLogLine("{0} win rates:", raceFlag.ToString());
-			UserIO.WriteLogLine("{0:0.00}     {1} / {2,5}", totalWinRate, totalWins.Matches.Count, totalGames.Matches.Count);
+			UserIO.WriteLogLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
 			UserIO.WriteLogLine("----------------------------------------------------------------");
 			foreach (var m in mapsByWinRate)
 			{
