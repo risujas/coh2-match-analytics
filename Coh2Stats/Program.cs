@@ -48,7 +48,7 @@ namespace Coh2Stats
 			RaceFlag combinedFlags = germans | soviets | aef | wgermans | british;
 			return combinedFlags;
 		}
-		public static void AnalyzeWinRatesByRace(MatchAnalyticsBundle mab, RaceFlag raceFlag)
+		public static void AnalyzeWinRatesByRace(MatchAnalyticsBundle mab, RaceFlag raceFlag, string destination = "")
 		{
 			FactionId factionId = FactionId.Allies;
 			if (raceFlag == RaceFlag.German || raceFlag == RaceFlag.WGerman)
@@ -86,19 +86,46 @@ namespace Coh2Stats
 
 			mapsByWinRate = mapsByWinRate.OrderByDescending(m => m.Value).ToDictionary(m => m.Key, m => m.Value);
 
-			UserIO.WriteLogLine("");
-			UserIO.WriteLogLine("{0} win rates:", raceFlag.ToString());
-			UserIO.WriteLogLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
-			UserIO.WriteLogLine("----------------------------------------------------------------");
-			foreach (var m in mapsByWinRate)
+			if (destination == "")
 			{
-				int winCount = 0;
-				if (mapsByWinCount.ContainsKey(m.Key))
-				{
-					winCount = mapsByWinCount[m.Key];
-				}
+				UserIO.WriteLogLine("");
+				UserIO.WriteLogLine("{0} win rates:", raceFlag.ToString());
+				UserIO.WriteLogLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
+				UserIO.WriteLogLine("----------------------------------------------------------------");
 
-				UserIO.WriteLogLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+				foreach (var m in mapsByWinRate)
+				{
+					int winCount = 0;
+					if (mapsByWinCount.ContainsKey(m.Key))
+					{
+						winCount = mapsByWinCount[m.Key];
+					}
+
+					UserIO.WriteLogLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+				}
+			}
+
+			else
+			{
+				using (StreamWriter file = File.AppendText(destination))
+				{
+					file.WriteLine("{0} win rates:", raceFlag.ToString());
+					file.WriteLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
+					file.WriteLine("----------------------------------------------------------------");
+
+					foreach (var m in mapsByWinRate)
+					{
+						int winCount = 0;
+						if (mapsByWinCount.ContainsKey(m.Key))
+						{
+							winCount = mapsByWinCount[m.Key];
+						}
+
+						file.WriteLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+					}
+
+					file.WriteLine();
+				}
 			}
 		}
 
@@ -109,9 +136,14 @@ namespace Coh2Stats
 			Directory.CreateDirectory(Database.ApplicationDataFolder);
 			Directory.CreateDirectory(finalFolder);
 
-			File.Create(finalFolder + "\\" + fileName + ".txt");
+			string filePath = finalFolder + "\\" + fileName + ".txt";
+			File.Delete(filePath);
 
-			// TODO implement this
+			AnalyzeWinRatesByRace(mab, RaceFlag.German, filePath);
+			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet, filePath);
+			AnalyzeWinRatesByRace(mab, RaceFlag.AEF, filePath);
+			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman, filePath);
+			AnalyzeWinRatesByRace(mab, RaceFlag.British, filePath);
 		}
 
 		public static void RunInteractiveAnalysis(Database db, MatchAnalyticsBundle mab, string filterHistory = "")
