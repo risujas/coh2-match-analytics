@@ -36,7 +36,7 @@ namespace Coh2Stats
 			for (int i = 0; i < newPlayers.Count; i++)
 			{
 				var x = newPlayers[i];
-				
+
 				bool found = false;
 				for (int j = 0; j < knownRankedPlayers.Count; j++)
 				{
