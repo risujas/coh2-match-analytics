@@ -104,9 +104,9 @@ namespace Coh2Stats
 
 		public static void SaveResultsToFile(string fileName)
 		{
-			string finalFolder = Database.DatabaseFolder + "\\exports";
+			string finalFolder = Database.ApplicationDataFolder + "\\exports";
 
-			Directory.CreateDirectory(Database.DatabaseFolder);
+			Directory.CreateDirectory(Database.ApplicationDataFolder);
 			Directory.CreateDirectory(finalFolder);
 
 			File.Create(finalFolder + "\\" + fileName + ".txt");

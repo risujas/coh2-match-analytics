@@ -15,7 +15,8 @@ namespace Coh2Stats
 
 		[JsonIgnore] public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchHistoryStats = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
-		[JsonIgnore] public static readonly string DatabaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
+		[JsonIgnore] public static readonly string ApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
+		[JsonIgnore] public static readonly string DatabaseFolder = ApplicationDataFolder + "\\databases";
 		[JsonIgnore] public const string PlayerDatabaseFile = "playerData.txt";
 		[JsonIgnore] public const string MatchDatabaseFile = "matchData.txt";
 
@@ -23,6 +24,7 @@ namespace Coh2Stats
 
 		public Database()
 		{
+			Directory.CreateDirectory(ApplicationDataFolder);
 			Directory.CreateDirectory(DatabaseFolder);
 		}
 
@@ -255,8 +257,6 @@ namespace Coh2Stats
 		{
 			UserIO.WriteLogLine("Writing player database");
 
-			Directory.CreateDirectory(DatabaseFolder);
-
 			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
 			string fullPath = DatabaseFolder + "\\" + PlayerDatabaseFile;
 			File.WriteAllText(fullPath, text);
@@ -284,8 +284,6 @@ namespace Coh2Stats
 		public void WriteMatchDatabase(MatchTypeId gameMode)
 		{
 			UserIO.WriteLogLine("Writing match database");
-
-			Directory.CreateDirectory(DatabaseFolder);
 
 			var text = JsonConvert.SerializeObject(MatchHistoryStats, Formatting.Indented);
 			string fullPath = DatabaseFolder + "\\" + gameMode.ToString() + MatchDatabaseFile;
