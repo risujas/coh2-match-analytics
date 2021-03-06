@@ -130,7 +130,7 @@ namespace Coh2Stats
 				double percentile = UserIO.RunFloatingPointInput();
 
 				mab = mab.FilterByTopPercentile(db, percentile, true);
-				RunInteractiveAnalysis(db, mab, filterHistory + ",t%-" + percentile);
+				RunInteractiveAnalysis(db, mab, filterHistory + ",tp-" + percentile);
 			}
 
 			if (operation == '2')
