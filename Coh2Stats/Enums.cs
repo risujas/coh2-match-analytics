@@ -89,6 +89,7 @@ namespace Coh2Stats
 	[Flags]
 	public enum RaceFlag
 	{
+		None = 0,
 		German = 1,
 		Soviet = 2,
 		WGerman = 4,

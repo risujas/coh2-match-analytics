@@ -15,13 +15,28 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByRace(RaceFlag raceFlags)
+		public MatchAnalyticsBundle FilterByRequiredRaces(RaceFlag raceFlags)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
 			foreach (var m in Matches)
 			{
-				if (m.HasExclusivelyGivenRaces(raceFlags))
+				if (m.HasAllGivenRaces(raceFlags))
+				{
+					matchAnalyticsBundle.Matches.Add(m);
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
+		public MatchAnalyticsBundle FilterByAllowedRaces(RaceFlag raceFlags)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			foreach (var m in Matches)
+			{
+				if (m.HasAllowedRaces(raceFlags))
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}

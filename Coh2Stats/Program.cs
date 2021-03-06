@@ -12,6 +12,42 @@ namespace Coh2Stats
 	{
 		private const long relevantTimeCutoff = 1614376800;
 
+		public static RaceFlag GenerateRaceFlag(bool includeGerman, bool includeSoviet, bool includeAEF, bool includeWGerman, bool includeBritish)
+		{
+			RaceFlag germans = RaceFlag.None;
+			RaceFlag soviets = RaceFlag.None;
+			RaceFlag aef = RaceFlag.None;
+			RaceFlag wgermans = RaceFlag.None;
+			RaceFlag british = RaceFlag.None;
+
+			if (includeGerman)
+			{
+				germans = RaceFlag.German;
+			}
+
+			if (includeSoviet)
+			{
+				soviets = RaceFlag.Soviet;
+			}
+
+			if (includeAEF)
+			{
+				aef = RaceFlag.AEF;
+			}
+
+			if (includeWGerman)
+			{
+				wgermans = RaceFlag.WGerman;
+			}
+
+			if (includeBritish)
+			{
+				british = RaceFlag.British;
+			}
+
+			RaceFlag combinedFlags = germans | soviets | aef | wgermans | british;
+			return combinedFlags;
+		}
 		public static void AnalyzeWinRatesByRace(MatchAnalyticsBundle mab, RaceFlag raceFlag)
 		{
 			FactionId factionId = FactionId.Allies;
@@ -20,7 +56,7 @@ namespace Coh2Stats
 				factionId = FactionId.Axis;
 			}
 
-			var totalGames = mab.FilterByRace(raceFlag);
+			var totalGames = mab.FilterByRequiredRaces(raceFlag);
 			if (totalGames.Matches.Count == 0)
 			{
 				return;
@@ -163,30 +199,8 @@ namespace Coh2Stats
 					}
 				}
 
-				if (partsList.Contains("w"))
-				{
-					mab = mab.FilterByRace(RaceFlag.German);
-				}
-
-				if (partsList.Contains("s"))
-				{
-					mab = mab.FilterByRace(RaceFlag.Soviet);
-				}
-
-				if (partsList.Contains("u"))
-				{
-					mab = mab.FilterByRace(RaceFlag.AEF);
-				}
-
-				if (partsList.Contains("o"))
-				{
-					mab = mab.FilterByRace(RaceFlag.WGerman);
-				}
-
-				if (partsList.Contains("b"))
-				{
-					mab = mab.FilterByRace(RaceFlag.British);
-				}
+				RaceFlag flags = GenerateRaceFlag(partsList.Contains("w"), partsList.Contains("s"), partsList.Contains("u"), partsList.Contains("o"), partsList.Contains("b"));
+				mab = mab.FilterByAllowedRaces(flags);
 
 				RunInteractiveAnalysis(db, mab, filterHistory + ",r-" + string.Join("", partsList));
 			}
