@@ -238,7 +238,7 @@ namespace Coh2Stats.RelicAPI
 				throw new Exception("Invalid factions");
 			}
 
-			public bool HasAllGivenRaces(RaceFlag raceFlags)
+			public bool HasRequiredRaces(RaceFlag raceFlags)
 			{
 				bool requireGerman = raceFlags.HasFlag(RaceFlag.German);
 				bool requireSoviet = raceFlags.HasFlag(RaceFlag.Soviet);

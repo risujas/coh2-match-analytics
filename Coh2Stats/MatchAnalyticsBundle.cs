@@ -21,7 +21,7 @@ namespace Coh2Stats
 
 			foreach (var m in Matches)
 			{
-				if (m.HasAllGivenRaces(raceFlags))
+				if (m.HasRequiredRaces(raceFlags))
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
