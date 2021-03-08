@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 namespace Coh2Stats
 {
@@ -170,6 +171,33 @@ namespace Coh2Stats
 			Console.ResetColor();
 
 			return input;
+		}
+
+		public static void AllowPause()
+		{
+			if (Console.KeyAvailable)
+			{
+				var cki = Console.ReadKey(true);
+				if (cki.Key == ConsoleKey.P)
+				{
+					PrintUIPrompt("Paused. Press P again to unpause.");
+
+					bool paused = true;
+					while (paused)
+					{
+						if (Console.KeyAvailable)
+						{
+							cki = Console.ReadKey(true);
+							if (cki.Key == ConsoleKey.P)
+							{
+								paused = false;
+							}
+						}
+
+						Thread.Sleep(1000);
+					}
+				}
+			}
 		}
 	}
 }

@@ -100,6 +100,8 @@ namespace Coh2Stats
 						LogMatch(x);
 					}
 				}
+
+				UserIO.AllowPause();
 			}
 
 			int newMatchCount = MatchHistoryStats.Count;
@@ -173,6 +175,8 @@ namespace Coh2Stats
 
 					UserIO.WriteLogLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
 					batchStartingIndex += batchSize;
+
+					UserIO.AllowPause();
 				}
 			}
 
@@ -223,6 +227,8 @@ namespace Coh2Stats
 				{
 					batchSize = players.Count;
 				}
+
+				UserIO.AllowPause();
 			}
 		}
 
