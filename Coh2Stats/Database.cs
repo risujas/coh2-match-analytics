@@ -32,28 +32,8 @@ namespace Coh2Stats
 
 		public void ProcessPlayers(MatchTypeId gameMode)
 		{
-			var newPlayers = GetNewPlayers(gameMode, 1, -1);
-			var knownRankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
-
-			for (int i = 0; i < newPlayers.Count; i++)
-			{
-				var x = newPlayers[i];
-
-				bool found = false;
-				for (int j = 0; j < knownRankedPlayers.Count; j++)
-				{
-					if (x.ProfileId == knownRankedPlayers[j].ProfileId)
-					{
-						found = true;
-						break;
-					}
-				}
-
-				if (!found)
-				{
-					knownRankedPlayers.Add(x);
-				}
-			}
+			GetNewPlayers(gameMode, 1, -1);
+			var knownRankedPlayers = GetRankedPlayersFromDatabase(gameMode);
 
 			UpdatePlayerDetails(knownRankedPlayers);
 			WritePlayerDatabase();
@@ -61,7 +41,7 @@ namespace Coh2Stats
 
 		public void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
 		{
-			var playersToBeProcessed = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList(); // TODO something more efficient
+			var playersToBeProcessed = GetRankedPlayersFromDatabase(gameMode);
 			int oldMatchCount = MatchHistoryStats.Count;
 
 			while (playersToBeProcessed.Count > 0)
@@ -310,6 +290,16 @@ namespace Coh2Stats
 			}
 
 			return null;
+		}
+
+		public List<RelicAPI.PlayerIdentity> GetRankedPlayersFromDatabase(MatchTypeId gameMode)
+		{
+			UserIO.WriteLogLine("Getting ranked players from the database. This is a long operation.");
+			var rankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
+			UserIO.WriteLogLine("Finished.");
+
+			return rankedPlayers;
+
 		}
 
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
