@@ -61,16 +61,6 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public List<RelicAPI.PlayerIdentity> GetRankedPlayersFromDatabase(MatchTypeId gameMode)
-		{
-			UserIO.WriteLogLine("Getting ranked players from the database. This is a long operation.");
-			var rankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
-			UserIO.WriteLogLine("Finished.");
-
-			return rankedPlayers;
-
-		}
-
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
 			var oldPlayerIdentity = GetPlayerByProfileId(playerIdentity.ProfileId);
@@ -106,31 +96,6 @@ namespace Coh2Stats
 			StatGroups.Add(statGroup);
 		}
 
-		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId, MatchTypeId gameMode)
-		{
-			RelicAPI.LeaderboardStat highest = null;
-
-			for (int i = 0; i < LeaderboardStats.Count; i++)
-			{
-				var x = LeaderboardStats[i];
-
-				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)x.LeaderboardId, gameMode))
-				{
-					if (highest == null)
-					{
-						highest = x;
-					}
-
-					else if ((highest.Rank == -1) || x.Rank < highest.Rank && x.Rank >= 1)
-					{
-						highest = x;
-					}
-				}
-			}
-
-			return highest;
-		}
-
 		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
 			for (int i = 0; i < LeaderboardStats.Count; i++)
@@ -154,6 +119,41 @@ namespace Coh2Stats
 				LeaderboardStats.Remove(oldStat);
 			}
 			LeaderboardStats.Add(stat);
+		}
+
+		public List<RelicAPI.PlayerIdentity> GetRankedPlayersFromDatabase(MatchTypeId gameMode)
+		{
+			UserIO.WriteLogLine("Getting ranked players from the database. This is a long operation.");
+			var rankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
+			UserIO.WriteLogLine("Finished.");
+
+			return rankedPlayers;
+
+		}
+
+		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId, MatchTypeId gameMode)
+		{
+			RelicAPI.LeaderboardStat highest = null;
+
+			for (int i = 0; i < LeaderboardStats.Count; i++)
+			{
+				var x = LeaderboardStats[i];
+
+				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)x.LeaderboardId, gameMode))
+				{
+					if (highest == null)
+					{
+						highest = x;
+					}
+
+					else if ((highest.Rank == -1) || x.Rank < highest.Rank && x.Rank >= 1)
+					{
+						highest = x;
+					}
+				}
+			}
+
+			return highest;
 		}
 	}
 }
