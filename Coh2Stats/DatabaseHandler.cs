@@ -82,6 +82,29 @@ namespace Coh2Stats
 			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;
 			File.WriteAllText(fullPath, text);
 		}
+
+		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
+		{
+			if (GetMatchById(matchHistoryStat.Id) == null)
+			{
+				MatchData.Add(matchHistoryStat);
+			}
+		}
+
+		public RelicAPI.RecentMatchHistory.MatchHistoryStat GetMatchById(int id)
+		{
+			for (int i = 0; i < MatchData.Count; i++)
+			{
+				var x = MatchData[i];
+
+				if (x.Id == id)
+				{
+					return x;
+				}
+			}
+
+			return null;
+		}
 	}
 
 	public class DatabaseHandler
@@ -155,7 +178,7 @@ namespace Coh2Stats
 					var x = response.MatchHistoryStats[i];
 					if (x.MatchTypeId == (int)gameMode && x.StartGameTime >= startedAfterTimestamp)
 					{
-						LogMatch(x);
+						MatchDb.LogMatch(x);
 					}
 				}
 
@@ -416,28 +439,7 @@ namespace Coh2Stats
 			PlayerDb.LeaderboardStats.Add(stat);
 		}
 
-		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
-		{
-			if (GetMatchById(matchHistoryStat.Id) == null)
-			{
-				MatchDb.MatchData.Add(matchHistoryStat);
-			}
-		}
-
-		public RelicAPI.RecentMatchHistory.MatchHistoryStat GetMatchById(int id)
-		{
-			for (int i = 0; i < MatchDb.MatchData.Count; i++)
-			{
-				var x = MatchDb.MatchData[i];
-
-				if (x.Id == id)
-				{
-					return x;
-				}
-			}
-
-			return null;
-		}
+		
 
 		public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)
 		{
