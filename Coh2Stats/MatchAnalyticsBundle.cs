@@ -231,7 +231,7 @@ namespace Coh2Stats
 						continue;
 					}
 
-					int cutoffRank = db.GetLeaderboardRankByPercentile(lbid, topPercentile);
+					int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(lbid, topPercentile);
 					if (lbs.Rank <= cutoffRank)
 					{
 						numGoodPlayers++;
