@@ -28,8 +28,6 @@ namespace Coh2Stats
 			Directory.CreateDirectory(DatabaseFolder);
 		}
 
-		// BUILDER METHODS
-
 		public void ProcessPlayers(MatchTypeId gameMode)
 		{
 			GetNewPlayers(gameMode, 1, -1);
@@ -212,8 +210,6 @@ namespace Coh2Stats
 			}
 		}
 
-		// FILE HANDLING METHODS
-
 		public bool LoadPlayerDatabase()
 		{
 			string fullPath = DatabaseFolder + "\\" + PlayerDatabaseFile;
@@ -276,7 +272,6 @@ namespace Coh2Stats
 			File.WriteAllText(fullPath, text);
 		}
 
-		// PLAYERIDENTITY ACCESS METHODS
 
 		public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
 		{
@@ -312,8 +307,6 @@ namespace Coh2Stats
 			PlayerIdentities.Add(playerIdentity);
 		}
 
-		// STATGROUP ACCESS METHODS
-
 		public RelicAPI.StatGroup GetStatGroupById(int id)
 		{
 			for (int i = 0; i < StatGroups.Count; i++)
@@ -338,8 +331,6 @@ namespace Coh2Stats
 			}
 			StatGroups.Add(statGroup);
 		}
-
-		// LEADERBOARDSTAT ACCESS METHODS
 
 		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId, MatchTypeId gameMode)
 		{
@@ -391,8 +382,6 @@ namespace Coh2Stats
 			LeaderboardStats.Add(stat);
 		}
 
-		// MATCHHISTORYSTAT ACCESS METHODS
-
 		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
 			if (GetById(matchHistoryStat.Id) == null)
@@ -415,8 +404,6 @@ namespace Coh2Stats
 
 			return null;
 		}
-
-		// OTHER METHODS
 
 		public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)
 		{
