@@ -170,6 +170,7 @@ namespace Coh2Stats
 			UserIO.PrintUIPrompt("S - Export the current results into a file");
 			UserIO.PrintUIPrompt("1 - Filter by top percentile of players");
 			UserIO.PrintUIPrompt("2 - Filter by faction");
+			UserIO.PrintUIPrompt("3 - Filter by match age in hours");
 			UserIO.PrintUIPrompt("Please select an operation.");
 
 			char operation = UserIO.RunCharSelection('Q', 'S', '1', '2', '3');
@@ -235,6 +236,15 @@ namespace Coh2Stats
 				mab = mab.FilterByAllowedRaces(flags);
 
 				RunInteractiveAnalysis(db, mab, filterHistory + ",r-" + string.Join("", partsList));
+			}
+
+			if (operation == '3')
+			{
+				UserIO.PrintUIPrompt("Please select maximum allowed age for matches in hours: ");
+				int hours = UserIO.RunIntegerSelection(0, 8760);
+
+				mab = mab.FilterByMaxAgeInHours(hours);
+				RunInteractiveAnalysis(db, mab, filterHistory + ",ma-" + hours);
 			}
 		}
 
