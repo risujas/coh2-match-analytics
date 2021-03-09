@@ -22,16 +22,15 @@ namespace Coh2Stats
 		public void Load(MatchTypeId gameMode)
 		{
 			PlayerDb.FindLeaderboardSizes(gameMode);
-			PlayerDb.Load(DatabaseFolder);
 
+			PlayerDb.Load(DatabaseFolder);
 			MatchDb.Load(DatabaseFolder, gameMode);
 		}
 
 		public void ProcessPlayers(MatchTypeId gameMode)
 		{
 			PlayerDb.FindNewPlayers(gameMode, 1, -1);
-			var knownRankedPlayers = PlayerDb.GetRankedPlayersFromDatabase(gameMode);
-			PlayerDb.UpdatePlayerDetails(knownRankedPlayers);
+			PlayerDb.UpdatePlayerDetails(gameMode);
 
 			PlayerDb.Write(DatabaseFolder);
 		}

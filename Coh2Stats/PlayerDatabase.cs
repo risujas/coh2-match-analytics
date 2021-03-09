@@ -112,8 +112,10 @@ namespace Coh2Stats
 			UserIO.WriteLogLine("{0} new players found", playerCountDiff);
 		}
 
-		public void UpdatePlayerDetails(List<RelicAPI.PlayerIdentity> players)
+		public void UpdatePlayerDetails(MatchTypeId gameMode)
 		{
+			var players = GetRankedPlayersFromDatabase(gameMode);
+
 			int batchSize = 200;
 			while (players.Count > 0)
 			{
