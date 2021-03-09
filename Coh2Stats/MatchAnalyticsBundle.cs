@@ -139,10 +139,35 @@ namespace Coh2Stats
 					var report = match.MatchHistoryReportResults[j];
 
 					var identity = db.PlayerDb.GetPlayerByProfileId(report.ProfileId);
-					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId, false); // TODO properly handle AT
-					var lbs = db.PlayerDb.GetStat(identity.PersonalStatGroupId, lbid);
 
-					if (lbs == null)
+					LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId, false);
+					LeaderboardId teamLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId, true);
+
+					RelicAPI.LeaderboardStat selectedStat = null;
+					var soloStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
+					var teamStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, teamLb);
+					bool useTeamLb = false;
+
+					if (soloStat == null && teamStat != null)
+					{
+						selectedStat = teamStat;
+						useTeamLb = true;
+					}
+					else if (soloStat != null && teamStat == null)
+					{
+						selectedStat = soloStat;
+					}
+					else if (soloStat != null && teamStat != null)
+					{
+						selectedStat = soloStat;
+						if (teamStat.Rank < soloStat.Rank)
+						{
+							selectedStat = teamStat;
+							useTeamLb = true;
+						}
+					}
+
+					if (selectedStat == null)
 					{
 						if (requireOnAll)
 						{
@@ -152,12 +177,20 @@ namespace Coh2Stats
 						continue;
 					}
 
-					int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(lbid, topPercentile);
-					if (lbs.Rank <= cutoffRank)
+					int cutoffRank;
+					if (!useTeamLb)
+					{
+						cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, topPercentile);
+					}
+					else
+					{
+						cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(teamLb, topPercentile);
+					}
+
+					if (selectedStat.Rank <= cutoffRank)
 					{
 						numGoodPlayers++;
 					}
-
 					else if (requireOnAll)
 					{
 						break;
