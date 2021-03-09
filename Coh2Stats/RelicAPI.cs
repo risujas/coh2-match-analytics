@@ -31,11 +31,6 @@ namespace Coh2Stats.RelicAPI
 
 			return stat.Rank;
 		}
-
-		public void PrintPlayer()
-		{
-			Console.WriteLine(ProfileId + " " + Name + " " + PersonalStatGroupId + " " + Xp + " " + Level + " " + Country + " " + LeaderboardRegionId + " " + Alias);
-		}
 	}
 
 	public class StatGroup
@@ -87,74 +82,6 @@ namespace Coh2Stats.RelicAPI
 
 			string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/getLeaderBoard2";
 			string requestParams = "?title=coh2&leaderboard_id=" + leaderboardId.ToString() + "&start=" + startRank.ToString() + "&count=" + numRanks.ToString();
-
-			return WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
-		}
-	}
-
-	internal class AvailableLeaderboards
-	{
-		public class Leaderboardmap
-		{
-			[JsonProperty("matchtype_id")] public int MatchTypeId { get; set; }
-			[JsonProperty("statgroup_type")] public int StatGroupType { get; set; }
-			[JsonProperty("race_id")] public int RaceId { get; set; }
-		}
-
-		public class Leaderboard
-		{
-			[JsonProperty("id")] public int Id { get; set; }
-			[JsonProperty("name")] public string Name { get; set; }
-			[JsonProperty("isranked")] public int IsRanked { get; set; }
-			[JsonProperty("leaderboardmap")] public List<Leaderboardmap> LeaderboardMap { get; set; }
-		}
-
-		public class MatchType
-		{
-			[JsonProperty("id")] public int Id { get; set; }
-			[JsonProperty("name")] public string Name { get; set; }
-			[JsonProperty("locstringid")] public int LocStringId { get; set; }
-			[JsonProperty("localizedName")] public string LocalizedName { get; set; }
-		}
-
-		public class Race
-		{
-			[JsonProperty("id")] public int Id { get; set; }
-			[JsonProperty("name")] public string Name { get; set; }
-			[JsonProperty("faction_id")] public int FactionId { get; set; }
-			[JsonProperty("locstringid")] public int LocStringId { get; set; }
-			[JsonProperty("localizedName")] public string LocalizedName { get; set; }
-		}
-
-		public class Faction
-		{
-			[JsonProperty("id")] public int Id { get; set; }
-			[JsonProperty("name")] public string Name { get; set; }
-			[JsonProperty("locstringid")] public int LocStringId { get; set; }
-			[JsonProperty("localizedName")] public string LocalizedName { get; set; }
-		}
-
-		public class LeaderboardRegion
-		{
-			[JsonProperty("id")] public int Id { get; set; }
-			[JsonProperty("name")] public string Name { get; set; }
-			[JsonProperty("locstringid")] public int LocStringId { get; set; }
-		}
-
-		public class Root
-		{
-			[JsonProperty("result")] public WebRequestResult Result { get; set; }
-			[JsonProperty("leaderboards")] public List<Leaderboard> Leaderboards { get; set; }
-			[JsonProperty("matchTypes")] public List<MatchType> MatchTypes { get; set; }
-			[JsonProperty("races")] public List<Race> Races { get; set; }
-			[JsonProperty("factions")] public List<Faction> Factions { get; set; }
-			[JsonProperty("leaderboardRegions")] public List<LeaderboardRegion> LeaderboardRegions { get; set; }
-		}
-
-		public static Root Get()
-		{
-			string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetAvailableLeaderboards";
-			string requestParams = "?title=coh2";
 
 			return WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
 		}
@@ -372,12 +299,6 @@ namespace Coh2Stats.RelicAPI
 			[JsonProperty("profiles")] public List<PlayerIdentity> Profiles { get; set; }
 		}
 
-		public static Root GetByProfileId(int profileId)
-		{
-			List<int> list = new List<int> { profileId };
-			return GetByProfileId(list);
-		}
-
 		public static Root GetByProfileId(List<int> profileIds)
 		{
 			string idString = string.Join(",", profileIds);
@@ -397,12 +318,6 @@ namespace Coh2Stats.RelicAPI
 			[JsonProperty("leaderboardStats")] public List<LeaderboardStat> LeaderboardStats { get; set; }
 		}
 
-		public static Root GetByProfileId(int profileId)
-		{
-			List<int> list = new List<int> { profileId };
-			return GetByProfileId(list);
-		}
-
 		public static Root GetByProfileId(List<int> profileIds)
 		{
 			string idString = string.Join(",", profileIds);
@@ -410,67 +325,6 @@ namespace Coh2Stats.RelicAPI
 			string requestParams = "?title=coh2&profile_ids=[" + idString + "]";
 
 			return WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
-		}
-	}
-
-	internal class PlayerSummaries
-	{
-		public class Player
-		{
-			[JsonProperty("steamid")] public string SteamId { get; set; }
-			[JsonProperty("communityvisibilitystate")] public int CommunityVisibilityState { get; set; }
-			[JsonProperty("profilestate")] public int ProfileState { get; set; }
-			[JsonProperty("personaname")] public string PersonaName { get; set; }
-			[JsonProperty("commentpermission")] public int CommentPermission { get; set; }
-			[JsonProperty("profileurl")] public string ProfileUrl { get; set; }
-			[JsonProperty("avatar")] public string Avatar { get; set; }
-			[JsonProperty("avatarmedium")] public string AvatarMedium { get; set; }
-			[JsonProperty("avatarfull")] public string AvatarFull { get; set; }
-			[JsonProperty("avatarhash")] public string AvatarHash { get; set; }
-			[JsonProperty("personastate")] public int PersonaState { get; set; }
-			[JsonProperty("primaryclanid")] public string PrimaryClanId { get; set; }
-			[JsonProperty("timecreated")] public int TimeCreated { get; set; }
-			[JsonProperty("personastateflags")] public int PersonaStateFlags { get; set; }
-			[JsonProperty("loccountrycode")] public string LocCountryCode { get; set; }
-		}
-
-		public class Response
-		{
-			[JsonProperty("players")] public List<Player> Players { get; set; }
-		}
-
-		public class SteamResults
-		{
-			[JsonProperty("response")] public Response Response { get; set; }
-		}
-
-		public class Root
-		{
-			[JsonProperty("result")] public WebRequestResult Result { get; set; }
-			[JsonProperty("avatars")] public List<PlayerIdentity> Avatars { get; set; }
-			[JsonProperty("steamResults")] public SteamResults SteamResults { get; set; }
-		}
-
-		public static Root GetBySteamId(string steamId)
-		{
-			List<string> list = new List<string> { steamId };
-			return GetBySteamId(list);
-		}
-
-		public static Root GetBySteamId(List<string> steamIds)
-		{
-			string idString = "\"" + string.Join("\",\"", steamIds) + "\"";
-			string requestUrl = "https://coh2-api.reliclink.com/community/external/proxysteamuserrequest";
-			string requestParams = "?request=/ISteamUser/GetPlayerSummaries/v0002/&title=coh2&profileNames=[" + idString + "]";
-
-			var response = WebRequestHandler.GetStructuredJsonResponse<Root>(requestUrl, requestParams);
-
-			if (response.Result.Message != "SUCCESS")
-			{
-				throw new Exception(response.Result.Message + ": " + idString);
-			}
-
-			return response;
 		}
 	}
 }
