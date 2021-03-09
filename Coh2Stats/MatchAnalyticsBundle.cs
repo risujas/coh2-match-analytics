@@ -11,7 +11,7 @@ namespace Coh2Stats
 		public static MatchAnalyticsBundle GetAllLoggedMatches(Database db)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-			matchAnalyticsBundle.Matches = db.MatchData;
+			matchAnalyticsBundle.Matches = db.MatchDb.MatchData;
 			return matchAnalyticsBundle;
 		}
 
