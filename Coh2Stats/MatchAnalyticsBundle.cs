@@ -131,69 +131,99 @@ namespace Coh2Stats
 			for (int i = 0; i < Matches.Count; i++)
 			{
 				var match = Matches[i];
-
 				int numGoodPlayers = 0;
 
 				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
 				{
 					var report = match.MatchHistoryReportResults[j];
-
 					var identity = db.PlayerDb.GetPlayerByProfileId(report.ProfileId);
+					MatchTypeId gameMode = (MatchTypeId)match.MatchTypeId;
+					RaceId playerFaction = (RaceId)report.RaceId;
 
-					LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId, false);
-					LeaderboardId teamLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId, true);
-
-					RelicAPI.LeaderboardStat selectedStat = null;
-					var soloStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
-					var teamStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, teamLb);
-					bool useTeamLb = false;
-
-					if (soloStat == null && teamStat != null)
+					if (gameMode == MatchTypeId._1v1_)
 					{
-						selectedStat = teamStat;
-						useTeamLb = true;
+						LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, false);
+
+						var soloStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
+						if (soloStat == null)
+						{
+							if (requireOnAll)
+							{
+								break;
+							}
+
+							continue;
+						}
+
+						int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, topPercentile);
+						if (soloStat.Rank <= cutoffRank)
+						{
+							numGoodPlayers++;
+						}
+						else if (requireOnAll)
+						{
+							break;
+						}
 					}
-					else if (soloStat != null && teamStat == null)
+
+					else
 					{
-						selectedStat = soloStat;
-					}
-					else if (soloStat != null && teamStat != null)
-					{
-						selectedStat = soloStat;
-						if (teamStat.Rank < soloStat.Rank)
+						RelicAPI.LeaderboardStat selectedStat = null;
+						bool useTeamLb = false;
+
+						LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, false);
+						LeaderboardId teamLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, true);
+
+						var soloStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
+						var teamStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, teamLb);
+
+						if (soloStat == null && teamStat != null)
 						{
 							selectedStat = teamStat;
 							useTeamLb = true;
 						}
-					}
+						else if (soloStat != null && teamStat == null)
+						{
+							selectedStat = soloStat;
+						}
+						else if (soloStat != null && teamStat != null)
+						{
+							selectedStat = soloStat;
+							if (teamStat.Rank < soloStat.Rank)
+							{
+								selectedStat = teamStat;
+								useTeamLb = true;
+							}
+						}
 
-					if (selectedStat == null)
-					{
-						if (requireOnAll)
+						if (selectedStat == null)
+						{
+							if (requireOnAll)
+							{
+								break;
+							}
+
+							continue;
+						}
+
+						int cutoffRank;
+						if (!useTeamLb)
+						{
+							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, topPercentile);
+						}
+						else
+						{
+							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(teamLb, topPercentile);
+						}
+
+						if (selectedStat.Rank <= cutoffRank)
+						{
+							numGoodPlayers++;
+						}
+						else if (requireOnAll)
 						{
 							break;
 						}
-
-						continue;
-					}
-
-					int cutoffRank;
-					if (!useTeamLb)
-					{
-						cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, topPercentile);
-					}
-					else
-					{
-						cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(teamLb, topPercentile);
-					}
-
-					if (selectedStat.Rank <= cutoffRank)
-					{
-						numGoodPlayers++;
-					}
-					else if (requireOnAll)
-					{
-						break;
 					}
 				}
 
