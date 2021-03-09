@@ -65,21 +65,6 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByCompletionTime(int completionTimeBegin, int completionTimeEnd)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			foreach (var m in Matches)
-			{
-				if (m.CompletionTime >= completionTimeBegin && m.CompletionTime <= completionTimeEnd)
-				{
-					matchAnalyticsBundle.Matches.Add(m);
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
 		public MatchAnalyticsBundle FilterByStartGameTime(int startGameTimeBegin, int startGameTimeEnd)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
