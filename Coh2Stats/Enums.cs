@@ -111,9 +111,9 @@ namespace Coh2Stats
 
 	internal class LeaderboardCompatibility
 	{
-		public static bool LeaderboardBelongsWithMatchType(LeaderboardId leaderboardId, MatchTypeId matchTypeId)
+		public static bool LeaderboardIsCompatibleWithGameMode(LeaderboardId leaderboardId, MatchTypeId gameMode)
 		{
-			if (matchTypeId == MatchTypeId._1v1_)
+			if (gameMode == MatchTypeId._1v1_)
 			{
 				if (leaderboardId == LeaderboardId._1v1German_) { return true; }
 				if (leaderboardId == LeaderboardId._1v1Soviet_) { return true; }
@@ -122,38 +122,43 @@ namespace Coh2Stats
 				if (leaderboardId == LeaderboardId._1v1British_) { return true; }
 			}
 
-			if (matchTypeId == MatchTypeId._2v2_)
+			if (gameMode == MatchTypeId._2v2_)
 			{
 				if (leaderboardId == LeaderboardId._2v2German_) { return true; }
 				if (leaderboardId == LeaderboardId._2v2Soviet_) { return true; }
 				if (leaderboardId == LeaderboardId._2v2WestGerman_) { return true; }
 				if (leaderboardId == LeaderboardId._2v2AEF_) { return true; }
 				if (leaderboardId == LeaderboardId._2v2British_) { return true; }
+				if (leaderboardId == LeaderboardId._TeamOf2Allies_) { return true; }
+				if (leaderboardId == LeaderboardId._TeamOf2Axis_) { return true; }
 			}
 
-			if (matchTypeId == MatchTypeId._3v3_)
+			if (gameMode == MatchTypeId._3v3_)
 			{
 				if (leaderboardId == LeaderboardId._3v3German_) { return true; }
 				if (leaderboardId == LeaderboardId._3v3Soviet_) { return true; }
 				if (leaderboardId == LeaderboardId._3v3WestGerman_) { return true; }
 				if (leaderboardId == LeaderboardId._3v3AEF_) { return true; }
 				if (leaderboardId == LeaderboardId._3v3British_) { return true; }
+				if (leaderboardId == LeaderboardId._TeamOf3Allies_) { return true; }
+				if (leaderboardId == LeaderboardId._TeamOf3Axis_) { return true; }
 			}
 
-			if (matchTypeId == MatchTypeId._4v4_)
+			if (gameMode == MatchTypeId._4v4_)
 			{
 				if (leaderboardId == LeaderboardId._4v4German_) { return true; }
 				if (leaderboardId == LeaderboardId._4v4Soviet_) { return true; }
 				if (leaderboardId == LeaderboardId._4v4WestGerman_) { return true; }
 				if (leaderboardId == LeaderboardId._4v4AEF_) { return true; }
 				if (leaderboardId == LeaderboardId._4v4British_) { return true; }
+				if (leaderboardId == LeaderboardId._TeamOf4Allies_) { return true; }
+				if (leaderboardId == LeaderboardId._TeamOf4Axis_) { return true; }
 			}
 
 			return false;
 		}
 
-		// TODO account for premade ladders
-		public static LeaderboardId GetLeaderboardFromRaceAndMode(RaceId raceId, MatchTypeId matchTypeId)
+		public static LeaderboardId GetLeaderboardFromRaceAndMode(RaceId raceId, MatchTypeId matchTypeId, bool arrangedTeam)
 		{
 			if (raceId == RaceId.German)
 			{
@@ -164,15 +169,27 @@ namespace Coh2Stats
 
 				if (matchTypeId == MatchTypeId._2v2_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf2Axis_;
+					}
 					return LeaderboardId._2v2German_;
 				}
 
 				if (matchTypeId == MatchTypeId._3v3_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf3Axis_;
+					}
 					return LeaderboardId._3v3German_;
 				}
 				if (matchTypeId == MatchTypeId._4v4_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf4Axis_;
+					}
 					return LeaderboardId._4v4German_;
 				}
 			}
@@ -186,15 +203,27 @@ namespace Coh2Stats
 
 				if (matchTypeId == MatchTypeId._2v2_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf2Allies_;
+					}
 					return LeaderboardId._2v2Soviet_;
 				}
 
 				if (matchTypeId == MatchTypeId._3v3_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf3Allies_;
+					}
 					return LeaderboardId._3v3Soviet_;
 				}
 				if (matchTypeId == MatchTypeId._4v4_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf4Allies_;
+					}
 					return LeaderboardId._4v4Soviet_;
 				}
 			}
@@ -208,15 +237,27 @@ namespace Coh2Stats
 
 				if (matchTypeId == MatchTypeId._2v2_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf2Axis_;
+					}
 					return LeaderboardId._2v2WestGerman_;
 				}
 
 				if (matchTypeId == MatchTypeId._3v3_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf3Axis_;
+					}
 					return LeaderboardId._3v3WestGerman_;
 				}
 				if (matchTypeId == MatchTypeId._4v4_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf4Axis_;
+					}
 					return LeaderboardId._4v4WestGerman_;
 				}
 			}
@@ -230,15 +271,27 @@ namespace Coh2Stats
 
 				if (matchTypeId == MatchTypeId._2v2_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf2Allies_;
+					}
 					return LeaderboardId._2v2AEF_;
 				}
 
 				if (matchTypeId == MatchTypeId._3v3_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf3Allies_;
+					}
 					return LeaderboardId._3v3AEF_;
 				}
 				if (matchTypeId == MatchTypeId._4v4_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf4Allies_;
+					}
 					return LeaderboardId._4v4AEF_;
 				}
 			}
@@ -252,15 +305,27 @@ namespace Coh2Stats
 
 				if (matchTypeId == MatchTypeId._2v2_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf2Allies_;
+					}
 					return LeaderboardId._2v2British_;
 				}
 
 				if (matchTypeId == MatchTypeId._3v3_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf3Allies_;
+					}
 					return LeaderboardId._3v3British_;
 				}
 				if (matchTypeId == MatchTypeId._4v4_)
 				{
+					if (arrangedTeam)
+					{
+						return LeaderboardId._TeamOf4Allies_;
+					}
 					return LeaderboardId._4v4British_;
 				}
 			}

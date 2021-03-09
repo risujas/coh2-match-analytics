@@ -56,7 +56,7 @@ namespace Coh2Stats
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)leaderboardIndex, gameMode) == false)
+				if (LeaderboardCompatibility.LeaderboardIsCompatibleWithGameMode((LeaderboardId)leaderboardIndex, gameMode) == false)
 				{
 					continue;
 				}
@@ -249,7 +249,7 @@ namespace Coh2Stats
 			{
 				var x = LeaderboardStats[i];
 
-				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)x.LeaderboardId, gameMode))
+				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardIsCompatibleWithGameMode((LeaderboardId)x.LeaderboardId, gameMode))
 				{
 					if (highest == null)
 					{
@@ -272,7 +272,7 @@ namespace Coh2Stats
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)leaderboardIndex, gameMode) == false)
+				if (LeaderboardCompatibility.LeaderboardIsCompatibleWithGameMode((LeaderboardId)leaderboardIndex, gameMode) == false)
 				{
 					continue;
 				}
