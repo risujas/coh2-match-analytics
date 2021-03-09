@@ -45,21 +45,6 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByMap(string mapName)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			foreach (var m in Matches)
-			{
-				if (m.MapName == mapName)
-				{
-					matchAnalyticsBundle.Matches.Add(m);
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
 		public MatchAnalyticsBundle FilterByResult(bool result, FactionId factionId)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
@@ -139,40 +124,6 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByDescription(string description)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			foreach (var m in Matches)
-			{
-				if (description == m.Description)
-				{
-					matchAnalyticsBundle.Matches.Add(m);
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
-		public MatchAnalyticsBundle FilterByPartialPlayerNickname(DatabaseHandler db, string nickname)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			foreach (var m in Matches)
-			{
-				foreach (var rr in m.MatchHistoryReportResults)
-				{
-					string currentNick = db.PlayerDb.GetPlayerByProfileId(rr.ProfileId).Alias;
-					if (currentNick.ToLower().Contains(nickname.ToLower()))
-					{
-						matchAnalyticsBundle.Matches.Add(m);
-					}
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
 		public MatchAnalyticsBundle FilterByMatchType(MatchTypeId matchTypeId)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
@@ -180,21 +131,6 @@ namespace Coh2Stats
 			foreach (var m in Matches)
 			{
 				if (m.MatchTypeId == (int)matchTypeId)
-				{
-					matchAnalyticsBundle.Matches.Add(m);
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
-		public MatchAnalyticsBundle FilterByMinObserverCount(int minObserverCount)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			foreach (var m in Matches)
-			{
-				if (m.ObserverTotal >= minObserverCount)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
@@ -254,78 +190,6 @@ namespace Coh2Stats
 					{
 						matchAnalyticsBundle.Matches.Add(match);
 					}
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
-		public MatchAnalyticsBundle FilterByRank(DatabaseHandler db, int rankFloor, int rankCap, bool requireOnAll)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			for (int i = 0; i < Matches.Count; i++)
-			{
-				var match = Matches[i];
-
-				int numGoodPlayers = 0;
-
-				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
-				{
-					var report = match.MatchHistoryReportResults[j];
-
-					var identity = db.PlayerDb.GetPlayerByProfileId(report.ProfileId);
-					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId);
-					var lbs = db.PlayerDb.GetStat(identity.PersonalStatGroupId, lbid);
-
-					if (lbs == null)
-					{
-						if (requireOnAll)
-						{
-							break;
-						}
-
-						continue;
-					}
-
-					if (lbs.Rank <= rankCap && lbs.Rank >= rankFloor)
-					{
-						numGoodPlayers++;
-					}
-
-					else if (requireOnAll)
-					{
-						break;
-					}
-				}
-
-				if (numGoodPlayers > 0)
-				{
-					if (!requireOnAll)
-					{
-						matchAnalyticsBundle.Matches.Add(match);
-					}
-
-					else if (requireOnAll && numGoodPlayers == match.MaxPlayers)
-					{
-						matchAnalyticsBundle.Matches.Add(match);
-					}
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
-		public MatchAnalyticsBundle FilterByCommander(CommanderServerId commanderServerId)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			foreach (var m in Matches)
-			{
-				int id = (int)commanderServerId;
-				if (m.HasMatchHistoryItem(id))
-				{
-					matchAnalyticsBundle.Matches.Add(m);
 				}
 			}
 
