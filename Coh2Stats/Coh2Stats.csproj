@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LeaderboardCompatibility.cs" />
     <Compile Include="RelicAPI\Leaderboard.cs" />
     <Compile Include="RelicAPI\LeaderboardStat.cs" />
     <Compile Include="MatchDatabase.cs" />

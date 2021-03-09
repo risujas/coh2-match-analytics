@@ -139,7 +139,7 @@ namespace Coh2Stats
 					var report = match.MatchHistoryReportResults[j];
 
 					var identity = db.PlayerDb.GetPlayerByProfileId(report.ProfileId);
-					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId);
+					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId, false); // TODO properly handle AT
 					var lbs = db.PlayerDb.GetStat(identity.PersonalStatGroupId, lbid);
 
 					if (lbs == null)
