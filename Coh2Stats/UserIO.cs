@@ -6,7 +6,7 @@ namespace Coh2Stats
 {
 	internal static class UserIO
 	{
-		private const string logFile = "log.txt";
+		private static readonly string logFile = Database.ApplicationDataFolder + "\\" + "log.txt";
 
 		public static void WriteLogLine(string text, params object[] args)
 		{
