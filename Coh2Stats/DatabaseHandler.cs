@@ -31,7 +31,7 @@ namespace Coh2Stats
 
 		public void ProcessPlayers(MatchTypeId gameMode)
 		{
-			GetNewPlayers(gameMode, 1, -1);
+			FindNewPlayers(gameMode, 1, -1);
 			var knownRankedPlayers = PlayerDb.GetRankedPlayersFromDatabase(gameMode);
 
 			UpdatePlayerDetails(knownRankedPlayers);
@@ -118,7 +118,7 @@ namespace Coh2Stats
 			}
 		}
 
-		private List<RelicAPI.PlayerIdentity> GetNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
+		private void FindNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
 		{
 			UserIO.WriteLogLine("Finding new players");
 
@@ -178,11 +178,8 @@ namespace Coh2Stats
 
 			int numPlayersAfter = PlayerDb.PlayerIdentities.Count;
 			int playerCountDiff = numPlayersAfter - numPlayersBefore;
-			var newPlayers = PlayerDb.PlayerIdentities.GetRange(numPlayersBefore, playerCountDiff);
 
 			UserIO.WriteLogLine("{0} new players found", playerCountDiff);
-
-			return newPlayers;
 		}
 
 		private void UpdatePlayerDetails(List<RelicAPI.PlayerIdentity> players)
