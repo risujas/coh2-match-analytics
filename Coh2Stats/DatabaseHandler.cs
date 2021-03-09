@@ -418,13 +418,13 @@ namespace Coh2Stats
 
 		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
-			if (GetById(matchHistoryStat.Id) == null)
+			if (GetMatchById(matchHistoryStat.Id) == null)
 			{
 				MatchDb.MatchData.Add(matchHistoryStat);
 			}
 		}
 
-		public RelicAPI.RecentMatchHistory.MatchHistoryStat GetById(int id)
+		public RelicAPI.RecentMatchHistory.MatchHistoryStat GetMatchById(int id)
 		{
 			for (int i = 0; i < MatchDb.MatchData.Count; i++)
 			{
