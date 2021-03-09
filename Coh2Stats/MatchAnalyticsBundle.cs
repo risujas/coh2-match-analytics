@@ -162,7 +162,7 @@ namespace Coh2Stats
 			{
 				foreach (var rr in m.MatchHistoryReportResults)
 				{
-					string currentNick = db.GetPlayerByProfileId(rr.ProfileId).Alias;
+					string currentNick = db.PlayerDb.GetPlayerByProfileId(rr.ProfileId).Alias;
 					if (currentNick.ToLower().Contains(nickname.ToLower()))
 					{
 						matchAnalyticsBundle.Matches.Add(m);
@@ -217,9 +217,9 @@ namespace Coh2Stats
 				{
 					var report = match.MatchHistoryReportResults[j];
 
-					var identity = db.GetPlayerByProfileId(report.ProfileId);
+					var identity = db.PlayerDb.GetPlayerByProfileId(report.ProfileId);
 					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId);
-					var lbs = db.GetStat(identity.PersonalStatGroupId, lbid);
+					var lbs = db.PlayerDb.GetStat(identity.PersonalStatGroupId, lbid);
 
 					if (lbs == null)
 					{
@@ -274,9 +274,9 @@ namespace Coh2Stats
 				{
 					var report = match.MatchHistoryReportResults[j];
 
-					var identity = db.GetPlayerByProfileId(report.ProfileId);
+					var identity = db.PlayerDb.GetPlayerByProfileId(report.ProfileId);
 					LeaderboardId lbid = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)report.RaceId, (MatchTypeId)match.MatchTypeId);
-					var lbs = db.GetStat(identity.PersonalStatGroupId, lbid);
+					var lbs = db.PlayerDb.GetStat(identity.PersonalStatGroupId, lbid);
 
 					if (lbs == null)
 					{

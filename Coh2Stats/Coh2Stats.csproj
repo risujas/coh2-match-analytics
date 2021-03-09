@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MatchDatabase.cs" />
+    <Compile Include="PlayerDatabase.cs" />
     <Compile Include="UserIO.cs" />
     <Compile Include="MatchAnalyticsBundle.cs" />
     <Compile Include="DatabaseHandler.cs" />
