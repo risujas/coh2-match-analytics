@@ -79,7 +79,7 @@ namespace Coh2Stats
 						batchSize = difference + 1;
 					}
 
-					var response = RelicAPI.Leaderboard.GetById(leaderboardIndex, batchStartingIndex, batchSize);
+					var response = RelicAPI.Leaderboard.RequestById(leaderboardIndex, batchStartingIndex, batchSize);
 
 					for (int i = 0; i < response.StatGroups.Count; i++)
 					{
@@ -127,7 +127,7 @@ namespace Coh2Stats
 					players.RemoveRange(0, batchSize);
 
 					List<int> profileIds = range.Select(p => p.ProfileId).ToList();
-					var response = RelicAPI.PersonalStat.GetByProfileId(profileIds);
+					var response = RelicAPI.PersonalStat.RequestByProfileId(profileIds);
 
 					for (int i = 0; i < response.StatGroups.Count; i++)
 					{
@@ -277,7 +277,7 @@ namespace Coh2Stats
 					continue;
 				}
 
-				var probeResponse = RelicAPI.Leaderboard.GetById(leaderboardIndex, 1, 1);
+				var probeResponse = RelicAPI.Leaderboard.RequestById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
 
 				if (LeaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
@@ -297,7 +297,7 @@ namespace Coh2Stats
 		{
 			if (LeaderboardSizes.ContainsKey(id) == false)
 			{
-				var probeResponse = RelicAPI.Leaderboard.GetById((int)id, 1, 1);
+				var probeResponse = RelicAPI.Leaderboard.RequestById((int)id, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
 				LeaderboardSizes.Add(id, leaderboardMaxRank);
 			}

@@ -59,7 +59,7 @@ namespace Coh2Stats
 					profileIds.Add(x.ProfileId);
 				}
 
-				var response = RelicAPI.RecentMatchHistory.GetByProfileId(profileIds);
+				var response = RelicAPI.RecentMatchHistory.RequestByProfileId(profileIds);
 
 				for (int i = 0; i < response.Profiles.Count; i++)
 				{
