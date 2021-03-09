@@ -11,29 +11,101 @@ namespace Coh2Stats
 		public List<RelicAPI.PlayerIdentity> PlayerIdentities = new List<RelicAPI.PlayerIdentity>();
 		public List<RelicAPI.StatGroup> StatGroups = new List<RelicAPI.StatGroup>();
 		public List<RelicAPI.LeaderboardStat> LeaderboardStats = new List<RelicAPI.LeaderboardStat>();
+
+		[JsonIgnore] public const string DbFile = "playerData.txt";
+
+		public bool Load(string dbFolder)
+		{
+			string fullPath = dbFolder + "\\" + DbFile;
+			if (!File.Exists(fullPath))
+			{
+				UserIO.WriteLogLine("No player database found");
+				return false;
+			}
+
+			UserIO.WriteLogLine("Player database found");
+
+			string text = File.ReadAllText(fullPath);
+			var json = JsonConvert.DeserializeObject<PlayerDatabase>(text);
+
+			PlayerIdentities = json.PlayerIdentities;
+			StatGroups = json.StatGroups;
+			LeaderboardStats = json.LeaderboardStats;
+
+			UserIO.WriteLogLine("{0} player identities", PlayerIdentities.Count);
+			UserIO.WriteLogLine("{0} stat groups", StatGroups.Count);
+			UserIO.WriteLogLine("{0} leaderboard stats", LeaderboardStats.Count);
+
+			return true;
+		}
+
+		public void Write(string dbFolder)
+		{
+			UserIO.WriteLogLine("Writing player database");
+
+			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
+			string fullPath = dbFolder + "\\" + DbFile;
+			File.WriteAllText(fullPath, text);
+		}
 	}
 
 	public class MatchDatabase
 	{
 		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchData = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
+
+		public const string DbFile = "matchData.txt";
+
+		public bool Load(string dbFolder, MatchTypeId gameMode)
+		{
+			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;
+			if (!File.Exists(fullPath))
+			{
+				UserIO.WriteLogLine("No match database found");
+				return false;
+			}
+
+			UserIO.WriteLogLine("Match database found");
+
+			string text = File.ReadAllText(fullPath);
+			MatchData = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
+
+			UserIO.WriteLogLine("{0} match history stats", MatchData.Count);
+
+			return true;
+		}
+
+		public void Write(string dbFolder, MatchTypeId gameMode)
+		{
+			UserIO.WriteLogLine("Writing match database");
+
+			var text = JsonConvert.SerializeObject(MatchData, Formatting.Indented);
+			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;
+			File.WriteAllText(fullPath, text);
+		}
 	}
 
-	public class Database
+	public class DatabaseHandler
 	{
-		public PlayerDatabase PlayerDb = new PlayerDatabase();
-		public MatchDatabase MatchDb = new MatchDatabase();
+		public readonly PlayerDatabase PlayerDb = new PlayerDatabase();
+		public readonly MatchDatabase MatchDb = new MatchDatabase();
 
 		public static readonly string ApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
 		public static readonly string DatabaseFolder = ApplicationDataFolder + "\\databases";
-		public const string PlayerDatabaseFile = "playerData.txt";
-		public const string MatchDatabaseFile = "matchData.txt";
 
 		private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
 
-		public Database()
+		public DatabaseHandler()
 		{
 			Directory.CreateDirectory(ApplicationDataFolder);
 			Directory.CreateDirectory(DatabaseFolder);
+		}
+
+		public void Load(MatchTypeId gameMode)
+		{
+			FindLeaderboardSizes(gameMode);
+
+			PlayerDb.Load(DatabaseFolder);
+			MatchDb.Load(DatabaseFolder, gameMode);
 		}
 
 		public void ProcessPlayers(MatchTypeId gameMode)
@@ -42,7 +114,7 @@ namespace Coh2Stats
 			var knownRankedPlayers = GetRankedPlayersFromDatabase(gameMode);
 
 			UpdatePlayerDetails(knownRankedPlayers);
-			WritePlayerDatabase();
+			PlayerDb.Write(DatabaseFolder);
 		}
 
 		public void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
@@ -94,8 +166,35 @@ namespace Coh2Stats
 			int difference = newMatchCount - oldMatchCount;
 			UserIO.WriteLogLine("{0} new matches found", difference);
 
-			WritePlayerDatabase();
-			WriteMatchDatabase(gameMode);
+			PlayerDb.Write(DatabaseFolder);
+			MatchDb.Write(DatabaseFolder, gameMode);
+		}
+
+		private void FindLeaderboardSizes(MatchTypeId gameMode)
+		{
+			UserIO.WriteLogLine("Finding leaderboard sizes");
+
+			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
+			{
+				if (LeaderboardCompatibility.LeaderboardBelongsWithMatchType((LeaderboardId)leaderboardIndex, gameMode) == false)
+				{
+					continue;
+				}
+
+				var probeResponse = RelicAPI.Leaderboard.GetById(leaderboardIndex, 1, 1);
+				int leaderboardMaxRank = probeResponse.RankTotal;
+
+				if (leaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
+				{
+					leaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
+				}
+				else
+				{
+					leaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
+				}
+
+				UserIO.WriteLogLine(((LeaderboardId)leaderboardIndex).ToString() + " " + leaderboardSizes[(LeaderboardId)leaderboardIndex]);
+			}
 		}
 
 		private List<RelicAPI.PlayerIdentity> GetNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
@@ -111,18 +210,8 @@ namespace Coh2Stats
 					continue;
 				}
 
-				var probeResponse = RelicAPI.Leaderboard.GetById(leaderboardIndex, 1, 1);
-				int leaderboardMaxRank = probeResponse.RankTotal;
+				int leaderboardMaxRank = leaderboardSizes[(LeaderboardId)leaderboardIndex];
 				int batchStartingIndex = startingRank;
-
-				if (leaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
-				{
-					leaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
-				}
-				else
-				{
-					leaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
-				}
 
 				if (maxRank != -1)
 				{
@@ -217,69 +306,6 @@ namespace Coh2Stats
 				UserIO.AllowPause();
 			}
 		}
-
-		public bool LoadPlayerDatabase()
-		{
-			string fullPath = DatabaseFolder + "\\" + PlayerDatabaseFile;
-			if (!File.Exists(fullPath))
-			{
-				UserIO.WriteLogLine("No player database found");
-				return false;
-			}
-
-			UserIO.WriteLogLine("Player database found");
-
-			string text = File.ReadAllText(fullPath);
-			var json = JsonConvert.DeserializeObject<PlayerDatabase>(text);
-
-			PlayerDb.PlayerIdentities = json.PlayerIdentities;
-			PlayerDb.StatGroups = json.StatGroups;
-			PlayerDb.LeaderboardStats = json.LeaderboardStats;
-
-			UserIO.WriteLogLine("{0} player identities", PlayerDb.PlayerIdentities.Count);
-			UserIO.WriteLogLine("{0} stat groups", PlayerDb.StatGroups.Count);
-			UserIO.WriteLogLine("{0} leaderboard stats", PlayerDb.LeaderboardStats.Count);
-
-			return true;
-		}
-
-		public void WritePlayerDatabase()
-		{
-			UserIO.WriteLogLine("Writing player database");
-
-			var text = JsonConvert.SerializeObject(PlayerDb, Formatting.Indented);
-			string fullPath = DatabaseFolder + "\\" + PlayerDatabaseFile;
-			File.WriteAllText(fullPath, text);
-		}
-
-		public bool LoadMatchDatabase(MatchTypeId gameMode)
-		{
-			string fullPath = DatabaseFolder + "\\" + gameMode.ToString() + MatchDatabaseFile;
-			if (!File.Exists(fullPath))
-			{
-				UserIO.WriteLogLine("No match database found");
-				return false;
-			}
-
-			UserIO.WriteLogLine("Match database found");
-
-			string text = File.ReadAllText(fullPath);
-			MatchDb.MatchData = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
-
-			UserIO.WriteLogLine("{0} match history stats", MatchDb.MatchData.Count);
-
-			return true;
-		}
-
-		public void WriteMatchDatabase(MatchTypeId gameMode)
-		{
-			UserIO.WriteLogLine("Writing match database");
-
-			var text = JsonConvert.SerializeObject(MatchDb.MatchData, Formatting.Indented);
-			string fullPath = DatabaseFolder + "\\" + gameMode.ToString() + MatchDatabaseFile;
-			File.WriteAllText(fullPath, text);
-		}
-
 
 		public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
 		{

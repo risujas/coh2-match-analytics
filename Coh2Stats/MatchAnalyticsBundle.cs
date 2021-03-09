@@ -8,7 +8,7 @@ namespace Coh2Stats
 	{
 		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> Matches = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
-		public static MatchAnalyticsBundle GetAllLoggedMatches(Database db)
+		public static MatchAnalyticsBundle GetAllLoggedMatches(DatabaseHandler db)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 			matchAnalyticsBundle.Matches = db.MatchDb.MatchData;
@@ -154,7 +154,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByPartialPlayerNickname(Database db, string nickname)
+		public MatchAnalyticsBundle FilterByPartialPlayerNickname(DatabaseHandler db, string nickname)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -203,7 +203,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByTopPercentile(Database db, double topPercentile, bool requireOnAll)
+		public MatchAnalyticsBundle FilterByTopPercentile(DatabaseHandler db, double topPercentile, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -260,7 +260,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByRank(Database db, int rankFloor, int rankCap, bool requireOnAll)
+		public MatchAnalyticsBundle FilterByRank(DatabaseHandler db, int rankFloor, int rankCap, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 

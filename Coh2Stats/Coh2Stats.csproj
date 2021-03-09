@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="UserIO.cs" />
     <Compile Include="MatchAnalyticsBundle.cs" />
-    <Compile Include="Database.cs" />
+    <Compile Include="DatabaseHandler.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

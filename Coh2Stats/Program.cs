@@ -131,9 +131,9 @@ namespace Coh2Stats
 
 		public static void SaveResultsToFile(MatchAnalyticsBundle mab, string fileName)
 		{
-			string finalFolder = Database.ApplicationDataFolder + "\\exports";
+			string finalFolder = DatabaseHandler.ApplicationDataFolder + "\\exports";
 
-			Directory.CreateDirectory(Database.ApplicationDataFolder);
+			Directory.CreateDirectory(DatabaseHandler.ApplicationDataFolder);
 			Directory.CreateDirectory(finalFolder);
 
 			string filePath = finalFolder + "\\" + fileName + ".txt";
@@ -146,7 +146,7 @@ namespace Coh2Stats
 			AnalyzeWinRatesByRace(mab, RaceFlag.British, filePath);
 		}
 
-		public static void RunInteractiveAnalysis(Database db, MatchAnalyticsBundle mab, string filterHistory = "")
+		public static void RunInteractiveAnalysis(DatabaseHandler db, MatchAnalyticsBundle mab, string filterHistory = "")
 		{
 			UserIO.WriteLogLine("Filter history: " + filterHistory);
 
@@ -259,7 +259,7 @@ namespace Coh2Stats
 			return UserIO.RunIntegerSelection(1, 4);
 		}
 
-		public static void RunModeOperations(Database db, int operatingMode, MatchTypeId gameMode)
+		public static void RunModeOperations(DatabaseHandler db, int operatingMode, MatchTypeId gameMode)
 		{
 			if (operatingMode == 1)
 			{
@@ -308,9 +308,8 @@ namespace Coh2Stats
 
 			MatchTypeId gameMode = RunGameModeSelection();
 
-			Database db = new Database();
-			db.LoadPlayerDatabase();
-			db.LoadMatchDatabase(gameMode);
+			DatabaseHandler db = new DatabaseHandler();
+			db.Load(gameMode);
 
 			while (true)
 			{
