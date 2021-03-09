@@ -313,8 +313,7 @@ namespace Coh2Stats
 			var culture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentCulture = culture;
 
-			DateTime dt = DateTime.Now;
-			UserIO.WriteLogLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
+			UserIO.InitLog();
 
 			MatchTypeId gameMode = RunGameModeSelection();
 

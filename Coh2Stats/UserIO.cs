@@ -8,6 +8,14 @@ namespace Coh2Stats
 	{
 		private static readonly string logFile = DatabaseHandler.ApplicationDataFolder + "\\" + "log.txt";
 
+		public static void InitLog()
+		{
+			File.Delete(logFile);
+
+			DateTime dt = DateTime.Now;
+			WriteLogLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
+		}
+
 		public static void WriteLogLine(string text, params object[] args)
 		{
 			if (args.Length > 0)
