@@ -13,7 +13,7 @@ namespace Coh2Stats
 		public static readonly string ApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
 		public static readonly string DatabaseFolder = ApplicationDataFolder + "\\databases";
 
-		private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
+		public Dictionary<LeaderboardId, int> LeaderboardSizes = new Dictionary<LeaderboardId, int>();
 
 		public DatabaseHandler()
 		{
@@ -105,16 +105,16 @@ namespace Coh2Stats
 				var probeResponse = RelicAPI.Leaderboard.GetById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
 
-				if (leaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
+				if (LeaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
 				{
-					leaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
+					LeaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
 				}
 				else
 				{
-					leaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
+					LeaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
 				}
 
-				UserIO.WriteLogLine(((LeaderboardId)leaderboardIndex).ToString() + " " + leaderboardSizes[(LeaderboardId)leaderboardIndex]);
+				UserIO.WriteLogLine(((LeaderboardId)leaderboardIndex).ToString() + " " + LeaderboardSizes[(LeaderboardId)leaderboardIndex]);
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace Coh2Stats
 					continue;
 				}
 
-				int leaderboardMaxRank = leaderboardSizes[(LeaderboardId)leaderboardIndex];
+				int leaderboardMaxRank = LeaderboardSizes[(LeaderboardId)leaderboardIndex];
 				int batchStartingIndex = startingRank;
 
 				if (maxRank != -1)
@@ -227,14 +227,14 @@ namespace Coh2Stats
 
 		public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)
 		{
-			if (leaderboardSizes.ContainsKey(id) == false)
+			if (LeaderboardSizes.ContainsKey(id) == false)
 			{
 				var probeResponse = RelicAPI.Leaderboard.GetById((int)id, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
-				leaderboardSizes.Add(id, leaderboardMaxRank);
+				LeaderboardSizes.Add(id, leaderboardMaxRank);
 			}
 
-			int maxRank = leaderboardSizes[id];
+			int maxRank = LeaderboardSizes[id];
 			double cutoffRank = maxRank * (percentile / 100.0);
 
 			return (int)cutoffRank;
