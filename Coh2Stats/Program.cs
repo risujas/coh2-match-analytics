@@ -293,7 +293,7 @@ namespace Coh2Stats
 
 			if (operatingMode == 3)
 			{
-				MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches(db);
+				MatchAnalyticsBundle mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByStartGameTime((int)relevantTimeCutoff, -1).FilterByMatchType(gameMode);
 				RunInteractiveAnalysis(db, mab);
 			}
 		}
