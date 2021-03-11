@@ -24,10 +24,7 @@ namespace Coh2Stats
 				client.BaseAddress = new Uri(requestUrl);
 				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-				int maxAttempts = 10;
-				int attemptInterval = 1000;
-
-				for (int i = 1; i <= maxAttempts; i++)
+				while (true)
 				{
 					try
 					{
@@ -38,14 +35,9 @@ namespace Coh2Stats
 
 					catch (Exception e)
 					{
-						Console.Write(e.Message);
+						UserIO.LogRootException(e);
 
-						Thread.Sleep(attemptInterval);
-
-						if (i == maxAttempts)
-						{
-							throw e;
-						}
+						Thread.Sleep(5000);
 					}
 				}
 

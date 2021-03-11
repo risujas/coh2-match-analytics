@@ -37,6 +37,19 @@ namespace Coh2Stats
 			}
 		}
 
+		public static void LogRootException(Exception e)
+		{
+			if (e.InnerException == null)
+			{
+				WriteLogLine("An error occurred: " + e.Message);
+			}
+
+			else
+			{
+				LogRootException(e.InnerException);
+			}
+		}
+
 		public static void PrintUIPrompt(string text, params object[] args)
 		{
 			if (args.Length > 0)
