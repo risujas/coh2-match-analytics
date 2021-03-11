@@ -10,8 +10,7 @@ namespace Coh2Stats
 
 		public static void InitLog()
 		{
-			DateTime dt = DateTime.UtcNow;
-			DateTimeOffset dto = new DateTimeOffset(dt);
+			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
 
 			logFile = DatabaseHandler.ApplicationDataFolder + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
 
@@ -25,6 +24,7 @@ namespace Coh2Stats
 				}
 			}
 
+			DateTime dt = DateTime.Now;
 			WriteLogLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
 		}
 
@@ -37,7 +37,7 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] >>\t" + text;
+			string message = "[" + time + "]\t" + text;
 
 			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine(message);
