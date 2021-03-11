@@ -6,13 +6,25 @@ namespace Coh2Stats
 {
 	internal static class UserIO
 	{
-		private static readonly string logFile = DatabaseHandler.ApplicationDataFolder + "\\" + "log.txt";
+		private static string logFile;
 
 		public static void InitLog()
 		{
-			File.Delete(logFile);
+			DateTime dt = DateTime.UtcNow;
+			DateTimeOffset dto = new DateTimeOffset(dt);
 
-			DateTime dt = DateTime.Now;
+			logFile = DatabaseHandler.ApplicationDataFolder + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
+
+			if (Properties.Settings1.Default.DeleteOldLogs)
+			{
+				string[] files = Directory.GetFiles(DatabaseHandler.ApplicationDataFolder, "*_log.txt");
+				
+				foreach (var f in files)
+				{
+					File.Delete(f);
+				}
+			}
+
 			WriteLogLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
 		}
 
