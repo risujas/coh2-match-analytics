@@ -26,6 +26,9 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			WriteLogLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
+#if DEBUG
+			WriteLogLine("Debug build");
+#endif
 		}
 
 		public static void WriteLogLine(string text, params object[] args)
