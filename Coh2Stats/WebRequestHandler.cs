@@ -14,9 +14,12 @@ namespace Coh2Stats
 
 	internal class WebRequestHandler
 	{
+		private const long requestCooldownDuration = 1000;
+		private static long requestCooldownStart = 0;
+
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)
 		{
-			string responseString = "";
+			string responseString;
 
 			HttpClient client;
 			using (client = new HttpClient())
@@ -28,8 +31,13 @@ namespace Coh2Stats
 				{
 					try
 					{
+						WaitForRequestCooldown();
+
 						HttpResponseMessage responseObject = client.GetAsync(requestParams).Result;
 						responseString = responseObject.Content.ReadAsStringAsync().Result;
+
+						ResetRequestCooldown();
+
 						break;
 					}
 
@@ -37,7 +45,7 @@ namespace Coh2Stats
 					{
 						UserIO.LogRootException(e);
 
-						Thread.Sleep(5000);
+						ResetRequestCooldown();
 					}
 				}
 
@@ -51,6 +59,26 @@ namespace Coh2Stats
 			string responseString = GetStringJsonResponse(requestUrl, requestParams);
 			T structuredResponse = JsonConvert.DeserializeObject<T>(responseString);
 			return structuredResponse;
+		}
+
+		private static void ResetRequestCooldown()
+		{
+			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
+			requestCooldownStart = dto.ToUnixTimeMilliseconds();
+		}
+
+		private static void WaitForRequestCooldown()
+		{
+			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
+			long current = dto.ToUnixTimeMilliseconds();
+
+			long end = requestCooldownStart + requestCooldownDuration;
+			long difference = end - current;
+
+			if (difference > 0)
+			{
+				Thread.Sleep((int)difference);
+			}
 		}
 	}
 }
