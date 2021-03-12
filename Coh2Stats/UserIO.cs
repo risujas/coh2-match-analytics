@@ -8,7 +8,7 @@ namespace Coh2Stats
 	{
 		private static string logFile;
 
-		public static void InitLog()
+		static UserIO()
 		{
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
 
@@ -17,7 +17,7 @@ namespace Coh2Stats
 			if (Properties.Settings1.Default.DeleteOldLogs)
 			{
 				string[] files = Directory.GetFiles(DatabaseHandler.ApplicationDataFolder, "*_log.txt");
-				
+
 				foreach (var f in files)
 				{
 					File.Delete(f);
