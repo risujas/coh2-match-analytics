@@ -150,6 +150,40 @@ namespace Coh2Stats
 		{
 			UserIO.WriteLogLine("Filter history: " + filterHistory);
 
+			var filters = filterHistory.Split(',').ToList();
+			if (filters.Count > 0)
+			{
+				filters.RemoveAt(0);
+				
+				foreach (var f in filters)
+				{
+					var parts = f.Split('-');
+					var first = parts[0];
+					var second = parts[1];
+					
+					if (first == "armies")
+					{
+						RaceFlag flags = GenerateRaceFlag(second.Contains("w"), second.Contains("s"), second.Contains("u"), second.Contains("o"), second.Contains("b"));
+						mab = mab.FilterByAllowedRaces(flags);
+					}
+
+					if (first == "%in")
+					{
+						mab = mab.FilterByPercentile(db, double.Parse(second), true, true);
+					}
+
+					if (first == "%ex")
+					{
+						mab = mab.FilterByPercentile(db, double.Parse(second), true, false);
+					}
+
+					if (first == "age")
+					{
+						mab = mab.FilterByMaxAgeInHours(int.Parse(second));
+					}
+				}
+			}
+
 			AnalyzeWinRatesByRace(mab, RaceFlag.German);
 			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
 			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
@@ -204,13 +238,12 @@ namespace Coh2Stats
 				int topOrBottom = UserIO.RunIntegerSelection(1, 2);
 				bool useTopPercentile = (topOrBottom == 1);
 
-				string filterString = ",top-";
+				string filterString = ",%in-";
 				if (!useTopPercentile)
 				{
-					filterString = ",bottom-";
+					filterString = ",%ex-";
 				}
 
-				mab = mab.FilterByPercentile(db, percentile, true, useTopPercentile);
 				RunInteractiveAnalysis(db, mab, filterHistory + filterString + percentile);
 			}
 
@@ -244,9 +277,6 @@ namespace Coh2Stats
 					}
 				}
 
-				RaceFlag flags = GenerateRaceFlag(partsList.Contains("w"), partsList.Contains("s"), partsList.Contains("u"), partsList.Contains("o"), partsList.Contains("b"));
-				mab = mab.FilterByAllowedRaces(flags);
-
 				RunInteractiveAnalysis(db, mab, filterHistory + ",armies-" + string.Join("", partsList));
 			}
 
@@ -255,7 +285,6 @@ namespace Coh2Stats
 				UserIO.PrintUIPrompt("Please select maximum allowed age for matches in hours: ");
 				int hours = UserIO.RunIntegerSelection(0, 8760);
 
-				mab = mab.FilterByMaxAgeInHours(hours);
 				RunInteractiveAnalysis(db, mab, filterHistory + ",age-" + hours);
 			}
 		}
