@@ -152,176 +152,181 @@ namespace Coh2Stats
 
 		public static void RunInteractiveAnalysis(DatabaseHandler db, MatchAnalyticsBundle mab, string filterHistory = "")
 		{
-			UserIO.WriteLogLine("Filter history: " + filterHistory);
-
-			var filters = filterHistory.Split(',').ToList();
-			if (filters.Count > 0)
+			while (true)
 			{
-				filters.RemoveAt(0);
-				
-				foreach (var f in filters)
+				mab = MatchAnalyticsBundle.GetAllLoggedMatches(db);
+
+				UserIO.WriteLogLine("Filter history: " + filterHistory);
+
+				var filters = filterHistory.Split(',').ToList();
+				if (filters.Count > 0)
 				{
-					var parts = f.Split('-');
-					var first = parts[0];
-					var second = parts[1];
-					
-					if (first == factionFilterTag)
+					filters.RemoveAt(0);
+
+					foreach (var f in filters)
 					{
-						RaceFlag flags = GenerateRaceFlag(second.Contains("w"), second.Contains("s"), second.Contains("u"), second.Contains("o"), second.Contains("b"));
-						mab = mab.FilterByAllowedRaces(flags);
-					}
+						var parts = f.Split('-');
+						var first = parts[0];
+						var second = parts[1];
 
-					if (first == inclusivePercentileFilterTag)
-					{
-						mab = mab.FilterByPercentile(db, double.Parse(second), true, true);
-					}
-
-					if (first == exclusivePercentileFilterTag)
-					{
-						mab = mab.FilterByPercentile(db, double.Parse(second), true, false);
-					}
-
-					if (first == ageFilterTag)
-					{
-						mab = mab.FilterByMaxAgeInHours(int.Parse(second));
-					}
-				}
-			}
-
-			AnalyzeWinRatesByRace(mab, RaceFlag.German);
-			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
-			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
-			AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
-			AnalyzeWinRatesByRace(mab, RaceFlag.British);
-
-			UserIO.WriteLogLine("");
-
-			var playCounts = mab.GetOrderedMapPlayCount();
-			foreach (var p in playCounts)
-			{
-				UserIO.WriteLogLine(p.Value + " " + p.Key);
-			}
-
-			UserIO.WriteLogLine("");
-
-			UserIO.PrintUIPrompt("Q - Finish running the interactive analysis");
-			UserIO.PrintUIPrompt("S - Export the current results into a file");
-			UserIO.PrintUIPrompt("D - Remove a filter");
-			UserIO.PrintUIPrompt("1 - Filter by percentile");
-			UserIO.PrintUIPrompt("2 - Filter by faction");
-			UserIO.PrintUIPrompt("3 - Filter by match age in hours");
-			UserIO.PrintUIPrompt("Please select an operation.");
-
-			char operation = UserIO.RunCharSelection('Q', 'S', 'D', '1', '2', '3');
-			operation = char.ToLower(operation);
-
-			if (operation == 'q')
-			{
-				return;
-			}
-
-			if (operation == 's')
-			{
-				string timestamp = DateTime.Now.ToString("ddMMyyyyHHmmss");
-				string fileName = timestamp + filterHistory;
-				SaveResultsToFile(mab, fileName);
-
-				RunInteractiveAnalysis(db, mab, filterHistory);
-			}
-
-			if (operation == 'd')
-			{
-				string newFilters = string.Empty;
-				filters = filterHistory.Split(',').ToList();
-
-				if (filters.Count > 1)
-				{
-					for (int i = 1; i < filters.Count; i++)
-					{
-						UserIO.PrintUIPrompt(i.ToString() + " - " + filters[i]);
-					}
-					UserIO.PrintUIPrompt("Please select the filter you want to remove.");
-					int selection = UserIO.RunIntegerSelection(1, filters.Count);
-
-					for (int i = 0; i < filters.Count; i++)
-					{
-						if (i == selection)
+						if (first == factionFilterTag)
 						{
-							continue;
+							RaceFlag flags = GenerateRaceFlag(second.Contains("w"), second.Contains("s"), second.Contains("u"), second.Contains("o"), second.Contains("b"));
+							mab = mab.FilterByAllowedRaces(flags);
 						}
 
-						if (filters[i] == string.Empty)
+						if (first == inclusivePercentileFilterTag)
 						{
-							continue;
+							mab = mab.FilterByPercentile(db, double.Parse(second), true, true);
 						}
 
-						newFilters += ",";
-						newFilters += filters[i];
+						if (first == exclusivePercentileFilterTag)
+						{
+							mab = mab.FilterByPercentile(db, double.Parse(second), true, false);
+						}
+
+						if (first == ageFilterTag)
+						{
+							mab = mab.FilterByMaxAgeInHours(int.Parse(second));
+						}
 					}
 				}
 
-				RunInteractiveAnalysis(db, mab, newFilters);
-			}
+				AnalyzeWinRatesByRace(mab, RaceFlag.German);
+				AnalyzeWinRatesByRace(mab, RaceFlag.WGerman);
+				AnalyzeWinRatesByRace(mab, RaceFlag.Soviet);
+				AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
+				AnalyzeWinRatesByRace(mab, RaceFlag.British);
 
-			if (operation == '1')
-			{
-				UserIO.PrintUIPrompt("Please select the cutoff percentile. More options will be presented afterwards.");
-				double percentile = UserIO.RunFloatingPointInput();
+				UserIO.WriteLogLine("");
 
-				UserIO.PrintUIPrompt("1 - get matches for the top {0}% of the playerbase", percentile);
-				UserIO.PrintUIPrompt("2 - get matches for the bottom {0}% of the playerbase", (100.0 - percentile));
-				UserIO.PrintUIPrompt("Please make your selection.");
-				int topOrBottom = UserIO.RunIntegerSelection(1, 2);
-				bool useTopPercentile = (topOrBottom == 1);
-
-				string filterString = "," + inclusivePercentileFilterTag + "-";
-				if (!useTopPercentile)
+				var playCounts = mab.GetOrderedMapPlayCount();
+				foreach (var p in playCounts)
 				{
-					filterString = "," + exclusivePercentileFilterTag + "-";
+					UserIO.WriteLogLine(p.Value + " " + p.Key);
 				}
 
-				RunInteractiveAnalysis(db, mab, filterHistory + filterString + percentile);
-			}
+				UserIO.WriteLogLine("");
 
-			if (operation == '2')	
-			{
-				UserIO.PrintUIPrompt("W - Wehrmacht Ostheer");
-				UserIO.PrintUIPrompt("S - Soviet Union");
-				UserIO.PrintUIPrompt("U - United States Forces");
-				UserIO.PrintUIPrompt("O - Oberkommando West");
-				UserIO.PrintUIPrompt("B - British Forces");
-				UserIO.PrintUIPrompt("Input the factions you want to be included in the results. You can input multiple factions by separating the characters with commas or spaces.");
+				UserIO.PrintUIPrompt("Q - Finish running the interactive analysis");
+				UserIO.PrintUIPrompt("S - Export the current results into a file");
+				UserIO.PrintUIPrompt("D - Remove a filter");
+				UserIO.PrintUIPrompt("1 - Filter by percentile");
+				UserIO.PrintUIPrompt("2 - Filter by faction");
+				UserIO.PrintUIPrompt("3 - Filter by match age in hours");
+				UserIO.PrintUIPrompt("Please select an operation.");
 
-				bool goodParse = false;
-				List<string> partsList = null;
+				char operation = UserIO.RunCharSelection('Q', 'S', 'D', '1', '2', '3');
+				operation = char.ToLower(operation);
 
-				while (!goodParse)
+				if (operation == 'q')
 				{
-					string input = UserIO.RunStringInput();
-					var parts = input.Split(',', ' ');
-
-					for (int i = 0; i < parts.Length; i++)
-					{
-						parts[i] = parts[i].ToLower().Trim();
-					}
-
-					partsList = parts.ToList();
-
-					if (partsList.Contains("w") || partsList.Contains("s") || partsList.Contains("u") || partsList.Contains("o") || partsList.Contains("b"))
-					{
-						goodParse = true;
-					}
+					return;
 				}
 
-				RunInteractiveAnalysis(db, mab, filterHistory + "," + factionFilterTag + "-" + string.Join("", partsList));
-			}
+				if (operation == 's')
+				{
+					string timestamp = DateTime.Now.ToString("ddMMyyyyHHmmss");
+					string fileName = timestamp + filterHistory;
+					SaveResultsToFile(mab, fileName);
 
-			if (operation == '3')
-			{
-				UserIO.PrintUIPrompt("Please select maximum allowed age for matches in hours: ");
-				int hours = UserIO.RunIntegerSelection(0, 8760);
+					RunInteractiveAnalysis(db, mab, filterHistory);
+				}
 
-				RunInteractiveAnalysis(db, mab, filterHistory + "," + ageFilterTag + "-" + hours);
+				if (operation == 'd')
+				{
+					string newFilters = string.Empty;
+					filters = filterHistory.Split(',').ToList();
+
+					if (filters.Count > 1)
+					{
+						for (int i = 1; i < filters.Count; i++)
+						{
+							UserIO.PrintUIPrompt(i.ToString() + " - " + filters[i]);
+						}
+						UserIO.PrintUIPrompt("Please select the filter you want to remove.");
+						int selection = UserIO.RunIntegerSelection(1, filters.Count);
+
+						for (int i = 0; i < filters.Count; i++)
+						{
+							if (i == selection)
+							{
+								continue;
+							}
+
+							if (filters[i] == string.Empty)
+							{
+								continue;
+							}
+
+							newFilters += ",";
+							newFilters += filters[i];
+						}
+					}
+
+					RunInteractiveAnalysis(db, mab, newFilters);
+				}
+
+				if (operation == '1')
+				{
+					UserIO.PrintUIPrompt("Please select the cutoff percentile. More options will be presented afterwards.");
+					double percentile = UserIO.RunFloatingPointInput();
+
+					UserIO.PrintUIPrompt("1 - get matches for the top {0}% of the playerbase", percentile);
+					UserIO.PrintUIPrompt("2 - get matches for the bottom {0}% of the playerbase", (100.0 - percentile));
+					UserIO.PrintUIPrompt("Please make your selection.");
+					int topOrBottom = UserIO.RunIntegerSelection(1, 2);
+					bool useTopPercentile = (topOrBottom == 1);
+
+					string filterString = "," + inclusivePercentileFilterTag + "-";
+					if (!useTopPercentile)
+					{
+						filterString = "," + exclusivePercentileFilterTag + "-";
+					}
+
+					filterHistory += filterString + percentile;
+				}
+
+				if (operation == '2')
+				{
+					UserIO.PrintUIPrompt("W - Wehrmacht Ostheer");
+					UserIO.PrintUIPrompt("S - Soviet Union");
+					UserIO.PrintUIPrompt("U - United States Forces");
+					UserIO.PrintUIPrompt("O - Oberkommando West");
+					UserIO.PrintUIPrompt("B - British Forces");
+					UserIO.PrintUIPrompt("Input the factions you want to be included in the results. You can input multiple factions by separating the characters with commas or spaces.");
+
+					bool goodParse = false;
+					List<string> partsList = null;
+
+					while (!goodParse)
+					{
+						string input = UserIO.RunStringInput();
+						var parts = input.Split(',', ' ');
+
+						for (int i = 0; i < parts.Length; i++)
+						{
+							parts[i] = parts[i].ToLower().Trim();
+						}
+
+						partsList = parts.ToList();
+
+						if (partsList.Contains("w") || partsList.Contains("s") || partsList.Contains("u") || partsList.Contains("o") || partsList.Contains("b"))
+						{
+							goodParse = true;
+						}
+					}
+
+					filterHistory += "," + factionFilterTag + "-" + string.Join("", partsList);
+				}
+
+				if (operation == '3')
+				{
+					UserIO.PrintUIPrompt("Please select maximum allowed age for matches in hours: ");
+					int hours = UserIO.RunIntegerSelection(0, 8760);
+
+					filterHistory += "," + ageFilterTag + "-" + hours;
+				}
 			}
 		}
 
