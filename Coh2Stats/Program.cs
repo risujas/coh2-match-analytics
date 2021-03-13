@@ -229,8 +229,6 @@ namespace Coh2Stats
 					string timestamp = DateTime.Now.ToString("ddMMyyyyHHmmss");
 					string fileName = timestamp + filterHistory;
 					SaveResultsToFile(mab, fileName);
-
-					RunInteractiveAnalysis(db, mab, filterHistory);
 				}
 
 				if (operation == 'd')
@@ -264,7 +262,7 @@ namespace Coh2Stats
 						}
 					}
 
-					RunInteractiveAnalysis(db, mab, newFilters);
+					filterHistory = newFilters;
 				}
 
 				if (operation == '1')
