@@ -32,45 +32,47 @@ namespace Coh2Stats
 			return UserIO.RunIntegerSelection(1, 4);
 		}
 
+		public static void RunCooldownProcedure()
+		{
+			Stopwatch sw = Stopwatch.StartNew();
+			double sessionInterval = 1200;
+			int notificationInterval = 60;
+
+			while (sw.Elapsed.TotalSeconds < sessionInterval)
+			{
+				double difference = sessionInterval - sw.Elapsed.TotalSeconds;
+				int intDiff = (int)difference;
+
+				if (intDiff % notificationInterval == 0)
+				{
+					UserIO.WriteLogLine("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program, or ESCAPE to return to the start screen.", difference);
+					Thread.Sleep(1000);
+				}
+
+				if (Console.KeyAvailable)
+				{
+					var cki = Console.ReadKey();
+					if (cki.Key == ConsoleKey.Escape)
+					{
+						return;
+					}
+				}
+			}
+		}
+
 		public static void RunModeOperations(DatabaseHandler db, int operatingMode, MatchTypeId gameMode)
 		{
 			if (operatingMode == 1)
 			{
-				db.ProcessPlayers(gameMode);
-				db.ProcessMatches(gameMode, MatchAnalytics.relevantTimeCutoffSeconds);
+				db.ParseAndProcess(gameMode);
 			}
 
 			if (operatingMode == 2)
 			{
 				while (true)
 				{
-					db.ProcessPlayers(gameMode);
-					db.ProcessMatches(gameMode, MatchAnalytics.relevantTimeCutoffSeconds);
-
-					Stopwatch sw = Stopwatch.StartNew();
-					double sessionInterval = 1200;
-					int notificationInterval = 60;
-
-					while (sw.Elapsed.TotalSeconds < sessionInterval)
-					{
-						double difference = sessionInterval - sw.Elapsed.TotalSeconds;
-						int intDiff = (int)difference;
-
-						if (intDiff % notificationInterval == 0)
-						{
-							UserIO.WriteLogLine("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program, or ESCAPE to return to the start screen.", difference);
-							Thread.Sleep(1000);
-						}
-
-						if (Console.KeyAvailable)
-						{
-							var cki = Console.ReadKey();
-							if (cki.Key == ConsoleKey.Escape)
-							{
-								return;
-							}
-						}
-					}
+					db.ParseAndProcess(gameMode);
+					RunCooldownProcedure();
 				}
 			}
 

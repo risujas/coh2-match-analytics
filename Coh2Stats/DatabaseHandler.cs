@@ -26,7 +26,13 @@ namespace Coh2Stats
 			MatchDb.Load(DatabaseFolder, gameMode);
 		}
 
-		public void ProcessPlayers(MatchTypeId gameMode)
+		public void ParseAndProcess(MatchTypeId gameMode)
+		{
+			ProcessPlayers(gameMode);
+			ProcessMatches(gameMode, MatchAnalytics.relevantTimeCutoffSeconds);
+		}
+
+		private void ProcessPlayers(MatchTypeId gameMode)
 		{
 			PlayerDb.FindNewPlayers(gameMode, 1, -1);
 			PlayerDb.UpdatePlayerDetails(gameMode);
@@ -34,7 +40,7 @@ namespace Coh2Stats
 			PlayerDb.Write(DatabaseFolder);
 		}
 
-		public void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
+		private void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
 		{
 			var playersToBeProcessed = PlayerDb.GetRankedPlayersFromDatabase(gameMode);
 			int oldMatchCount = MatchDb.MatchData.Count;
