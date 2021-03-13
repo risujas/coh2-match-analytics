@@ -49,13 +49,14 @@ namespace Coh2Stats
 
 					Stopwatch sw = Stopwatch.StartNew();
 					double sessionInterval = 1200;
+					int notificationInterval = 60;
 
 					while (sw.Elapsed.TotalSeconds < sessionInterval)
 					{
 						double difference = sessionInterval - sw.Elapsed.TotalSeconds;
 						int intDiff = (int)difference;
 
-						if (intDiff % 60 == 0)
+						if (intDiff % notificationInterval == 0)
 						{
 							UserIO.WriteLogLine("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program.", difference);
 							Thread.Sleep(1000);
