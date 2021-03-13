@@ -168,7 +168,7 @@ namespace Coh2Stats
 
 			UserIO.PrintUIPrompt("Q - Finish running the interactive analysis");
 			UserIO.PrintUIPrompt("S - Export the current results into a file");
-			UserIO.PrintUIPrompt("1 - Filter by top percentile of players");
+			UserIO.PrintUIPrompt("1 - Filter by percentile");
 			UserIO.PrintUIPrompt("2 - Filter by faction");
 			UserIO.PrintUIPrompt("3 - Filter by match age in hours");
 			UserIO.PrintUIPrompt("Please select an operation.");
@@ -195,14 +195,26 @@ namespace Coh2Stats
 
 			if (operation == '1')
 			{
-				UserIO.PrintUIPrompt("Please select the percentile of top players to be included in the results.");
+				UserIO.PrintUIPrompt("Please select the cutoff percentile. More options will be presented afterwards.");
 				double percentile = UserIO.RunFloatingPointInput();
 
-				mab = mab.FilterByTopPercentile(db, percentile, true);
-				RunInteractiveAnalysis(db, mab, filterHistory + ",tp-" + percentile);
+				UserIO.PrintUIPrompt("1 - get matches for the top {0}% of the playerbase", percentile);
+				UserIO.PrintUIPrompt("2 - get matches for the bottom {0}% of the playerbase", (100.0 - percentile));
+				UserIO.PrintUIPrompt("Please select one option.");
+				int topOrBottom = UserIO.RunIntegerSelection(1, 2);
+				bool useTopPercentile = (topOrBottom == 1);
+
+				string filterString = ",top-";
+				if (!useTopPercentile)
+				{
+					filterString = ",bottom-";
+				}
+
+				mab = mab.FilterByPercentile(db, percentile, true, useTopPercentile);
+				RunInteractiveAnalysis(db, mab, filterHistory + filterString + percentile);
 			}
 
-			if (operation == '2')
+			if (operation == '2')	
 			{
 				UserIO.PrintUIPrompt("W - Wehrmacht Ostheer");
 				UserIO.PrintUIPrompt("S - Soviet Union");
@@ -235,7 +247,7 @@ namespace Coh2Stats
 				RaceFlag flags = GenerateRaceFlag(partsList.Contains("w"), partsList.Contains("s"), partsList.Contains("u"), partsList.Contains("o"), partsList.Contains("b"));
 				mab = mab.FilterByAllowedRaces(flags);
 
-				RunInteractiveAnalysis(db, mab, filterHistory + ",r-" + string.Join("", partsList));
+				RunInteractiveAnalysis(db, mab, filterHistory + ",armies-" + string.Join("", partsList));
 			}
 
 			if (operation == '3')
@@ -244,7 +256,7 @@ namespace Coh2Stats
 				int hours = UserIO.RunIntegerSelection(0, 8760);
 
 				mab = mab.FilterByMaxAgeInHours(hours);
-				RunInteractiveAnalysis(db, mab, filterHistory + ",ma-" + hours);
+				RunInteractiveAnalysis(db, mab, filterHistory + ",age-" + hours);
 			}
 		}
 

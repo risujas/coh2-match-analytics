@@ -124,14 +124,14 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByTopPercentile(DatabaseHandler db, double topPercentile, bool requireOnAll)
+		public MatchAnalyticsBundle FilterByPercentile(DatabaseHandler db, double percentile, bool requireOnAll, bool useTopPercentile)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
 			for (int i = 0; i < Matches.Count; i++)
 			{
 				var match = Matches[i];
-				int numGoodPlayers = 0;
+				int numValidPlayers = 0;
 
 				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
 				{
@@ -155,14 +155,29 @@ namespace Coh2Stats
 							continue;
 						}
 
-						int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, topPercentile);
-						if (soloStat.Rank <= cutoffRank)
+						if (useTopPercentile)
 						{
-							numGoodPlayers++;
+							int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
+							if (soloStat.Rank <= cutoffRank)
+							{
+								numValidPlayers++;
+							}
+							else if (requireOnAll)
+							{
+								break;
+							}
 						}
-						else if (requireOnAll)
+						else
 						{
-							break;
+							int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
+							if (soloStat.Rank > cutoffRank)
+							{
+								numValidPlayers++;
+							}
+							else if (requireOnAll)
+							{
+								break;
+							}
 						}
 					}
 
@@ -209,16 +224,16 @@ namespace Coh2Stats
 						int cutoffRank;
 						if (!useTeamLb)
 						{
-							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, topPercentile);
+							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
 						}
 						else
 						{
-							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(teamLb, topPercentile);
+							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(teamLb, percentile);
 						}
 
 						if (selectedStat.Rank <= cutoffRank)
 						{
-							numGoodPlayers++;
+							numValidPlayers++;
 						}
 						else if (requireOnAll)
 						{
@@ -227,14 +242,14 @@ namespace Coh2Stats
 					}
 				}
 
-				if (numGoodPlayers > 0)
+				if (numValidPlayers > 0)
 				{
 					if (!requireOnAll)
 					{
 						matchAnalyticsBundle.Matches.Add(match);
 					}
 
-					else if (requireOnAll && numGoodPlayers == match.MaxPlayers)
+					else if (requireOnAll && numValidPlayers == match.MaxPlayers)
 					{
 						matchAnalyticsBundle.Matches.Add(match);
 					}
