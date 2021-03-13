@@ -11,6 +11,10 @@ namespace Coh2Stats
 	internal class Program
 	{
 		private const long relevantTimeCutoff = 1614376800;
+		private const string factionFilterTag = "fac";
+		private const string inclusivePercentileFilterTag = "%in";
+		private const string exclusivePercentileFilterTag = "%ex";
+		private const string ageFilterTag = "age";
 
 		public static RaceFlag GenerateRaceFlag(bool includeGerman, bool includeSoviet, bool includeAEF, bool includeWGerman, bool includeBritish)
 		{
@@ -161,23 +165,23 @@ namespace Coh2Stats
 					var first = parts[0];
 					var second = parts[1];
 					
-					if (first == "armies")
+					if (first == factionFilterTag)
 					{
 						RaceFlag flags = GenerateRaceFlag(second.Contains("w"), second.Contains("s"), second.Contains("u"), second.Contains("o"), second.Contains("b"));
 						mab = mab.FilterByAllowedRaces(flags);
 					}
 
-					if (first == "%in")
+					if (first == inclusivePercentileFilterTag)
 					{
 						mab = mab.FilterByPercentile(db, double.Parse(second), true, true);
 					}
 
-					if (first == "%ex")
+					if (first == exclusivePercentileFilterTag)
 					{
 						mab = mab.FilterByPercentile(db, double.Parse(second), true, false);
 					}
 
-					if (first == "age")
+					if (first == ageFilterTag)
 					{
 						mab = mab.FilterByMaxAgeInHours(int.Parse(second));
 					}
@@ -235,10 +239,10 @@ namespace Coh2Stats
 				int topOrBottom = UserIO.RunIntegerSelection(1, 2);
 				bool useTopPercentile = (topOrBottom == 1);
 
-				string filterString = ",%in-";
+				string filterString = "," + inclusivePercentileFilterTag + "-";
 				if (!useTopPercentile)
 				{
-					filterString = ",%ex-";
+					filterString = "," + exclusivePercentileFilterTag + "-";
 				}
 
 				RunInteractiveAnalysis(db, mab, filterHistory + filterString + percentile);
@@ -274,7 +278,7 @@ namespace Coh2Stats
 					}
 				}
 
-				RunInteractiveAnalysis(db, mab, filterHistory + ",armies-" + string.Join("", partsList));
+				RunInteractiveAnalysis(db, mab, filterHistory + "," + factionFilterTag + "-" + string.Join("", partsList));
 			}
 
 			if (operation == '3')
@@ -282,7 +286,7 @@ namespace Coh2Stats
 				UserIO.PrintUIPrompt("Please select maximum allowed age for matches in hours: ");
 				int hours = UserIO.RunIntegerSelection(0, 8760);
 
-				RunInteractiveAnalysis(db, mab, filterHistory + ",age-" + hours);
+				RunInteractiveAnalysis(db, mab, filterHistory + "," + ageFilterTag + "-" + hours);
 			}
 		}
 
