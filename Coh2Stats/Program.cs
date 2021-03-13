@@ -206,12 +206,13 @@ namespace Coh2Stats
 
 			UserIO.PrintUIPrompt("Q - Finish running the interactive analysis");
 			UserIO.PrintUIPrompt("S - Export the current results into a file");
+			UserIO.PrintUIPrompt("D - Remove a filter");
 			UserIO.PrintUIPrompt("1 - Filter by percentile");
 			UserIO.PrintUIPrompt("2 - Filter by faction");
 			UserIO.PrintUIPrompt("3 - Filter by match age in hours");
 			UserIO.PrintUIPrompt("Please select an operation.");
 
-			char operation = UserIO.RunCharSelection('Q', 'S', '1', '2', '3');
+			char operation = UserIO.RunCharSelection('Q', 'S', 'D', '1', '2', '3');
 			operation = char.ToLower(operation);
 
 			if (operation == 'q')
@@ -228,6 +229,40 @@ namespace Coh2Stats
 				RunInteractiveAnalysis(db, mab, filterHistory);
 			}
 
+			if (operation == 'd')
+			{
+				string newFilters = string.Empty;
+				filters = filterHistory.Split(',').ToList();
+
+				if (filters.Count > 1)
+				{
+					for (int i = 1; i < filters.Count; i++)
+					{
+						UserIO.PrintUIPrompt(i.ToString() + " - " + filters[i]);
+					}
+					UserIO.PrintUIPrompt("Please select the filter you want to remove.");
+					int selection = UserIO.RunIntegerSelection(1, filters.Count);
+
+					for (int i = 0; i < filters.Count; i++)
+					{
+						if (i == selection)
+						{
+							continue;
+						}
+
+						if (filters[i] == string.Empty)
+						{
+							continue;
+						}
+
+						newFilters += ",";
+						newFilters += filters[i];
+					}
+				}
+
+				RunInteractiveAnalysis(db, mab, newFilters);
+			}
+
 			if (operation == '1')
 			{
 				UserIO.PrintUIPrompt("Please select the cutoff percentile. More options will be presented afterwards.");
@@ -235,7 +270,7 @@ namespace Coh2Stats
 
 				UserIO.PrintUIPrompt("1 - get matches for the top {0}% of the playerbase", percentile);
 				UserIO.PrintUIPrompt("2 - get matches for the bottom {0}% of the playerbase", (100.0 - percentile));
-				UserIO.PrintUIPrompt("Please select one option.");
+				UserIO.PrintUIPrompt("Please make your selection.");
 				int topOrBottom = UserIO.RunIntegerSelection(1, 2);
 				bool useTopPercentile = (topOrBottom == 1);
 
