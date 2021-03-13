@@ -45,7 +45,7 @@ namespace Coh2Stats
 
 				if (intDiff % notificationInterval == 0)
 				{
-					UserIO.WriteLogLine("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program, or ESCAPE to return to the start screen.", difference);
+					UserIO.PrintUIPrompt("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program, or ESCAPE to return to the start screen.", difference);
 					Thread.Sleep(1000);
 				}
 
