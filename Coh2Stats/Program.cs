@@ -154,6 +154,8 @@ namespace Coh2Stats
 		{
 			while (true)
 			{
+				Console.Clear();
+
 				mab = MatchAnalyticsBundle.GetAllLoggedMatches(db);
 
 				UserIO.WriteLogLine("Filter history: " + filterHistory);
@@ -330,6 +332,8 @@ namespace Coh2Stats
 
 		public static MatchTypeId RunGameModeSelection()
 		{
+			Console.Clear();
+
 			UserIO.PrintUIPrompt("1 - 1v1 automatch");
 			UserIO.PrintUIPrompt("2 - 2v2 automatch");
 			UserIO.PrintUIPrompt("3 - 3v3 automatch");
@@ -341,6 +345,8 @@ namespace Coh2Stats
 
 		public static int RunOperatingModeSelection()
 		{
+			Console.Clear();
+
 			UserIO.PrintUIPrompt("1 - Match logging");
 			UserIO.PrintUIPrompt("2 - Match logging (repeating)");
 			UserIO.PrintUIPrompt("3 - Match analysis");
