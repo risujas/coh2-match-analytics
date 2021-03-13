@@ -7,12 +7,16 @@ namespace Coh2Stats
 	internal static class UserIO
 	{
 		private static string logFile;
+		private const string logFolder = "\\logs";
 
 		static UserIO()
 		{
-			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
+			string fullLogDirectory = DatabaseHandler.ApplicationDataFolder + logFolder;
+			Directory.CreateDirectory(DatabaseHandler.ApplicationDataFolder);
+			Directory.CreateDirectory(fullLogDirectory);
 
-			logFile = DatabaseHandler.ApplicationDataFolder + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
+			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
+			logFile = fullLogDirectory + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
 
 			if (Properties.Settings1.Default.DeleteOldLogs)
 			{
