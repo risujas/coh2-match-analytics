@@ -9,7 +9,7 @@ namespace Coh2Stats
 	{
 		public static MatchTypeId RunGameModeSelection()
 		{
-			Console.Clear();
+			UserIO.ClearConsoleWithCountdown(3);
 
 			UserIO.PrintUIPrompt("1 - 1v1 automatch");
 			UserIO.PrintUIPrompt("2 - 2v2 automatch");
@@ -22,7 +22,7 @@ namespace Coh2Stats
 
 		public static int RunOperatingModeSelection()
 		{
-			Console.Clear();
+			UserIO.ClearConsoleWithCountdown(3);
 
 			UserIO.PrintUIPrompt("1 - Match logging");
 			UserIO.PrintUIPrompt("2 - Match logging (repeating)");

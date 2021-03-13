@@ -239,5 +239,17 @@ namespace Coh2Stats
 				}
 			}
 		}
+
+		public static void ClearConsoleWithCountdown(int seconds)
+		{
+			while (seconds > 0)
+			{
+				Console.CursorLeft = 0;
+				Console.Write("The program will continue in " + seconds + "...");
+				Thread.Sleep(1000);
+				seconds--;
+			}
+			Console.Clear();
+		}
 	}
 }
