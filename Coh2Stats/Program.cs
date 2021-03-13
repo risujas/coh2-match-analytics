@@ -394,14 +394,14 @@ namespace Coh2Stats
 		{
 			var culture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentCulture = culture;
-
-			MatchTypeId gameMode = RunGameModeSelection();
-
-			DatabaseHandler db = new DatabaseHandler();
-			db.Load(gameMode);
-
+			
 			while (true)
 			{
+				MatchTypeId gameMode = RunGameModeSelection();
+
+				DatabaseHandler db = new DatabaseHandler();
+				db.Load(gameMode);
+
 				int operatingMode = RunOperatingModeSelection();
 				RunModeOperations(db, operatingMode, gameMode);
 			}
