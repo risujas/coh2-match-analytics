@@ -11,40 +11,60 @@ namespace Coh2Stats
 		public List<RelicAPI.StatGroup> StatGroups = new List<RelicAPI.StatGroup>();
 		public List<RelicAPI.LeaderboardStat> LeaderboardStats = new List<RelicAPI.LeaderboardStat>();
 
-		[JsonIgnore] public const string DbFile = "playerData.txt";
-		[JsonIgnore] public Dictionary<LeaderboardId, int> LeaderboardSizes = new Dictionary<LeaderboardId, int>();
+		public const string PlayerIdentityFile = "playerIdentities.json";
+		public const string StatGroupFile = "statGroups.json";
+		public const string LeaderboardStatFile = "leaderboardStats.json";
+
+		private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
 
 		public bool Load(string dbFolder)
 		{
-			string fullPath = dbFolder + "\\" + DbFile;
-			if (!File.Exists(fullPath))
+			if (File.Exists(dbFolder + "\\" + PlayerIdentityFile) || File.Exists(dbFolder + "\\" + StatGroupFile) || File.Exists(dbFolder + "\\" + LeaderboardStatFile))
 			{
-				UserIO.WriteLogLine("No player database found");
-				return false;
+				UserIO.WriteLogLine("Loading player data");
 			}
 
-			UserIO.WriteLogLine("Player database found");
+			string fullPath = dbFolder + "\\" + PlayerIdentityFile;
+			if (File.Exists(fullPath))
+			{
+				string text = File.ReadAllText(fullPath);
+				PlayerIdentities = JsonConvert.DeserializeObject<List<RelicAPI.PlayerIdentity>>(text);
+				UserIO.WriteLogLine("{0} player identities", PlayerIdentities.Count);
+			}
 
-			string text = File.ReadAllText(fullPath);
-			var json = JsonConvert.DeserializeObject<PlayerDatabase>(text);
+			fullPath = dbFolder + "\\" + StatGroupFile;
+			if (File.Exists(fullPath))
+			{
+				string text = File.ReadAllText(fullPath);
+				StatGroups = JsonConvert.DeserializeObject<List<RelicAPI.StatGroup>>(text);
+				UserIO.WriteLogLine("{0} stat groups", StatGroups.Count);
+			}
 
-			PlayerIdentities = json.PlayerIdentities;
-			StatGroups = json.StatGroups;
-			LeaderboardStats = json.LeaderboardStats;
-
-			UserIO.WriteLogLine("{0} player identities", PlayerIdentities.Count);
-			UserIO.WriteLogLine("{0} stat groups", StatGroups.Count);
-			UserIO.WriteLogLine("{0} leaderboard stats", LeaderboardStats.Count);
+			fullPath = dbFolder + "\\" + LeaderboardStatFile;
+			if (File.Exists(fullPath))
+			{
+				string text = File.ReadAllText(fullPath);
+				LeaderboardStats = JsonConvert.DeserializeObject<List<RelicAPI.LeaderboardStat>>(text);
+				UserIO.WriteLogLine("{0} leaderboard stats", LeaderboardStats.Count);
+			}
 
 			return true;
 		}
 
 		public void Write(string dbFolder)
 		{
-			UserIO.WriteLogLine("Writing player database");
+			UserIO.WriteLogLine("Writing player data");
 
-			var text = JsonConvert.SerializeObject(this, Formatting.Indented);
-			string fullPath = dbFolder + "\\" + DbFile;
+			var text = JsonConvert.SerializeObject(PlayerIdentities, Formatting.Indented);
+			var fullPath = dbFolder + "\\" + "playerIdentities.txt";
+			File.WriteAllText(fullPath, text);
+
+			text = JsonConvert.SerializeObject(StatGroups, Formatting.Indented);
+			fullPath = dbFolder + "\\" + "statGroups.txt";
+			File.WriteAllText(fullPath, text);
+
+			text = JsonConvert.SerializeObject(LeaderboardStats, Formatting.Indented);
+			fullPath = dbFolder + "\\" + "leaderboardStats.txt";
 			File.WriteAllText(fullPath, text);
 		}
 
@@ -61,7 +81,7 @@ namespace Coh2Stats
 					continue;
 				}
 
-				int leaderboardMaxRank = LeaderboardSizes[(LeaderboardId)leaderboardIndex];
+				int leaderboardMaxRank = leaderboardSizes[(LeaderboardId)leaderboardIndex];
 				int batchStartingIndex = startingRank;
 
 				if (maxRank != -1)
@@ -280,29 +300,29 @@ namespace Coh2Stats
 				var probeResponse = RelicAPI.Leaderboard.RequestById(leaderboardIndex, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
 
-				if (LeaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
+				if (leaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
 				{
-					LeaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
+					leaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
 				}
 				else
 				{
-					LeaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
+					leaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
 				}
 
-				UserIO.WriteLogLine(((LeaderboardId)leaderboardIndex).ToString() + " " + LeaderboardSizes[(LeaderboardId)leaderboardIndex]);
+				UserIO.WriteLogLine(((LeaderboardId)leaderboardIndex).ToString() + " " + leaderboardSizes[(LeaderboardId)leaderboardIndex]);
 			}
 		}
 
 		public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)
 		{
-			if (LeaderboardSizes.ContainsKey(id) == false)
+			if (leaderboardSizes.ContainsKey(id) == false)
 			{
 				var probeResponse = RelicAPI.Leaderboard.RequestById((int)id, 1, 1);
 				int leaderboardMaxRank = probeResponse.RankTotal;
-				LeaderboardSizes.Add(id, leaderboardMaxRank);
+				leaderboardSizes.Add(id, leaderboardMaxRank);
 			}
 
-			int maxRank = LeaderboardSizes[id];
+			int maxRank = leaderboardSizes[id];
 			double cutoffRank = maxRank * (percentile / 100.0);
 
 			return (int)cutoffRank;

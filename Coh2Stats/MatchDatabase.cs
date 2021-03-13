@@ -8,18 +8,17 @@ namespace Coh2Stats
 	{
 		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchData = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
-		public const string DbFile = "matchData.txt";
+		public const string DbFile = "matchData.json";
 
 		public bool Load(string dbFolder, MatchTypeId gameMode)
 		{
 			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;
 			if (!File.Exists(fullPath))
 			{
-				UserIO.WriteLogLine("No match database found");
 				return false;
 			}
 
-			UserIO.WriteLogLine("Match database found");
+			UserIO.WriteLogLine("Loading match data");
 
 			string text = File.ReadAllText(fullPath);
 			MatchData = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
@@ -31,7 +30,7 @@ namespace Coh2Stats
 
 		public void Write(string dbFolder, MatchTypeId gameMode)
 		{
-			UserIO.WriteLogLine("Writing match database");
+			UserIO.WriteLogLine("Writing match data");
 
 			var text = JsonConvert.SerializeObject(MatchData, Formatting.Indented);
 			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;
