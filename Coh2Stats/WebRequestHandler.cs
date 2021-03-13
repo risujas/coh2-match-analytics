@@ -14,8 +14,8 @@ namespace Coh2Stats
 
 	internal class WebRequestHandler
 	{
-		private const long requestCooldownDuration = 1000;
-		private static long requestCooldownStart = 0;
+		private const long requestCooldownDurationMs = 1000;
+		private static long requestCooldownStartMs = 0;
 
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)
 		{
@@ -64,20 +64,20 @@ namespace Coh2Stats
 		private static void ResetRequestCooldown()
 		{
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
-			requestCooldownStart = dto.ToUnixTimeMilliseconds();
+			requestCooldownStartMs = dto.ToUnixTimeMilliseconds();
 		}
 
 		private static void WaitForRequestCooldown()
 		{
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
-			long current = dto.ToUnixTimeMilliseconds();
+			long currentMs = dto.ToUnixTimeMilliseconds();
 
-			long end = requestCooldownStart + requestCooldownDuration;
-			long difference = end - current;
+			long endMs = requestCooldownStartMs + requestCooldownDurationMs;
+			long differenceMs = endMs - currentMs;
 
-			if (difference > 0)
+			if (differenceMs > 0)
 			{
-				Thread.Sleep((int)difference);
+				Thread.Sleep((int)differenceMs);
 			}
 		}
 	}

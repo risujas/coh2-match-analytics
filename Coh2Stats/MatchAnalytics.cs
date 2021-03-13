@@ -92,8 +92,8 @@ namespace Coh2Stats
 
 				if (operation == 's')
 				{
-					string timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
-					string fileName = timestamp + filterHistory;
+					string timestampSeconds = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+					string fileName = timestampSeconds + filterHistory;
 					SaveResultsToFile(mab, fileName);
 				}
 

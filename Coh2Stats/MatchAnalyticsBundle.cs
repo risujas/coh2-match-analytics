@@ -98,9 +98,9 @@ namespace Coh2Stats
 			{
 				DateTime dt = DateTime.UtcNow;
 				DateTimeOffset dto = new DateTimeOffset(dt).AddHours(-maxAgeInHours);
-				long cutoffTime = dto.ToUnixTimeSeconds();
+				long cutoffTimeSeconds = dto.ToUnixTimeSeconds();
 
-				if (m.CompletionTime > cutoffTime)
+				if (m.CompletionTime > cutoffTimeSeconds)
 				{
 					matchAnalyticsBundle.Matches.Add(m);
 				}
