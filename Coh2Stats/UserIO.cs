@@ -6,7 +6,7 @@ namespace Coh2Stats
 {
 	internal static class UserIO
 	{
-		private static string logFile;
+		private static readonly string logFile;
 		private const string logFolder = "\\logs";
 
 		static UserIO()
