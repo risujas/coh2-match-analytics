@@ -9,8 +9,15 @@ namespace Coh2Stats
 		public readonly PlayerDatabase PlayerDb = new PlayerDatabase();
 		public readonly MatchDatabase MatchDb = new MatchDatabase();
 
-		public static readonly string ApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
-		public static readonly string DatabaseFolder = ApplicationDataFolder + "\\databases";
+		public static string ApplicationDataFolder
+		{
+			get;
+		} = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
+
+		public static string DatabaseFolder
+		{
+			get;
+		} = ApplicationDataFolder + "\\databases";
 
 		public DatabaseHandler()
 		{
