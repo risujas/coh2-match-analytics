@@ -217,11 +217,8 @@ namespace Coh2Stats
 
 			if (operation == 's')
 			{
-				DateTime dt = DateTime.UtcNow;
-				DateTimeOffset dto = new DateTimeOffset(dt);
-				long unixTime = dto.ToUnixTimeSeconds();
-
-				string fileName = unixTime.ToString() + filterHistory;
+				string timestamp = DateTime.Now.ToString("ddMMyyyyHHmmss");
+				string fileName = timestamp + filterHistory;
 				SaveResultsToFile(mab, fileName);
 
 				RunInteractiveAnalysis(db, mab, filterHistory);
