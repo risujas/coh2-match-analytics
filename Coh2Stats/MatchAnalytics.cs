@@ -14,15 +14,15 @@ namespace Coh2Stats
 		private const string exclusivePercentileFilterTag = "%ex";
 		private const string ageFilterTag = "age";
 
-		public static void RunInteractiveAnalysis(DatabaseHandler db, MatchTypeId gameMode, string filterHistory = "")
+		public static void RunInteractiveAnalysis(MatchTypeId gameMode, string filterHistory = "")
 		{
 			while (true)
 			{
 				Console.Clear();
 
-				var mab = MatchAnalyticsBundle.GetAllLoggedMatches(db).FilterByStartGameTime((int)relevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
+				var mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)relevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
 
-				UserIO.WriteLogLine("Filter history: " + filterHistory);
+				UserIO.WriteLine("Filter history: " + filterHistory);
 
 				var filters = filterHistory.Split(',').ToList();
 				if (filters.Count > 0)
@@ -43,12 +43,12 @@ namespace Coh2Stats
 
 						if (first == inclusivePercentileFilterTag)
 						{
-							mab = mab.FilterByPercentile(db, double.Parse(second), true, true);
+							mab = mab.FilterByPercentile(double.Parse(second), true, true);
 						}
 
 						if (first == exclusivePercentileFilterTag)
 						{
-							mab = mab.FilterByPercentile(db, double.Parse(second), true, false);
+							mab = mab.FilterByPercentile(double.Parse(second), true, false);
 						}
 
 						if (first == ageFilterTag)
@@ -64,23 +64,23 @@ namespace Coh2Stats
 				AnalyzeWinRatesByRace(mab, RaceFlag.AEF);
 				AnalyzeWinRatesByRace(mab, RaceFlag.British);
 
-				UserIO.WriteLogLine("");
+				UserIO.WriteLine("");
 
 				var playCounts = mab.GetOrderedMapPlayCount();
 				foreach (var p in playCounts)
 				{
-					UserIO.WriteLogLine(p.Value + " " + p.Key);
+					UserIO.WriteLine(p.Value + " " + p.Key);
 				}
 
-				UserIO.WriteLogLine("");
+				UserIO.WriteLine("");
 
-				UserIO.PrintUIPrompt("Q - Finish running the interactive analysis");
-				UserIO.PrintUIPrompt("S - Export the current results into a file");
-				UserIO.PrintUIPrompt("D - Remove a filter");
-				UserIO.PrintUIPrompt("1 - Filter by percentile");
-				UserIO.PrintUIPrompt("2 - Filter by faction");
-				UserIO.PrintUIPrompt("3 - Filter by match age in hours");
-				UserIO.PrintUIPrompt("Please select an operation.");
+				UserIO.WriteLine("Q - Finish running the interactive analysis");
+				UserIO.WriteLine("S - Export the current results into a file");
+				UserIO.WriteLine("D - Remove a filter");
+				UserIO.WriteLine("1 - Filter by percentile");
+				UserIO.WriteLine("2 - Filter by faction");
+				UserIO.WriteLine("3 - Filter by match age in hours");
+				UserIO.WriteLine("Please select an operation.");
 
 				char operation = UserIO.RunCharSelection('Q', 'S', 'D', '1', '2', '3');
 				operation = char.ToLower(operation);
@@ -106,9 +106,9 @@ namespace Coh2Stats
 					{
 						for (int i = 1; i < filters.Count; i++)
 						{
-							UserIO.PrintUIPrompt(i.ToString() + " - " + filters[i]);
+							UserIO.WriteLine(i.ToString() + " - " + filters[i]);
 						}
-						UserIO.PrintUIPrompt("Please select the filter you want to remove.");
+						UserIO.WriteLine("Please select the filter you want to remove.");
 						int selection = UserIO.RunIntegerSelection(1, filters.Count);
 
 						for (int i = 0; i < filters.Count; i++)
@@ -133,12 +133,12 @@ namespace Coh2Stats
 
 				if (operation == '1')
 				{
-					UserIO.PrintUIPrompt("Please select the cutoff percentile. More options will be presented afterwards.");
+					UserIO.WriteLine("Please select the cutoff percentile. More options will be presented afterwards.");
 					double percentile = UserIO.RunFloatingPointInput();
 
-					UserIO.PrintUIPrompt("1 - get matches for the top {0}% of the playerbase", percentile);
-					UserIO.PrintUIPrompt("2 - get matches for the bottom {0}% of the playerbase", (100.0 - percentile));
-					UserIO.PrintUIPrompt("Please make your selection.");
+					UserIO.WriteLine("1 - get matches for the top {0}% of the playerbase", percentile);
+					UserIO.WriteLine("2 - get matches for the bottom {0}% of the playerbase", (100.0 - percentile));
+					UserIO.WriteLine("Please make your selection.");
 					int topOrBottom = UserIO.RunIntegerSelection(1, 2);
 					bool useTopPercentile = (topOrBottom == 1);
 
@@ -153,12 +153,12 @@ namespace Coh2Stats
 
 				if (operation == '2')
 				{
-					UserIO.PrintUIPrompt("W - Wehrmacht Ostheer");
-					UserIO.PrintUIPrompt("S - Soviet Union");
-					UserIO.PrintUIPrompt("U - United States Forces");
-					UserIO.PrintUIPrompt("O - Oberkommando West");
-					UserIO.PrintUIPrompt("B - British Forces");
-					UserIO.PrintUIPrompt("Input the factions you want to be included in the results. You can input multiple factions by separating the characters with commas or spaces.");
+					UserIO.WriteLine("W - Wehrmacht Ostheer");
+					UserIO.WriteLine("S - Soviet Union");
+					UserIO.WriteLine("U - United States Forces");
+					UserIO.WriteLine("O - Oberkommando West");
+					UserIO.WriteLine("B - British Forces");
+					UserIO.WriteLine("Input the factions you want to be included in the results. You can input multiple factions by separating the characters with commas or spaces.");
 
 					bool goodParse = false;
 					List<string> partsList = null;
@@ -186,7 +186,7 @@ namespace Coh2Stats
 
 				if (operation == '3')
 				{
-					UserIO.PrintUIPrompt("Please select maximum allowed age for matches in hours: ");
+					UserIO.WriteLine("Please select maximum allowed age for matches in hours: ");
 					int hours = UserIO.RunIntegerSelection(0, 8760);
 
 					filterHistory += "," + ageFilterTag + "-" + hours;
@@ -234,10 +234,10 @@ namespace Coh2Stats
 
 			if (destination == "")
 			{
-				UserIO.WriteLogLine("");
-				UserIO.WriteLogLine("{0} win rates:", raceFlag.ToString());
-				UserIO.WriteLogLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
-				UserIO.WriteLogLine("----------------------------------------------------------------");
+				UserIO.WriteLine("");
+				UserIO.WriteLine("{0} win rates:", raceFlag.ToString());
+				UserIO.WriteLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
+				UserIO.WriteLine("----------------------------------------------------------------");
 
 				foreach (var m in mapsByWinRate)
 				{
@@ -247,7 +247,7 @@ namespace Coh2Stats
 						winCount = mapsByWinCount[m.Key];
 					}
 
-					UserIO.WriteLogLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+					UserIO.WriteLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
 				}
 			}
 

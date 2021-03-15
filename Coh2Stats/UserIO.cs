@@ -1,18 +1,22 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Globalization;
 
 namespace Coh2Stats
 {
-	internal static class UserIO
+	public static class UserIO
 	{
 		private static readonly string logFile;
 		private const string logFolder = "\\logs";
+		private const int reservedLines = 1;
 
 		static UserIO()
 		{
+			var culture = CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentCulture = culture;
+
 			string fullLogDirectory = DatabaseHandler.ApplicationDataFolder + logFolder;
-			Directory.CreateDirectory(DatabaseHandler.ApplicationDataFolder);
 			Directory.CreateDirectory(fullLogDirectory);
 
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
@@ -29,13 +33,13 @@ namespace Coh2Stats
 			}
 
 			DateTime dt = DateTime.Now;
-			WriteLogLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
+			WriteLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
 #if DEBUG
-			WriteLogLine("Debug build");
+			WriteLine("DEBUG BUILD - NOT FOR RELEASE");
 #endif
 		}
 
-		public static void WriteLogLine(string text, params object[] args)
+		public static void WriteLine(string text, params object[] args)
 		{
 			if (args.Length > 0)
 			{
@@ -44,45 +48,27 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "]\t" + text;
+			string message = "[" + time + "] " + text;
 
-			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine(message);
-			Console.ResetColor();
 
 			using (StreamWriter file = File.AppendText(logFile))
 			{
 				file.WriteLine(message);
 			}
 		}
-
-		public static void LogRootException(Exception e)
+		
+		public static void WriteExceptions(Exception e)
 		{
 			if (e.InnerException == null)
 			{
-				WriteLogLine("An error occurred: " + e.Message);
+				WriteLine("An error occurred: " + e.Message);
 			}
 
 			else
 			{
-				LogRootException(e.InnerException);
+				WriteExceptions(e.InnerException);
 			}
-		}
-
-		public static void PrintUIPrompt(string text, params object[] args)
-		{
-			if (args.Length > 0)
-			{
-				text = string.Format(text, args);
-			}
-
-			DateTime dt = DateTime.Now;
-			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] >>\t" + text;
-
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine(message);
-			Console.ResetColor();
 		}
 
 		public static int RunIntegerSelection(int inclusiveMin, int inclusiveMax)
@@ -91,9 +77,9 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] <<\t";
+			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.ForegroundColor = ConsoleColor.DarkGray;
 
 			bool good = false;
 			while (!good)
@@ -118,6 +104,8 @@ namespace Coh2Stats
 
 			Console.ResetColor();
 
+			WriteLine("User input: " + selection);
+
 			return selection;
 		}
 
@@ -127,9 +115,9 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] <<\t";
+			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.ForegroundColor = ConsoleColor.DarkGray;
 
 			bool good = false;
 			while (!good)
@@ -165,6 +153,8 @@ namespace Coh2Stats
 
 			Console.ResetColor();
 
+			WriteLine("User input: " + selection);
+
 			return selection;
 		}
 
@@ -174,9 +164,9 @@ namespace Coh2Stats
 
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] <<\t";
+			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.ForegroundColor = ConsoleColor.DarkGray;
 
 			bool good = false;
 			while (!good)
@@ -196,6 +186,8 @@ namespace Coh2Stats
 
 			Console.ResetColor();
 
+			WriteLine("User input: " + floatInput);
+
 			return floatInput;
 		}
 
@@ -203,12 +195,14 @@ namespace Coh2Stats
 		{
 			DateTime dt = DateTime.Now;
 			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] <<\t";
+			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.ForegroundColor = ConsoleColor.DarkGray;
 			Console.Write(message);
 			string input = Console.ReadLine();
 			Console.ResetColor();
+
+			WriteLine("User input: " + input);
 
 			return input;
 		}
@@ -220,7 +214,7 @@ namespace Coh2Stats
 				var cki = Console.ReadKey(true);
 				if (cki.Key == ConsoleKey.P)
 				{
-					PrintUIPrompt("Paused. Press P again to unpause.");
+					WriteLine("Paused. Press P again to unpause.");
 
 					bool paused = true;
 					while (paused)
@@ -238,18 +232,6 @@ namespace Coh2Stats
 					}
 				}
 			}
-		}
-
-		public static void ClearConsoleWithCountdown(int seconds)
-		{
-			while (seconds > 0)
-			{
-				Console.CursorLeft = 0;
-				Console.Write("The program will continue in " + seconds + "...");
-				Thread.Sleep(1000);
-				seconds--;
-			}
-			Console.Clear();
 		}
 	}
 }

@@ -18,19 +18,19 @@ namespace Coh2Stats
 				return false;
 			}
 
-			UserIO.WriteLogLine("Loading match data");
+			UserIO.WriteLine("Loading match data");
 
 			string text = File.ReadAllText(fullPath);
 			MatchData = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
 
-			UserIO.WriteLogLine("{0} match history stats", MatchData.Count);
+			UserIO.WriteLine("{0} match history stats", MatchData.Count);
 
 			return true;
 		}
 
 		public void Write(string dbFolder, MatchTypeId gameMode)
 		{
-			UserIO.WriteLogLine("Writing match data");
+			UserIO.WriteLine("Writing match data");
 
 			var text = JsonConvert.SerializeObject(MatchData, Formatting.Indented);
 			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;

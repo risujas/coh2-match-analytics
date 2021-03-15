@@ -4,10 +4,11 @@ using System.IO;
 
 namespace Coh2Stats
 {
-	public class DatabaseHandler
+	public static class DatabaseHandler
 	{
-		public readonly PlayerDatabase PlayerDb = new PlayerDatabase();
-		public readonly MatchDatabase MatchDb = new MatchDatabase();
+		public static readonly PlayerDatabase PlayerDb = new PlayerDatabase();
+		public static readonly MatchDatabase MatchDb = new MatchDatabase();
+		public static MatchTypeId LoadedDataSet;
 
 		public static string ApplicationDataFolder
 		{
@@ -19,27 +20,29 @@ namespace Coh2Stats
 			get;
 		} = ApplicationDataFolder + "\\databases";
 
-		public DatabaseHandler()
+		static DatabaseHandler()
 		{
 			Directory.CreateDirectory(ApplicationDataFolder);
 			Directory.CreateDirectory(DatabaseFolder);
 		}
 
-		public void Load(MatchTypeId gameMode)
+		public static void Load(MatchTypeId gameMode)
 		{
 			PlayerDb.FindLeaderboardSizes(gameMode);
 
 			PlayerDb.Load(DatabaseFolder);
 			MatchDb.Load(DatabaseFolder, gameMode);
+
+			LoadedDataSet = gameMode;
 		}
 
-		public void ParseAndProcess(MatchTypeId gameMode)
+		public static void ParseAndProcess(MatchTypeId gameMode)
 		{
 			ProcessPlayers(gameMode);
 			ProcessMatches(gameMode, MatchAnalytics.relevantTimeCutoffSeconds);
 		}
 
-		private void ProcessPlayers(MatchTypeId gameMode)
+		private static void ProcessPlayers(MatchTypeId gameMode)
 		{
 			PlayerDb.FindNewPlayers(gameMode, 1, -1);
 			PlayerDb.UpdatePlayerDetails(gameMode);
@@ -47,7 +50,7 @@ namespace Coh2Stats
 			PlayerDb.Write(DatabaseFolder);
 		}
 
-		private void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
+		private static void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
 		{
 			var playersToBeProcessed = PlayerDb.GetRankedPlayersFromDatabase(gameMode);
 			int oldMatchCount = MatchDb.MatchData.Count;
@@ -60,7 +63,7 @@ namespace Coh2Stats
 					batchSize = playersToBeProcessed.Count;
 				}
 
-				UserIO.WriteLogLine("Retrieving match history for {0} players", playersToBeProcessed.Count);
+				UserIO.WriteLine("Retrieving match history for {0} players", playersToBeProcessed.Count);
 
 				var range = playersToBeProcessed.GetRange(0, batchSize);
 				playersToBeProcessed.RemoveRange(0, batchSize);
@@ -94,7 +97,7 @@ namespace Coh2Stats
 
 			int newMatchCount = MatchDb.MatchData.Count;
 			int difference = newMatchCount - oldMatchCount;
-			UserIO.WriteLogLine("{0} new matches found", difference);
+			UserIO.WriteLine("{0} new matches found", difference);
 
 			PlayerDb.Write(DatabaseFolder);
 			MatchDb.Write(DatabaseFolder, gameMode);

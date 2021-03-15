@@ -12,7 +12,7 @@ namespace Coh2Stats
 		[JsonProperty("message")] public string Message { get; set; }
 	}
 
-	internal class WebRequestHandler
+	public class WebRequestHandler
 	{
 		private const long requestCooldownDurationMs = 1000;
 		private static long requestCooldownStartMs = 0;
@@ -43,7 +43,7 @@ namespace Coh2Stats
 
 					catch (Exception e)
 					{
-						UserIO.LogRootException(e);
+						UserIO.WriteExceptions(e);
 
 						ResetRequestCooldown();
 					}

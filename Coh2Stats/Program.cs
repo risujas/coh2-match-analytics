@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Threading;
 
 namespace Coh2Stats
 {
-	internal class Program
+	public class Program
 	{
 		public static MatchTypeId RunGameModeSelection()
 		{
-			UserIO.PrintUIPrompt("1 - 1v1 automatch");
-			UserIO.PrintUIPrompt("2 - 2v2 automatch");
-			UserIO.PrintUIPrompt("3 - 3v3 automatch");
-			UserIO.PrintUIPrompt("4 - 4v4 automatch");
-			UserIO.PrintUIPrompt("Please select a game mode.");
+			UserIO.WriteLine("1 - 1v1 automatch");
+			UserIO.WriteLine("2 - 2v2 automatch");
+			UserIO.WriteLine("3 - 3v3 automatch");
+			UserIO.WriteLine("4 - 4v4 automatch");
+			UserIO.WriteLine("Please select a game mode.");
 
 			return (MatchTypeId)UserIO.RunIntegerSelection(1, 4);
 		}
 
 		public static int RunOperatingModeSelection()
 		{
-			UserIO.PrintUIPrompt("1 - Match logging");
-			UserIO.PrintUIPrompt("2 - Match logging (repeating)");
-			UserIO.PrintUIPrompt("3 - Match analysis");
-			UserIO.PrintUIPrompt("Please select an operating mode.");
+			UserIO.WriteLine("1 - Match logging");
+			UserIO.WriteLine("2 - Match logging (repeating)");
+			UserIO.WriteLine("3 - Match analysis");
+			UserIO.WriteLine("Please select an operating mode.");
 
 			return UserIO.RunIntegerSelection(1, 4);
 		}
@@ -41,7 +40,7 @@ namespace Coh2Stats
 
 				if (intDiff % notificationInterval == 0)
 				{
-					UserIO.PrintUIPrompt("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program, or ESCAPE to return to the start screen.", difference);
+					UserIO.WriteLine("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program, or ESCAPE to return to the start screen.", difference);
 					Thread.Sleep(1000);
 				}
 
@@ -56,42 +55,38 @@ namespace Coh2Stats
 			}
 		}
 
-		public static void RunModeOperations(DatabaseHandler db, int operatingMode, MatchTypeId gameMode)
+		public static void RunModeOperations(int operatingMode, MatchTypeId gameMode)
 		{
 			if (operatingMode == 1)
 			{
-				db.ParseAndProcess(gameMode);
+				DatabaseHandler.ParseAndProcess(gameMode);
 			}
 
 			if (operatingMode == 2)
 			{
 				while (true)
 				{
-					db.ParseAndProcess(gameMode);
+					DatabaseHandler.ParseAndProcess(gameMode);
 					RunCooldownProcedure();
 				}
 			}
 
 			if (operatingMode == 3)
 			{
-				MatchAnalytics.RunInteractiveAnalysis(db, gameMode);
+				MatchAnalytics.RunInteractiveAnalysis(gameMode);
 			}
 		}
 
 		private static void Main()
 		{
-			var culture = CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentCulture = culture;
-			
 			while (true)
 			{
 				MatchTypeId gameMode = RunGameModeSelection();
 
-				DatabaseHandler db = new DatabaseHandler();
-				db.Load(gameMode);
+				DatabaseHandler.Load(gameMode);
 
 				int operatingMode = RunOperatingModeSelection();
-				RunModeOperations(db, operatingMode, gameMode);
+				RunModeOperations(operatingMode, gameMode);
 			}
 		}
 	}

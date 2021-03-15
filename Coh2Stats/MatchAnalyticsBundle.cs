@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Coh2Stats
 {
-	internal class MatchAnalyticsBundle
+	public class MatchAnalyticsBundle
 	{
 		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> Matches = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
-		public static MatchAnalyticsBundle GetAllLoggedMatches(DatabaseHandler db)
+		public static MatchAnalyticsBundle GetAllLoggedMatches()
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-			matchAnalyticsBundle.Matches = db.MatchDb.MatchData;
+			matchAnalyticsBundle.Matches = DatabaseHandler.MatchDb.MatchData;
 			return matchAnalyticsBundle;
 		}
 
@@ -124,7 +124,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByPercentile(DatabaseHandler db, double percentile, bool requireOnAll, bool useTopPercentile)
+		public MatchAnalyticsBundle FilterByPercentile(double percentile, bool requireOnAll, bool useTopPercentile)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -136,7 +136,7 @@ namespace Coh2Stats
 				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
 				{
 					var report = match.MatchHistoryReportResults[j];
-					var identity = db.PlayerDb.GetPlayerByProfileId(report.ProfileId);
+					var identity = DatabaseHandler.PlayerDb.GetPlayerByProfileId(report.ProfileId);
 					MatchTypeId gameMode = (MatchTypeId)match.MatchTypeId;
 					RaceId playerFaction = (RaceId)report.RaceId;
 
@@ -144,7 +144,7 @@ namespace Coh2Stats
 					{
 						LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, false);
 
-						var soloStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
+						var soloStat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
 						if (soloStat == null)
 						{
 							if (requireOnAll)
@@ -157,7 +157,7 @@ namespace Coh2Stats
 
 						if (useTopPercentile)
 						{
-							int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
+							int cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
 							if (soloStat.Rank <= cutoffRank)
 							{
 								numValidPlayers++;
@@ -169,7 +169,7 @@ namespace Coh2Stats
 						}
 						else
 						{
-							int cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
+							int cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
 							if (soloStat.Rank > cutoffRank)
 							{
 								numValidPlayers++;
@@ -189,8 +189,8 @@ namespace Coh2Stats
 						LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, false);
 						LeaderboardId teamLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, true);
 
-						var soloStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
-						var teamStat = db.PlayerDb.GetStat(identity.PersonalStatGroupId, teamLb);
+						var soloStat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
+						var teamStat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, teamLb);
 
 						if (soloStat == null && teamStat != null)
 						{
@@ -224,11 +224,11 @@ namespace Coh2Stats
 						int cutoffRank;
 						if (!useTeamLb)
 						{
-							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
+							cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
 						}
 						else
 						{
-							cutoffRank = db.PlayerDb.GetLeaderboardRankByPercentile(teamLb, percentile);
+							cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(teamLb, percentile);
 						}
 
 						if (selectedStat.Rank <= cutoffRank)

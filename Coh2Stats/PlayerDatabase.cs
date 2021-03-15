@@ -21,7 +21,7 @@ namespace Coh2Stats
 		{
 			if (File.Exists(dbFolder + "\\" + PlayerIdentityFile) || File.Exists(dbFolder + "\\" + StatGroupFile) || File.Exists(dbFolder + "\\" + LeaderboardStatFile))
 			{
-				UserIO.WriteLogLine("Loading player data");
+				UserIO.WriteLine("Loading player data");
 			}
 
 			string fullPath = dbFolder + "\\" + PlayerIdentityFile;
@@ -29,7 +29,7 @@ namespace Coh2Stats
 			{
 				string text = File.ReadAllText(fullPath);
 				PlayerIdentities = JsonConvert.DeserializeObject<List<RelicAPI.PlayerIdentity>>(text);
-				UserIO.WriteLogLine("{0} player identities", PlayerIdentities.Count);
+				UserIO.WriteLine("{0} player identities", PlayerIdentities.Count);
 			}
 
 			fullPath = dbFolder + "\\" + StatGroupFile;
@@ -37,7 +37,7 @@ namespace Coh2Stats
 			{
 				string text = File.ReadAllText(fullPath);
 				StatGroups = JsonConvert.DeserializeObject<List<RelicAPI.StatGroup>>(text);
-				UserIO.WriteLogLine("{0} stat groups", StatGroups.Count);
+				UserIO.WriteLine("{0} stat groups", StatGroups.Count);
 			}
 
 			fullPath = dbFolder + "\\" + LeaderboardStatFile;
@@ -45,7 +45,7 @@ namespace Coh2Stats
 			{
 				string text = File.ReadAllText(fullPath);
 				LeaderboardStats = JsonConvert.DeserializeObject<List<RelicAPI.LeaderboardStat>>(text);
-				UserIO.WriteLogLine("{0} leaderboard stats", LeaderboardStats.Count);
+				UserIO.WriteLine("{0} leaderboard stats", LeaderboardStats.Count);
 			}
 
 			return true;
@@ -53,7 +53,7 @@ namespace Coh2Stats
 
 		public void Write(string dbFolder)
 		{
-			UserIO.WriteLogLine("Writing player data");
+			UserIO.WriteLine("Writing player data");
 
 			var text = JsonConvert.SerializeObject(PlayerIdentities, Formatting.Indented);
 			var fullPath = dbFolder + "\\" + PlayerIdentityFile;
@@ -70,7 +70,7 @@ namespace Coh2Stats
 
 		public void FindNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
 		{
-			UserIO.WriteLogLine("Finding new players");
+			UserIO.WriteLine("Finding new players");
 
 			int numPlayersBefore = PlayerIdentities.Count;
 
@@ -119,7 +119,7 @@ namespace Coh2Stats
 						LogStat(lbs);
 					}
 
-					UserIO.WriteLogLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
+					UserIO.WriteLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
 					batchStartingIndex += batchSize;
 
 					UserIO.AllowPause();
@@ -129,7 +129,7 @@ namespace Coh2Stats
 			int numPlayersAfter = PlayerIdentities.Count;
 			int playerCountDiff = numPlayersAfter - numPlayersBefore;
 
-			UserIO.WriteLogLine("{0} new players found", playerCountDiff);
+			UserIO.WriteLine("{0} new players found", playerCountDiff);
 		}
 
 		public void UpdatePlayerDetails(MatchTypeId gameMode)
@@ -141,7 +141,7 @@ namespace Coh2Stats
 			{
 				if (players.Count >= batchSize)
 				{
-					UserIO.WriteLogLine("Updating player details, {0} remaining", players.Count);
+					UserIO.WriteLine("Updating player details, {0} remaining", players.Count);
 
 					var range = players.GetRange(0, batchSize);
 					players.RemoveRange(0, batchSize);
@@ -188,7 +188,7 @@ namespace Coh2Stats
 				}
 			}
 
-			UserIO.WriteLogLine("Missing player data; making an additional request to fill the gaps");
+			UserIO.WriteLine("Missing player data; making an additional request to fill the gaps");
 
 			List<int> list = new List<int>();
 			list.Add(profileId);
@@ -285,9 +285,9 @@ namespace Coh2Stats
 
 		public List<RelicAPI.PlayerIdentity> GetRankedPlayersFromDatabase(MatchTypeId gameMode)
 		{
-			UserIO.WriteLogLine("Getting ranked players from the database. This is a long operation.");
+			UserIO.WriteLine("Getting ranked players from the database. This is a long operation.");
 			var rankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
-			UserIO.WriteLogLine("Finished.");
+			UserIO.WriteLine("Finished.");
 
 			return rankedPlayers;
 
@@ -320,7 +320,7 @@ namespace Coh2Stats
 
 		public void FindLeaderboardSizes(MatchTypeId gameMode)
 		{
-			UserIO.WriteLogLine("Finding leaderboard sizes");
+			UserIO.WriteLine("Finding leaderboard sizes");
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
@@ -341,7 +341,7 @@ namespace Coh2Stats
 					leaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
 				}
 
-				UserIO.WriteLogLine(((LeaderboardId)leaderboardIndex).ToString() + " " + leaderboardSizes[(LeaderboardId)leaderboardIndex]);
+				UserIO.WriteLine(((LeaderboardId)leaderboardIndex).ToString() + " " + leaderboardSizes[(LeaderboardId)leaderboardIndex]);
 			}
 		}
 
