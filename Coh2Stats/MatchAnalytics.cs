@@ -9,10 +9,10 @@ namespace Coh2Stats
 	{
 		public const long relevantTimeCutoffSeconds = 1614376800;
 
-		private const string factionFilterTag = "fac";
-		private const string inclusivePercentileFilterTag = "%in";
-		private const string exclusivePercentileFilterTag = "%ex";
-		private const string ageFilterTag = "age";
+		private const string factionFilterTag = "factions";
+		private const string inclusivePercentileFilterTag = "in_top_%";
+		private const string exclusivePercentileFilterTag = "not_top_%";
+		private const string ageFilterTag = "hours";
 
 		public static void RunInteractiveAnalysis(MatchTypeId gameMode, string filterHistory = "")
 		{
