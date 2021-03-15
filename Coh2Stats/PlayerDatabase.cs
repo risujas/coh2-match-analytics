@@ -56,15 +56,15 @@ namespace Coh2Stats
 			UserIO.WriteLogLine("Writing player data");
 
 			var text = JsonConvert.SerializeObject(PlayerIdentities, Formatting.Indented);
-			var fullPath = dbFolder + "\\" + "playerIdentities.txt";
+			var fullPath = dbFolder + "\\" + PlayerIdentityFile;
 			File.WriteAllText(fullPath, text);
 
 			text = JsonConvert.SerializeObject(StatGroups, Formatting.Indented);
-			fullPath = dbFolder + "\\" + "statGroups.txt";
+			fullPath = dbFolder + "\\" + StatGroupFile;
 			File.WriteAllText(fullPath, text);
 
 			text = JsonConvert.SerializeObject(LeaderboardStats, Formatting.Indented);
-			fullPath = dbFolder + "\\" + "leaderboardStats.txt";
+			fullPath = dbFolder + "\\" + LeaderboardStatFile;
 			File.WriteAllText(fullPath, text);
 		}
 
@@ -188,16 +188,48 @@ namespace Coh2Stats
 				}
 			}
 
-			return null;
+			UserIO.WriteLogLine("Missing player data; making an additional request to fill the gaps");
+
+			List<int> list = new List<int>();
+			list.Add(profileId);
+
+			var ps = RelicAPI.PersonalStat.RequestByProfileId(list);
+			RelicAPI.PlayerIdentity player = null;
+
+			foreach (var sg in ps.StatGroups)
+			{
+				if (sg.Type == 1)
+				{
+					player = sg.Members[0];
+					LogPlayer(player);
+				}
+
+				LogStatGroup(sg);
+			}
+
+			foreach (var lbs in ps.LeaderboardStats)
+			{
+				LogStat(lbs);
+			}
+
+			Write(DatabaseHandler.DatabaseFolder);
+
+			return player;
 		}
 
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
-			var oldPlayerIdentity = GetPlayerByProfileId(playerIdentity.ProfileId);
-			if (oldPlayerIdentity != null)
+			for (int i = 0; i < PlayerIdentities.Count; i++)
 			{
-				PlayerIdentities.Remove(oldPlayerIdentity);
+				var p = PlayerIdentities[i];
+
+				if (playerIdentity.ProfileId == p.ProfileId)
+				{
+					PlayerIdentities.RemoveAt(i);
+					break;
+				}
 			}
+
 			PlayerIdentities.Add(playerIdentity);
 		}
 

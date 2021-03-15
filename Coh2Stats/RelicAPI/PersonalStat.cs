@@ -14,7 +14,17 @@ namespace Coh2Stats.RelicAPI
 
 		public static Root RequestByProfileId(List<int> profileIds)
 		{
-			string idString = string.Join(",", profileIds);
+			string idString;
+
+			if (profileIds.Count > 1)
+			{
+				idString = string.Join(",", profileIds);
+			}
+			else
+			{
+				idString = profileIds[0].ToString();
+			}
+
 			string requestUrl = "https://coh2-api.reliclink.com/community/leaderboard/GetPersonalStat";
 			string requestParams = "?title=coh2&profile_ids=[" + idString + "]";
 
