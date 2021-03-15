@@ -105,6 +105,7 @@ namespace Coh2Stats
 			Console.ResetColor();
 
 			WriteLine("User input: " + selection);
+			Console.Clear();
 
 			return selection;
 		}
@@ -154,6 +155,7 @@ namespace Coh2Stats
 			Console.ResetColor();
 
 			WriteLine("User input: " + selection);
+			Console.Clear();
 
 			return selection;
 		}
@@ -187,6 +189,7 @@ namespace Coh2Stats
 			Console.ResetColor();
 
 			WriteLine("User input: " + floatInput);
+			Console.Clear();
 
 			return floatInput;
 		}
@@ -203,6 +206,7 @@ namespace Coh2Stats
 			Console.ResetColor();
 
 			WriteLine("User input: " + input);
+			Console.Clear();
 
 			return input;
 		}

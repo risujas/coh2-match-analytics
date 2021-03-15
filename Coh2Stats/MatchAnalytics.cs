@@ -18,8 +18,6 @@ namespace Coh2Stats
 		{
 			while (true)
 			{
-				Console.Clear();
-
 				var mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)relevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
 
 				UserIO.WriteLine("Filter history: " + filterHistory);
