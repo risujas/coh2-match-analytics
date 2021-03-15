@@ -16,44 +16,55 @@ namespace Coh2Stats
 
 		public static void RunInteractiveAnalysis(MatchTypeId gameMode, string filterHistory = "")
 		{
+			MatchAnalyticsBundle mab = null;
+			bool skipFiltering = false;
+			List<string> filters;
+
 			while (true)
 			{
-				var mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)relevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
-
-				UserIO.WriteLine("Filter history: " + filterHistory);
-
-				var filters = filterHistory.Split(',').ToList();
-				if (filters.Count > 0)
+				if (!skipFiltering)
 				{
-					filters.RemoveAt(0);
+					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)relevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
 
-					foreach (var f in filters)
+					UserIO.WriteLine("Filter history: " + filterHistory);
+
+					filters = filterHistory.Split(',').ToList();
+					if (filters.Count > 0)
 					{
-						var parts = f.Split('-');
-						var first = parts[0];
-						var second = parts[1];
+						filters.RemoveAt(0);
 
-						if (first == factionFilterTag)
+						foreach (var f in filters)
 						{
-							RaceFlag flags = LeaderboardCompatibility.GenerateRaceFlag(second.Contains("w"), second.Contains("s"), second.Contains("u"), second.Contains("o"), second.Contains("b"));
-							mab = mab.FilterByAllowedRaces(flags);
-						}
+							var parts = f.Split('-');
+							var first = parts[0];
+							var second = parts[1];
 
-						if (first == inclusivePercentileFilterTag)
-						{
-							mab = mab.FilterByPercentile(double.Parse(second), true, true);
-						}
+							if (first == factionFilterTag)
+							{
+								RaceFlag flags = LeaderboardCompatibility.GenerateRaceFlag(second.Contains("w"), second.Contains("s"), second.Contains("u"), second.Contains("o"), second.Contains("b"));
+								mab = mab.FilterByAllowedRaces(flags);
+							}
 
-						if (first == exclusivePercentileFilterTag)
-						{
-							mab = mab.FilterByPercentile(double.Parse(second), true, false);
-						}
+							if (first == inclusivePercentileFilterTag)
+							{
+								mab = mab.FilterByPercentile(double.Parse(second), true, true);
+							}
 
-						if (first == ageFilterTag)
-						{
-							mab = mab.FilterByMaxAgeInHours(int.Parse(second));
+							if (first == exclusivePercentileFilterTag)
+							{
+								mab = mab.FilterByPercentile(double.Parse(second), true, false);
+							}
+
+							if (first == ageFilterTag)
+							{
+								mab = mab.FilterByMaxAgeInHours(int.Parse(second));
+							}
 						}
 					}
+				}
+				else
+				{
+					skipFiltering = false;
 				}
 
 				AnalyzeWinRatesByRace(mab, RaceFlag.German);
@@ -93,6 +104,7 @@ namespace Coh2Stats
 					string timestampSeconds = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 					string fileName = timestampSeconds + filterHistory;
 					SaveResultsToFile(mab, fileName);
+					skipFiltering = true;
 				}
 
 				if (operation == 'd')
