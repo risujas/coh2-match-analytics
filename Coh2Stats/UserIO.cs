@@ -62,6 +62,11 @@ namespace Coh2Stats
 				file.WriteLine(message);
 			}
 		}
+
+		public static void WriteSeparator()
+		{
+			WriteLine("****************************************************************");
+		}
 		
 		public static void WriteExceptions(Exception e)
 		{
