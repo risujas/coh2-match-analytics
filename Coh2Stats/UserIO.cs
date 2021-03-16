@@ -10,7 +10,6 @@ namespace Coh2Stats
 	{
 		private static readonly string logFile;
 		private const string logFolder = "\\logs";
-		private const int reservedLines = 1;
 
 		static UserIO()
 		{
