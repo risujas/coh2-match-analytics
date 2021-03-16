@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Globalization;
+using Microsoft.VisualBasic.Devices;
 
 namespace Coh2Stats
 {
@@ -37,6 +38,11 @@ namespace Coh2Stats
 #if DEBUG
 			WriteLine("DEBUG BUILD - NOT FOR RELEASE");
 #endif
+
+			var computerInfo =  new ComputerInfo();
+			WriteLine(computerInfo.OSFullName + " - " + computerInfo.OSPlatform + " - " + computerInfo.OSVersion);
+			WriteLine("Total physical memory: " + computerInfo.TotalPhysicalMemory / 1000 / 1000 + " MB");
+			WriteLine("Available: " + computerInfo.AvailablePhysicalMemory / 1000 / 1000 + " MB");
 		}
 
 		public static void WriteLine(string text, params object[] args)
