@@ -89,7 +89,7 @@ namespace Coh2Stats
 			string time = dt.ToLongTimeString();
 			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.ForegroundColor = ConsoleColor.Yellow;
 
 			bool good = false;
 			while (!good)
@@ -128,7 +128,7 @@ namespace Coh2Stats
 			string time = dt.ToLongTimeString();
 			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.ForegroundColor = ConsoleColor.Yellow;
 
 			bool good = false;
 			while (!good)
@@ -178,7 +178,7 @@ namespace Coh2Stats
 			string time = dt.ToLongTimeString();
 			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.ForegroundColor = ConsoleColor.Yellow;
 
 			bool good = false;
 			while (!good)
@@ -210,7 +210,7 @@ namespace Coh2Stats
 			string time = dt.ToLongTimeString();
 			string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.Write(message);
 			string input = Console.ReadLine();
 			Console.ResetColor();
