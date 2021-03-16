@@ -74,15 +74,13 @@ namespace Coh2Stats
 				AnalyzeWinRatesByRace(mab, RaceFlag.British);
 
 				UserIO.WriteLine("");
-
 				var playCounts = mab.GetOrderedMapPlayCount();
 				foreach (var p in playCounts)
 				{
 					UserIO.WriteLine(p.Value + " " + p.Key);
 				}
 
-				UserIO.WriteLine("");
-
+				UserIO.WriteSeparator();
 				UserIO.WriteLine("Q - Finish running the interactive analysis");
 				UserIO.WriteLine("S - Export the current results into a file");
 				UserIO.WriteLine("D - Remove a filter");

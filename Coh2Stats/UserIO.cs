@@ -65,6 +65,7 @@ namespace Coh2Stats
 
 		public static void WriteSeparator()
 		{
+			WriteLine("");
 			WriteLine("****************************************************************");
 		}
 		
