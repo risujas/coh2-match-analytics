@@ -89,8 +89,9 @@ namespace Coh2Stats
 		{
 			while (true)
 			{
-				MatchTypeId gameMode = RunGameModeSelection();
+				UserIO.PrintStartingInfo();
 
+				MatchTypeId gameMode = RunGameModeSelection();
 				DatabaseHandler.Load(gameMode);
 
 				int operatingMode = RunOperatingModeSelection();

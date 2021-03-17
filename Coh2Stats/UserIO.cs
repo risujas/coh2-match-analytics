@@ -19,9 +19,6 @@ namespace Coh2Stats
 			string fullLogDirectory = DatabaseHandler.ApplicationDataFolder + logFolder;
 			Directory.CreateDirectory(fullLogDirectory);
 
-			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
-			logFile = fullLogDirectory + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
-
 			if (Properties.Settings1.Default.DeleteOldLogs)
 			{
 				string[] files = Directory.GetFiles(DatabaseHandler.ApplicationDataFolder, "*_log.txt");
@@ -32,13 +29,19 @@ namespace Coh2Stats
 				}
 			}
 
+			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
+			logFile = fullLogDirectory + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
+		}
+
+		public static void PrintStartingInfo()
+		{
 			DateTime dt = DateTime.Now;
 			WriteLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
 #if DEBUG
 			WriteLine("DEBUG BUILD - NOT FOR RELEASE");
 #endif
 
-			var computerInfo =  new ComputerInfo();
+			var computerInfo = new ComputerInfo();
 			WriteLine(computerInfo.OSFullName + " - " + computerInfo.OSPlatform + " - " + computerInfo.OSVersion);
 			WriteLine("Total physical memory: " + computerInfo.TotalPhysicalMemory / 1000 / 1000 + " MB");
 			WriteLine("Available: " + computerInfo.AvailablePhysicalMemory / 1000 / 1000 + " MB");
