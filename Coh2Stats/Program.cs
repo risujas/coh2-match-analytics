@@ -29,7 +29,7 @@ namespace Coh2Stats
 			return UserIO.RunIntegerSelection(1, 4);
 		}
 
-		public static void RunCooldownProcedure()
+		public static bool RunCooldownProcedure()
 		{
 			Stopwatch sw = Stopwatch.StartNew();
 			double sessionInterval = 1200;
@@ -51,10 +51,12 @@ namespace Coh2Stats
 					var cki = Console.ReadKey();
 					if (cki.Key == ConsoleKey.Escape)
 					{
-						return;
+						return false;
 					}
 				}
 			}
+
+			return true;
 		}
 
 		public static void RunModeOperations(int operatingMode, MatchTypeId gameMode)
@@ -69,7 +71,11 @@ namespace Coh2Stats
 				while (true)
 				{
 					DatabaseHandler.ParseAndProcess(gameMode);
-					RunCooldownProcedure();
+					
+					if (RunCooldownProcedure() == false)
+					{
+						return;
+					}
 				}
 			}
 
