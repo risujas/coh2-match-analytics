@@ -177,46 +177,6 @@ namespace Coh2Stats
 			}
 		}
 
-		public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
-		{
-			for (int i = 0; i < PlayerIdentities.Count; i++)
-			{
-				var x = PlayerIdentities[i];
-				if (x.ProfileId == profileId)
-				{
-					return x;
-				}
-			}
-
-			UserIO.WriteLine("Missing player data; making an additional request to fill the gaps");
-
-			List<int> list = new List<int>();
-			list.Add(profileId);
-
-			var ps = RelicAPI.PersonalStat.RequestByProfileId(list);
-			RelicAPI.PlayerIdentity player = null;
-
-			foreach (var sg in ps.StatGroups)
-			{
-				if (sg.Type == 1)
-				{
-					player = sg.Members[0];
-					LogPlayer(player);
-				}
-
-				LogStatGroup(sg);
-			}
-
-			foreach (var lbs in ps.LeaderboardStats)
-			{
-				LogStat(lbs);
-			}
-
-			Write(DatabaseHandler.DatabaseFolder);
-
-			return player;
-		}
-
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
 			for (int i = 0; i < PlayerIdentities.Count; i++)
@@ -344,21 +304,6 @@ namespace Coh2Stats
 
 				UserIO.WriteLine(((LeaderboardId)leaderboardIndex).ToString() + " " + leaderboardSizes[(LeaderboardId)leaderboardIndex]);
 			}
-		}
-
-		public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)
-		{
-			if (leaderboardSizes.ContainsKey(id) == false)
-			{
-				var probeResponse = RelicAPI.Leaderboard.RequestById((int)id, 1, 1);
-				int leaderboardMaxRank = probeResponse.RankTotal;
-				leaderboardSizes.Add(id, leaderboardMaxRank);
-			}
-
-			int maxRank = leaderboardSizes[id];
-			double cutoffRank = maxRank * (percentile / 100.0);
-
-			return (int)cutoffRank;
 		}
 	}
 }

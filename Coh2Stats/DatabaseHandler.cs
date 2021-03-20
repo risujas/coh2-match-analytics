@@ -39,7 +39,7 @@ namespace Coh2Stats
 		public static void ParseAndProcess(MatchTypeId gameMode)
 		{
 			ProcessPlayers(gameMode);
-			ProcessMatches(gameMode, Program.RelevantTimeCutoffSeconds);
+			ProcessMatches(gameMode);
 		}
 
 		private static void ProcessPlayers(MatchTypeId gameMode)
@@ -50,7 +50,7 @@ namespace Coh2Stats
 			PlayerDb.Write(DatabaseFolder);
 		}
 
-		private static void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
+		private static void ProcessMatches(MatchTypeId gameMode)
 		{
 			var playersToBeProcessed = PlayerDb.GetRankedPlayersFromDatabase(gameMode);
 			int oldMatchCount = MatchDb.MatchData.Count;
@@ -86,7 +86,7 @@ namespace Coh2Stats
 				for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 				{
 					var x = response.MatchHistoryStats[i];
-					if (x.MatchTypeId == (int)gameMode && x.StartGameTime >= startedAfterTimestamp)
+					if (x.MatchTypeId == (int)gameMode)
 					{
 						MatchDb.LogMatch(x);
 					}

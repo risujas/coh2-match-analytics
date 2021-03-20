@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LeaderboardCompatibility.cs" />
-    <Compile Include="MatchAnalytics.cs" />
     <Compile Include="Properties\Settings1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -63,7 +62,6 @@
     <Compile Include="RelicAPI\RecentMatchHistory.cs" />
     <Compile Include="RelicAPI\StatGroup.cs" />
     <Compile Include="UserIO.cs" />
-    <Compile Include="MatchAnalyticsBundle.cs" />
     <Compile Include="DatabaseHandler.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Program.cs" />
