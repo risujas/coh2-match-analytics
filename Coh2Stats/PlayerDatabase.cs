@@ -258,6 +258,7 @@ namespace Coh2Stats
 			StatGroups.Add(statGroup);
 		}
 
+		// can return a stat with -1 rank
 		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
 			for (int i = 0; i < LeaderboardStats.Count; i++)

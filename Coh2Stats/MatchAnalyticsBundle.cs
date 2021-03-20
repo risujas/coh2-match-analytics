@@ -124,7 +124,7 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByPercentile(double percentile, bool requireOnAll, bool useTopPercentile)
+		public MatchAnalyticsBundle FilterByPercentile(double low, double high, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
 
@@ -145,7 +145,7 @@ namespace Coh2Stats
 						LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, false);
 
 						var soloStat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
-						if (soloStat == null)
+						if (soloStat == null || soloStat.Rank < 1)
 						{
 							if (requireOnAll)
 							{
@@ -155,29 +155,16 @@ namespace Coh2Stats
 							continue;
 						}
 
-						if (useTopPercentile)
+						int lowcutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, low);
+						int highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, high);
+
+						if (soloStat.Rank >= lowcutoffInclusive && soloStat.Rank < highCutoffExclusive)
 						{
-							int cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
-							if (soloStat.Rank <= cutoffRank)
-							{
-								numValidPlayers++;
-							}
-							else if (requireOnAll)
-							{
-								break;
-							}
+							numValidPlayers++;
 						}
-						else
+						else if (requireOnAll)
 						{
-							int cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
-							if (soloStat.Rank > cutoffRank)
-							{
-								numValidPlayers++;
-							}
-							else if (requireOnAll)
-							{
-								break;
-							}
+							break;
 						}
 					}
 
@@ -221,17 +208,16 @@ namespace Coh2Stats
 							continue;
 						}
 
-						int cutoffRank;
-						if (!useTeamLb)
+						int lowCutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, low);
+						int highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, high);
+
+						if (useTeamLb)
 						{
-							cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, percentile);
-						}
-						else
-						{
-							cutoffRank = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(teamLb, percentile);
+							lowCutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(teamLb, low);
+							highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(teamLb, high);
 						}
 
-						if (selectedStat.Rank <= cutoffRank)
+						if (selectedStat.Rank >= lowCutoffInclusive && selectedStat.Rank < highCutoffExclusive)
 						{
 							numValidPlayers++;
 						}

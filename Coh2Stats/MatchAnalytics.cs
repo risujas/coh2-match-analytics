@@ -10,8 +10,7 @@ namespace Coh2Stats
 		public const long relevantTimeCutoffSeconds = 1614376800;
 
 		private const string factionFilterTag = "factions";
-		private const string inclusivePercentileFilterTag = "in_top_%";
-		private const string exclusivePercentileFilterTag = "not_top_%";
+		private const string percentFilterTag = "ranks%";
 		private const string ageFilterTag = "hours";
 
 		public static void RunInteractiveAnalysis(MatchTypeId gameMode, string filterHistory = "")
@@ -45,14 +44,13 @@ namespace Coh2Stats
 								mab = mab.FilterByAllowedRaces(flags);
 							}
 
-							if (first == inclusivePercentileFilterTag)
+							if (first == percentFilterTag)
 							{
-								mab = mab.FilterByPercentile(double.Parse(second), true, true);
-							}
+								var moreParts = second.Split('_');
+								var low = moreParts[0];
+								var high = moreParts[1];
 
-							if (first == exclusivePercentileFilterTag)
-							{
-								mab = mab.FilterByPercentile(double.Parse(second), true, false);
+								mab = mab.FilterByPercentile(double.Parse(low), double.Parse(high), true);
 							}
 
 							if (first == ageFilterTag)
@@ -84,7 +82,7 @@ namespace Coh2Stats
 				UserIO.WriteLine("Q - Finish running the interactive analysis");
 				UserIO.WriteLine("S - Export the current results into a file");
 				UserIO.WriteLine("D - Remove a filter");
-				UserIO.WriteLine("1 - Filter by percentile");
+				UserIO.WriteLine("1 - Filter by percentile brackets");
 				UserIO.WriteLine("2 - Filter by faction");
 				UserIO.WriteLine("3 - Filter by match age in hours");
 				UserIO.WriteLine("Please select an operation.");
@@ -141,22 +139,13 @@ namespace Coh2Stats
 
 				if (operation == '1')
 				{
-					UserIO.WriteLine("Please select the cutoff percentile. More options will be presented afterwards.");
-					double percentile = UserIO.RunFloatingPointInput();
+					UserIO.WriteLine("Please select the low percentile cutoff.");
+					double lowCutoff = UserIO.RunFloatingPointInput();
 
-					UserIO.WriteLine("1 - get matches for the top {0}% of the playerbase", percentile);
-					UserIO.WriteLine("2 - get matches for the bottom {0}% of the playerbase", (100.0 - percentile));
-					UserIO.WriteLine("Please make your selection.");
-					int topOrBottom = UserIO.RunIntegerSelection(1, 2);
-					bool useTopPercentile = (topOrBottom == 1);
+					UserIO.WriteLine("Please select the high percentile cutoff.");
+					double highCutoff = UserIO.RunFloatingPointInput();
 
-					string filterString = "," + inclusivePercentileFilterTag + "-";
-					if (!useTopPercentile)
-					{
-						filterString = "," + exclusivePercentileFilterTag + "-";
-					}
-
-					filterHistory += filterString + percentile;
+					filterHistory += "," + percentFilterTag + "-" + lowCutoff.ToString() + "_" + highCutoff.ToString();
 				}
 
 				if (operation == '2')
