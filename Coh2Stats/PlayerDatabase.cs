@@ -83,7 +83,7 @@ namespace Coh2Stats
 					for (int i = 0; i < response.LeaderboardStats.Count; i++)
 					{
 						var lbs = response.LeaderboardStats[i];
-						LogStat(lbs);
+						LogLeaderboardStat(lbs);
 					}
 				}
 
@@ -151,7 +151,7 @@ namespace Coh2Stats
 			StatGroups.Add(statGroup);
 		}
 
-		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
+		public RelicAPI.LeaderboardStat GetLeaderboardStatByStatGroupId(int statGroupId, LeaderboardId leaderboardId)
 		{
 			for (int i = 0; i < LeaderboardStats.Count; i++)
 			{
@@ -166,9 +166,9 @@ namespace Coh2Stats
 			return null;
 		}
 
-		public void LogStat(RelicAPI.LeaderboardStat stat)
+		public void LogLeaderboardStat(RelicAPI.LeaderboardStat stat)
 		{
-			var oldStat = GetStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId);
+			var oldStat = GetLeaderboardStatByStatGroupId(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId);
 			if (oldStat != null)
 			{
 				LeaderboardStats.Remove(oldStat);

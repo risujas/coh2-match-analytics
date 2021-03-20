@@ -45,7 +45,7 @@ namespace Coh2Stats
 				{
 					var player = DatabaseHandler.PlayerDb.GetPlayerByProfileId(p.ProfileId);
 					var lbd = LeaderboardCompatibility.GetLeaderboardByRaceId((RaceId)p.RaceId);
-					var stat = DatabaseHandler.PlayerDb.GetStat(player.PersonalStatGroupId, lbd);
+					var stat = DatabaseHandler.PlayerDb.GetLeaderboardStatByStatGroupId(player.PersonalStatGroupId, lbd);
 					
 					int rank = -1;
 					if (stat != null)
