@@ -6,31 +6,22 @@ using Microsoft.VisualBasic.Devices;
 
 namespace Coh2Stats
 {
-	public static class UserIO
+	static class UserIO
 	{
+		public static string LogFolder
+		{
+			get;
+		} = Program.ApplicationDataFolder + "\\logs";
+
 		private static readonly string logFile;
-		private const string logFolder = "\\logs";
 
 		static UserIO()
 		{
 			var culture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentCulture = culture;
 
-			string fullLogDirectory = DatabaseHandler.ApplicationDataFolder + logFolder;
-			Directory.CreateDirectory(fullLogDirectory);
-
-			if (Properties.Settings1.Default.DeleteOldLogs)
-			{
-				string[] files = Directory.GetFiles(DatabaseHandler.ApplicationDataFolder, "*_log.txt");
-
-				foreach (var f in files)
-				{
-					File.Delete(f);
-				}
-			}
-
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
-			logFile = fullLogDirectory + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
+			logFile = LogFolder + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
 		}
 
 		public static void PrintStartingInfo()

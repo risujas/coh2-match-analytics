@@ -4,15 +4,15 @@ using System.IO;
 
 namespace Coh2Stats
 {
-	public class MatchDatabase
+	class MatchDatabase
 	{
 		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchData = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
 
 		public const string DbFile = "matchData.json";
 
-		public bool Load(string dbFolder, MatchTypeId gameMode)
+		public bool Load()
 		{
-			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;
+			string fullPath = DatabaseHandler.DatabaseFolder + "\\" + DbFile;
 			if (!File.Exists(fullPath))
 			{
 				return false;
@@ -28,25 +28,33 @@ namespace Coh2Stats
 			return true;
 		}
 
-		public void Write(string dbFolder, MatchTypeId gameMode)
+		public void Write()
 		{
 			UserIO.WriteLine("Writing match data");
 
 			var text = JsonConvert.SerializeObject(MatchData, Formatting.Indented);
-			string fullPath = dbFolder + "\\" + gameMode.ToString() + DbFile;
+			string fullPath = DatabaseHandler.DatabaseFolder + "\\" + DbFile;
 			File.WriteAllText(fullPath, text);
 		}
 
-		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat, MatchTypeId gameMode)
+		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
 		{
 			if (GetMatchById(matchHistoryStat.Id) == null)
 			{
 				foreach (var p in matchHistoryStat.MatchHistoryReportResults)
 				{
 					var player = DatabaseHandler.PlayerDb.GetPlayerByProfileId(p.ProfileId);
-					var lbd = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)p.RaceId, gameMode, false);
+					var lbd = LeaderboardCompatibility.GetLeaderboardByRaceId((RaceId)p.RaceId);
 					var stat = DatabaseHandler.PlayerDb.GetStat(player.PersonalStatGroupId, lbd);
-					p.Rank = stat.Rank;
+					
+					int rank = -1;
+					if (stat != null)
+					{
+						rank = stat.Rank;
+					}
+
+					p.Rank = rank;
+					p.Alias = player.Alias;
 				}
 
 				MatchData.Add(matchHistoryStat);

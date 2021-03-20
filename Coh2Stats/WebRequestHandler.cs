@@ -12,9 +12,9 @@ namespace Coh2Stats
 		[JsonProperty("message")] public string Message { get; set; }
 	}
 
-	public class WebRequestHandler
+	class WebRequestHandler
 	{
-		private const long requestCooldownDurationMs = 1000;
+		private const long requestCooldownDurationMs = 100;
 		private static long requestCooldownStartMs = 0;
 
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)

@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading;
+using System.IO;
 
 namespace Coh2Stats
 {
-	public class Program
+	class Program
 	{
-		public static void HandleGameMode(MatchTypeId gameMode)
+		public static string ApplicationDataFolder
 		{
-			DatabaseHandler.Load(gameMode);
-			DatabaseHandler.ParseAndProcess(gameMode);
-		}
+			get;
+		} = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
 
 		private static void Main()
 		{
+			Directory.CreateDirectory(ApplicationDataFolder);
+			Directory.CreateDirectory(DatabaseHandler.DatabaseFolder);
+			Directory.CreateDirectory(UserIO.LogFolder);
+
 			UserIO.PrintStartingInfo();
 
 			while (true)
 			{
-				HandleGameMode(MatchTypeId._1v1_);
-				HandleGameMode(MatchTypeId._2v2_);
-				HandleGameMode(MatchTypeId._3v3_);
-				HandleGameMode(MatchTypeId._4v4_);
+				DatabaseHandler.Load();
+				DatabaseHandler.Process();
 			}
 		}
 	}
