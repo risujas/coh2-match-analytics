@@ -232,7 +232,7 @@ namespace Coh2Stats
 			{
 				UserIO.WriteLine("");
 				UserIO.WriteLine("{0} win rates:", raceFlag.ToString());
-				UserIO.WriteLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
+				UserIO.WriteLine("{0:0.000}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
 				UserIO.WriteLine("----------------------------------------------------------------");
 
 				foreach (var m in mapsByWinRate)
@@ -243,7 +243,7 @@ namespace Coh2Stats
 						winCount = mapsByWinCount[m.Key];
 					}
 
-					UserIO.WriteLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+					UserIO.WriteLine("{0:0.000}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
 				}
 			}
 
@@ -252,7 +252,7 @@ namespace Coh2Stats
 				using (StreamWriter file = File.AppendText(destination))
 				{
 					file.WriteLine("{0} win rates:", raceFlag.ToString());
-					file.WriteLine("{0:0.00}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
+					file.WriteLine("{0:0.000}     {1} / {2,5}", totalWinRate, wonGames.Matches.Count, allGames.Matches.Count);
 					file.WriteLine("----------------------------------------------------------------");
 
 					foreach (var m in mapsByWinRate)
@@ -263,7 +263,7 @@ namespace Coh2Stats
 							winCount = mapsByWinCount[m.Key];
 						}
 
-						file.WriteLine("{0:0.00}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
+						file.WriteLine("{0:0.000}     {2} / {3,5} {1,40}", m.Value, m.Key, winCount, mapsByPlayCount[m.Key]);
 					}
 
 					file.WriteLine();
