@@ -107,31 +107,7 @@ namespace Coh2Stats
 				}
 			}
 
-			UserIO.WriteLine("Missing player data; making an additional request to fill the gaps");
-
-			List<int> list = new List<int>();
-			list.Add(profileId);
-
-			var ps = RelicAPI.PersonalStat.RequestByProfileId(list);
-			RelicAPI.PlayerIdentity player = null;
-
-			foreach (var sg in ps.StatGroups)
-			{
-				if (sg.Type == 1)
-				{
-					player = sg.Members[0];
-					LogPlayer(player);
-				}
-
-				LogStatGroup(sg);
-			}
-
-			foreach (var lbs in ps.LeaderboardStats)
-			{
-				LogStat(lbs);
-			}
-
-			return player;
+			return null;
 		}
 
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
