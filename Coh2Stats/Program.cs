@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 namespace Coh2Stats
 {
@@ -23,6 +24,9 @@ namespace Coh2Stats
 				DatabaseHandler.Load();
 				DatabaseHandler.ProcessPlayers();
 				DatabaseHandler.ProcessMatches();
+
+				UserIO.WriteLine("Processing finished. The program will continue operations in 10 minutes from now.");
+				Thread.Sleep(1000 * 60 * 10);
 			}
 		}
 	}
