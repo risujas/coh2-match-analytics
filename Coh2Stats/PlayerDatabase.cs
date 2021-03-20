@@ -68,7 +68,7 @@ namespace Coh2Stats
 			File.WriteAllText(fullPath, text);
 		}
 
-		public void FindNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
+		public void FindNewPlayers(MatchTypeId gameMode)
 		{
 			UserIO.WriteLine("Finding new players");
 
@@ -82,12 +82,7 @@ namespace Coh2Stats
 				}
 
 				int leaderboardMaxRank = leaderboardSizes[(LeaderboardId)leaderboardIndex];
-				int batchStartingIndex = startingRank;
-
-				if (maxRank != -1)
-				{
-					leaderboardMaxRank = maxRank;
-				}
+				int batchStartingIndex = 1;
 
 				while (batchStartingIndex < leaderboardMaxRank)
 				{
@@ -98,6 +93,8 @@ namespace Coh2Stats
 					{
 						batchSize = difference + 1;
 					}
+
+					UserIO.WriteLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
 
 					var response = RelicAPI.Leaderboard.RequestById(leaderboardIndex, batchStartingIndex, batchSize);
 
@@ -119,7 +116,6 @@ namespace Coh2Stats
 						LogStat(lbs);
 					}
 
-					UserIO.WriteLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
 					batchStartingIndex += batchSize;
 
 					UserIO.AllowPause();
@@ -177,6 +173,46 @@ namespace Coh2Stats
 			}
 		}
 
+		public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
+		{
+			for (int i = 0; i < PlayerIdentities.Count; i++)
+			{
+				var x = PlayerIdentities[i];
+				if (x.ProfileId == profileId)
+				{
+					return x;
+				}
+			}
+
+			UserIO.WriteLine("Missing player data; making an additional request to fill the gaps");
+
+			List<int> list = new List<int>();
+			list.Add(profileId);
+
+			var ps = RelicAPI.PersonalStat.RequestByProfileId(list);
+			RelicAPI.PlayerIdentity player = null;
+
+			foreach (var sg in ps.StatGroups)
+			{
+				if (sg.Type == 1)
+				{
+					player = sg.Members[0];
+					LogPlayer(player);
+				}
+
+				LogStatGroup(sg);
+			}
+
+			foreach (var lbs in ps.LeaderboardStats)
+			{
+				LogStat(lbs);
+			}
+
+			Write(DatabaseHandler.DatabaseFolder);
+
+			return player;
+		}
+
 		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
 			for (int i = 0; i < PlayerIdentities.Count; i++)
@@ -218,7 +254,6 @@ namespace Coh2Stats
 			StatGroups.Add(statGroup);
 		}
 
-		// can return a stat with -1 rank
 		public RelicAPI.LeaderboardStat GetStat(int statGroupId, LeaderboardId leaderboardId)
 		{
 			for (int i = 0; i < LeaderboardStats.Count; i++)

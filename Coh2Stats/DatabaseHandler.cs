@@ -8,7 +8,6 @@ namespace Coh2Stats
 	{
 		public static readonly PlayerDatabase PlayerDb = new PlayerDatabase();
 		public static readonly MatchDatabase MatchDb = new MatchDatabase();
-		public static MatchTypeId LoadedDataSet;
 
 		public static string ApplicationDataFolder
 		{
@@ -32,8 +31,6 @@ namespace Coh2Stats
 
 			PlayerDb.Load(DatabaseFolder);
 			MatchDb.Load(DatabaseFolder, gameMode);
-
-			LoadedDataSet = gameMode;
 		}
 
 		public static void ParseAndProcess(MatchTypeId gameMode)
@@ -44,7 +41,7 @@ namespace Coh2Stats
 
 		private static void ProcessPlayers(MatchTypeId gameMode)
 		{
-			PlayerDb.FindNewPlayers(gameMode, 1, -1);
+			PlayerDb.FindNewPlayers(gameMode);
 			PlayerDb.UpdatePlayerDetails(gameMode);
 
 			PlayerDb.Write(DatabaseFolder);
@@ -88,7 +85,7 @@ namespace Coh2Stats
 					var x = response.MatchHistoryStats[i];
 					if (x.MatchTypeId == (int)gameMode)
 					{
-						MatchDb.LogMatch(x);
+						MatchDb.LogMatch(x, gameMode);
 					}
 				}
 

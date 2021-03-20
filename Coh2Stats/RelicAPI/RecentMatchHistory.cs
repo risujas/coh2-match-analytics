@@ -16,6 +16,8 @@ namespace Coh2Stats.RelicAPI
 			[JsonProperty("xpgained")] public int XpGained { get; set; }
 			[JsonProperty("counters")] public string Counters { get; set; }
 			[JsonProperty("matchstartdate")] public int MatchStartDate { get; set; }
+			[JsonProperty("rank")] public int Rank { get; set; }
+
 		}
 
 		public class Matchhistoryitem

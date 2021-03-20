@@ -37,10 +37,18 @@ namespace Coh2Stats
 			File.WriteAllText(fullPath, text);
 		}
 
-		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
+		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat, MatchTypeId gameMode)
 		{
 			if (GetMatchById(matchHistoryStat.Id) == null)
 			{
+				foreach (var p in matchHistoryStat.MatchHistoryReportResults)
+				{
+					var player = DatabaseHandler.PlayerDb.GetPlayerByProfileId(p.ProfileId);
+					var lbd = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode((RaceId)p.RaceId, gameMode, false);
+					var stat = DatabaseHandler.PlayerDb.GetStat(player.PersonalStatGroupId, lbd);
+					p.Rank = stat.Rank;
+				}
+
 				MatchData.Add(matchHistoryStat);
 			}
 		}
