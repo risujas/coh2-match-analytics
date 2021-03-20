@@ -6,6 +6,15 @@ namespace Coh2Stats
 {
 	public class Program
 	{
+		public static readonly long RelevantTimeCutoffSeconds = 0;
+
+		static Program()
+		{
+			DateTime dt = DateTime.UtcNow;
+			DateTimeOffset dto = new DateTimeOffset(dt).AddDays(-30);
+			RelevantTimeCutoffSeconds = dto.ToUnixTimeSeconds();
+		}
+
 		public static MatchTypeId RunGameModeSelection()
 		{
 			UserIO.WriteSeparator();
@@ -87,6 +96,8 @@ namespace Coh2Stats
 
 		private static void Main()
 		{
+			UserIO.WriteLine("Relevant data cutoff set to " + RelevantTimeCutoffSeconds);
+
 			while (true)
 			{
 				UserIO.PrintStartingInfo();

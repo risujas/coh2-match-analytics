@@ -39,7 +39,7 @@ namespace Coh2Stats
 		public static void ParseAndProcess(MatchTypeId gameMode)
 		{
 			ProcessPlayers(gameMode);
-			ProcessMatches(gameMode, MatchAnalytics.relevantTimeCutoffSeconds);
+			ProcessMatches(gameMode, Program.RelevantTimeCutoffSeconds);
 		}
 
 		private static void ProcessPlayers(MatchTypeId gameMode)

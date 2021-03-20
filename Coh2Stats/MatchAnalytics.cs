@@ -7,7 +7,6 @@ namespace Coh2Stats
 {
 	static class MatchAnalytics
 	{
-		public const long relevantTimeCutoffSeconds = 1614376800;
 
 		private const string factionFilterTag = "factions";
 		private const string percentFilterTag = "ranks%";
@@ -23,7 +22,7 @@ namespace Coh2Stats
 			{
 				if (!skipFiltering)
 				{
-					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)relevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
+					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)Program.RelevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
 
 					UserIO.WriteLine("Filter history: " + filterHistory);
 
