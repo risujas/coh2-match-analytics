@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Coh2Stats
@@ -20,19 +19,13 @@ namespace Coh2Stats
 			MatchDb.Load();
 		}
 
-		public static void Process()
-		{
-			ProcessPlayers();
-			ProcessMatches();
-		}
-
-		private static void ProcessPlayers()
+		public static void ProcessPlayers()
 		{
 			PlayerDb.FindPlayerNames();
 			PlayerDb.FindPlayerStats();
 		}
 
-		private static void ProcessMatches()
+		public static void ProcessMatches()
 		{
 			var playersToBeProcessed = PlayerDb.PlayerIdentities.ToList();
 			int oldMatchCount = MatchDb.MatchData.Count;
@@ -69,10 +62,21 @@ namespace Coh2Stats
 				{
 					var x = response.MatchHistoryStats[i];
 					
-					if (x.MatchTypeId == 1)
+					if (x.MatchTypeId != 1)
 					{
-						MatchDb.LogMatch(x);
+						continue;
 					}
+
+					DateTime dt = DateTime.UtcNow.AddDays(-1);
+					DateTimeOffset dto = new DateTimeOffset(dt);
+					long unixTimeCutoff = dto.ToUnixTimeSeconds();
+
+					if (x.StartGameTime < unixTimeCutoff)
+					{
+						continue;
+					}
+
+					MatchDb.LogMatch(x);
 				}
 
 				UserIO.AllowPause();

@@ -21,7 +21,8 @@ namespace Coh2Stats
 			while (true)
 			{
 				DatabaseHandler.Load();
-				DatabaseHandler.Process();
+				DatabaseHandler.ProcessPlayers();
+				DatabaseHandler.ProcessMatches();
 			}
 		}
 	}
