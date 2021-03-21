@@ -55,6 +55,7 @@ namespace Coh2Stats
 
 					p.Rank = rank;
 					p.Alias = player.Alias;
+					p.RankTotal = DatabaseHandler.LeaderboardSizes[(int)lbd];
 				}
 
 				MatchData.Add(matchHistoryStat);
