@@ -72,7 +72,7 @@ namespace Coh2Stats
 						continue;
 					}
 
-					DateTime dt = DateTime.UtcNow.AddDays(-1);
+					DateTime dt = DateTime.UtcNow.AddHours(-4);
 					DateTimeOffset dto = new DateTimeOffset(dt);
 					long unixTimeCutoff = dto.ToUnixTimeSeconds();
 
