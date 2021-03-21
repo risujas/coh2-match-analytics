@@ -14,7 +14,7 @@ namespace Coh2Stats
 
 	class WebRequestHandler
 	{
-		private const long requestCooldownDurationMs = 100;
+		private const long requestCooldownDurationMs = 1000;
 		private static long requestCooldownStartMs = 0;
 
 		public static string GetStringJsonResponse(string requestUrl, string requestParams)
