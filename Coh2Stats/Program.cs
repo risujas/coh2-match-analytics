@@ -21,13 +21,20 @@ namespace Coh2Stats
 
 			while (true)
 			{
-				DatabaseHandler.Load();
-				DatabaseHandler.ProcessPlayers();
-				DatabaseHandler.ProcessMatches();
-				DatabaseHandler.Unload();
+				try
+				{
+					DatabaseHandler.Load();
+					DatabaseHandler.ProcessPlayers();
+					DatabaseHandler.ProcessMatches();
+					DatabaseHandler.Unload();
 
-				UserIO.WriteLine("Processing finished. The program will continue operations in 10 minutes from now.");
-				Thread.Sleep(1000 * 60 * 10);
+					UserIO.WriteLine("Processing finished. The program will continue operations in 10 minutes from now.");
+					Thread.Sleep(1000 * 60 * 10);
+				}
+				catch (Exception e)
+				{
+					UserIO.WriteExceptions(e);
+				}
 			}
 		}
 	}
