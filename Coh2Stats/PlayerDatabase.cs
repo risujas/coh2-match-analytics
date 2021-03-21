@@ -54,7 +54,7 @@ namespace Coh2Stats
 				}
 			}
 
-			UserIO.WriteLine("{0} players names found", PlayerIdentities.Count);
+			UserIO.WriteLine("{0} player names found", PlayerIdentities.Count);
 		}
 
 		public void FindPlayerStats()
