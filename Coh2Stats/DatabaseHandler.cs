@@ -16,6 +16,11 @@ namespace Coh2Stats
 
 		public static void Load()
 		{
+			PlayerDb.PlayerIdentities.Clear();
+			PlayerDb.StatGroups.Clear();
+			PlayerDb.LeaderboardStats.Clear();
+			MatchDb.MatchData.Clear();
+
 			MatchDb.Load();
 		}
 
