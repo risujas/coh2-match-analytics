@@ -12,5 +12,22 @@ namespace Coh2Stats.RelicAPI
 		[JsonProperty("level")] public int Level { get; set; }
 		[JsonProperty("leaderboardregion_id")] public int LeaderboardRegionId { get; set; }
 		[JsonProperty("country")] public string Country { get; set; }
+
+		public int GetHighestRank(PlayerDatabase pdb, MatchTypeId matchTypeId)
+		{
+			var stat = pdb.GetHighestStatByStatGroup(PersonalStatGroupId, matchTypeId);
+
+			if (stat == null)
+			{
+				return int.MaxValue;
+			}
+
+			if (stat.Rank < 1)
+			{
+				return int.MaxValue;
+			}
+
+			return stat.Rank;
+		}
 	}
 }

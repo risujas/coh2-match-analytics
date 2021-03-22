@@ -1,47 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 
 namespace Coh2Stats
 {
-	static class DatabaseHandler
+	public static class DatabaseHandler
 	{
 		public static readonly PlayerDatabase PlayerDb = new PlayerDatabase();
 		public static readonly MatchDatabase MatchDb = new MatchDatabase();
-		public static Dictionary<int, int> LeaderboardSizes = new Dictionary<int, int>();
+		public static MatchTypeId LoadedDataSet;
+
+		public static string ApplicationDataFolder
+		{
+			get;
+		} = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
 
 		public static string DatabaseFolder
 		{
 			get;
-		} = Program.ApplicationDataFolder + "\\databases";
+		} = ApplicationDataFolder + "\\databases";
 
-		public static void Unload()
+		static DatabaseHandler()
 		{
-			PlayerDb.PlayerIdentities.Clear();
-			PlayerDb.StatGroups.Clear();
-			PlayerDb.LeaderboardStats.Clear();
-
-			MatchDb.MatchData.Clear();
-
-			LeaderboardSizes.Clear();
+			Directory.CreateDirectory(ApplicationDataFolder);
+			Directory.CreateDirectory(DatabaseFolder);
 		}
 
-		public static void Load()
+		public static void Load(MatchTypeId gameMode)
 		{
-			GetLeaderboardSizes();
+			PlayerDb.FindLeaderboardSizes(gameMode);
 
-			MatchDb.Load();
+			PlayerDb.Load(DatabaseFolder);
+			MatchDb.Load(DatabaseFolder, gameMode);
+
+			LoadedDataSet = gameMode;
 		}
 
-		public static void ProcessPlayers()
+		public static void ParseAndProcess(MatchTypeId gameMode)
 		{
-			PlayerDb.FindPlayerNames();
-			PlayerDb.FindPlayerStats();
+			ProcessPlayers(gameMode);
+			ProcessMatches(gameMode, Program.RelevantTimeCutoffSeconds);
 		}
 
-		public static void ProcessMatches()
+		private static void ProcessPlayers(MatchTypeId gameMode)
 		{
-			var playersToBeProcessed = PlayerDb.PlayerIdentities.ToList();
+			PlayerDb.FindNewPlayers(gameMode, 1, -1);
+			PlayerDb.UpdatePlayerDetails(gameMode);
+
+			PlayerDb.Write(DatabaseFolder);
+		}
+
+		private static void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
+		{
+			var playersToBeProcessed = PlayerDb.GetRankedPlayersFromDatabase(gameMode);
 			int oldMatchCount = MatchDb.MatchData.Count;
 
 			while (playersToBeProcessed.Count > 0)
@@ -75,22 +86,10 @@ namespace Coh2Stats
 				for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 				{
 					var x = response.MatchHistoryStats[i];
-					
-					if (x.MatchTypeId != 1)
+					if (x.MatchTypeId == (int)gameMode && x.StartGameTime >= startedAfterTimestamp)
 					{
-						continue;
+						MatchDb.LogMatch(x);
 					}
-
-					DateTime dt = DateTime.UtcNow.AddDays(-1);
-					DateTimeOffset dto = new DateTimeOffset(dt);
-					long unixTimeCutoff = dto.ToUnixTimeSeconds();
-
-					if (x.StartGameTime < unixTimeCutoff)
-					{
-						continue;
-					}
-
-					MatchDb.LogMatch(x);
 				}
 
 				UserIO.AllowPause();
@@ -100,25 +99,8 @@ namespace Coh2Stats
 			int difference = newMatchCount - oldMatchCount;
 			UserIO.WriteLine("{0} new matches found", difference);
 
-			MatchDb.Write();
-		}
-
-		private static void GetLeaderboardSizes()
-		{
-			UserIO.WriteLine("Finding leaderboard sizes");
-
-			for (int i = 0; i < 100; i++)
-			{
-				if (i != 4 && i != 5 && i != 6 && i != 7 && i != 51)
-				{
-					continue;
-				}
-
-				var response = RelicAPI.Leaderboard.RequestById(i, 1, 1);
-				LeaderboardSizes.Add(i, response.RankTotal);
-
-				UserIO.WriteLine("#{0}: {1}", i, response.RankTotal);
-			}
+			PlayerDb.Write(DatabaseFolder);
+			MatchDb.Write(DatabaseFolder, gameMode);
 		}
 	}
 }
