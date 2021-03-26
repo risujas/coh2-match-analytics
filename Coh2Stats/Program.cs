@@ -94,19 +94,56 @@ namespace Coh2Stats
 			}
 		}
 
-		private static void Main()
+		private static void Main(string[] args)
 		{
 			UserIO.WriteLine("Relevant data cutoff set to " + RelevantTimeCutoffSeconds);
 
-			while (true)
+			if (args.Length > 0)
 			{
+				MatchTypeId gameMode;
+
+				if (args[0] == "-1v1")
+				{
+					gameMode = MatchTypeId._1v1_;
+				}
+
+				else if (args[0] == "-2v2")
+				{
+					gameMode = MatchTypeId._2v2_;
+				}
+
+				else if (args[0] == "-3v3")
+				{
+					gameMode = MatchTypeId._3v3_;
+				}
+
+				else if (args[0] == "-4v4")
+				{
+					gameMode = MatchTypeId._4v4_;
+				}
+
+				else
+				{
+					return;
+				}
+
 				UserIO.PrintStartingInfo();
-
-				MatchTypeId gameMode = RunGameModeSelection();
 				DatabaseHandler.Load(gameMode);
+				RunModeOperations(1, gameMode);
+			}
 
-				int operatingMode = RunOperatingModeSelection();
-				RunModeOperations(operatingMode, gameMode);
+			else
+			{
+				while (true)
+				{
+					UserIO.PrintStartingInfo();
+
+					MatchTypeId gameMode = RunGameModeSelection();
+					DatabaseHandler.Load(gameMode);
+
+					int operatingMode = RunOperatingModeSelection();
+					RunModeOperations(operatingMode, gameMode);
+				}
 			}
 		}
 	}
