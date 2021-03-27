@@ -13,7 +13,7 @@ namespace Coh2Stats
 		public static string DatabaseFolder
 		{
 			get;
-		} = ApplicationDataFolder + "\\databases";
+		} = ApplicationDataFolder + "\\database";
 
 		public static string LogFolder
 		{
