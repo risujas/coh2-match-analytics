@@ -16,16 +16,18 @@ namespace Coh2Stats
 
 		public static void Process()
 		{
-			ProcessPlayers();
+			PlayerDb.FindPlayerNames();
+			PlayerDb.FindPlayerDetails();
+
 			ProcessMatches();
 		}
 
-		private static void ProcessPlayers()
-		{
-			PlayerDb.FindPlayerNames();
-			PlayerDb.FindPlayerDetails();
-		}
-
+		/// <summary>
+		/// Iterates through batches of players from PlayerDB.PlayerIdentities and makes web requests to fetch their match histories.
+		/// Players discovered from the match histories are also added to PlayerDB.PlayerIdentities, but won't have their own match histories fetched.
+		/// All discovered matches are saved to MatchDB.MatchData.
+		/// Upon completion, the match data is exported to a file.
+		/// </summary>
 		private static void ProcessMatches()
 		{
 			var playersToBeProcessed = PlayerDb.PlayerIdentities.ToList();
