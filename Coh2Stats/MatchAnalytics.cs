@@ -23,7 +23,7 @@ namespace Coh2Stats
 			{
 				if (!skipFiltering)
 				{
-					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)Program.RelevantTimeCutoffSeconds, -1);
+					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)Program.MatchRelevancyCutoff, -1);
 
 					UserIO.WriteLine("Filter history: " + filterHistory);
 

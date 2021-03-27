@@ -25,13 +25,18 @@ namespace Coh2Stats
 			get;
 		} = ApplicationDataFolder + "\\exports";
 
-		public static readonly long RelevantTimeCutoffSeconds = 0;
+		public static readonly long MatchRelevancyCutoff = 0;
+		public static readonly long MatchLoggingCutoff = 0;
 
 		static Program()
 		{
 			DateTime dt = DateTime.UtcNow;
+
 			DateTimeOffset dto = new DateTimeOffset(dt).AddDays(-30);
-			RelevantTimeCutoffSeconds = dto.ToUnixTimeSeconds();
+			MatchRelevancyCutoff = dto.ToUnixTimeSeconds();
+
+			dto = new DateTimeOffset(dt).AddDays(-1);
+			MatchLoggingCutoff = dto.ToUnixTimeSeconds();
 		}
 		private static int RunOperatingModeSelection()
 		{
@@ -68,7 +73,7 @@ namespace Coh2Stats
 		{
 			CreateFolders();	
 
-			UserIO.WriteLine("Relevant data cutoff set to " + RelevantTimeCutoffSeconds);
+			UserIO.WriteLine("Relevant data cutoff set to " + MatchRelevancyCutoff);
 
 			if (args.Length > 0)
 			{

@@ -64,7 +64,7 @@ namespace Coh2Stats
 				for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 				{
 					var x = response.MatchHistoryStats[i];
-					if (x.MatchTypeId == 1 && x.StartGameTime >= Program.RelevantTimeCutoffSeconds)
+					if (x.MatchTypeId == 1 && x.StartGameTime >= Program.MatchLoggingCutoff)
 					{
 						MatchDb.LogMatch(x);
 					}
