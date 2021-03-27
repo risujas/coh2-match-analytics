@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Coh2Stats
 {
@@ -79,7 +80,7 @@ namespace Coh2Stats
 
 				UserIO.WriteSeparator();
 				UserIO.WriteLine("Q - Finish running the interactive analysis");
-				UserIO.WriteLine("S - Export the current results into a file");
+				UserIO.WriteLine("S - Export the current results");
 				UserIO.WriteLine("D - Remove a filter");
 				UserIO.WriteLine("1 - Filter by percentile brackets");
 				UserIO.WriteLine("2 - Filter by faction");
@@ -273,14 +274,21 @@ namespace Coh2Stats
 
 		private static void SaveResultsToFile(MatchAnalyticsBundle mab, string fileName)
 		{
-			string filePath = Program.ExportsFolder + "\\" + fileName + ".txt";
-			File.Delete(filePath);
+			string representationFile = Program.ExportsFolder + "\\" + fileName + ".txt";
+			string matchDataFile = Program.ExportsFolder + "\\" + fileName + ".json";
 
-			AnalyzeWinRatesByRace(mab, RaceFlag.German, filePath);
-			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet, filePath);
-			AnalyzeWinRatesByRace(mab, RaceFlag.AEF, filePath);
-			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman, filePath);
-			AnalyzeWinRatesByRace(mab, RaceFlag.British, filePath);
+			File.Delete(representationFile);
+			File.Delete(matchDataFile);
+
+			AnalyzeWinRatesByRace(mab, RaceFlag.German, representationFile);
+			AnalyzeWinRatesByRace(mab, RaceFlag.Soviet, representationFile);
+			AnalyzeWinRatesByRace(mab, RaceFlag.AEF, representationFile);
+			AnalyzeWinRatesByRace(mab, RaceFlag.WGerman, representationFile);
+			AnalyzeWinRatesByRace(mab, RaceFlag.British, representationFile);
+
+			var matchData = JsonConvert.SerializeObject(mab.Matches, Formatting.Indented);
+			File.WriteAllText(matchDataFile, matchData);
+
 		}
 	}
 }
