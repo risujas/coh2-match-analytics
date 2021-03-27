@@ -121,12 +121,9 @@ namespace Coh2Stats
 				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
 				{
 					var report = match.MatchHistoryReportResults[j];
-					var identity = DatabaseHandler.PlayerDb.GetPlayerByProfileId(report.ProfileId);
-					RaceId playerFaction = (RaceId)report.RaceId;
-					LeaderboardId ldb = LeaderboardCompatibility.GetLeaderboardByRace(playerFaction);
+					LeaderboardId ldb = LeaderboardCompatibility.GetLeaderboardByRace((RaceId)report.RaceId);
 
-					var stat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, ldb);
-					if (stat == null || stat.Rank < 1)
+					if (report.Rank < 1)
 					{
 						if (requireOnAll)
 						{
@@ -139,7 +136,7 @@ namespace Coh2Stats
 					int lowcutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(ldb, low);
 					int highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(ldb, high);
 
-					if (stat.Rank >= lowcutoffInclusive && stat.Rank < highCutoffExclusive)
+					if (report.Rank >= lowcutoffInclusive && report.Rank < highCutoffExclusive)
 					{
 						numValidPlayers++;
 					}
