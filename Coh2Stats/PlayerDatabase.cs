@@ -13,7 +13,7 @@ namespace Coh2Stats
 
 		public Dictionary<LeaderboardId, int> LeaderboardSizes = new Dictionary<LeaderboardId, int>();
 
-		public void FindPlayerNames(int startingRank = 1, int maxRank = -1)
+		public void FindPlayerNames()
 		{
 			UserIO.WriteLine("Finding players");
 
@@ -27,12 +27,7 @@ namespace Coh2Stats
 				}
 
 				int leaderboardMaxRank = LeaderboardSizes[(LeaderboardId)leaderboardIndex];
-				int batchStartingIndex = startingRank;
-
-				if (maxRank != -1)
-				{
-					leaderboardMaxRank = maxRank;
-				}
+				int batchStartingIndex = 1;
 
 				while (batchStartingIndex < leaderboardMaxRank)
 				{

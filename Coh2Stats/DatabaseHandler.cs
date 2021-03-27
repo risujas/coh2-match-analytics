@@ -24,7 +24,7 @@ namespace Coh2Stats
 
 		private static void ProcessPlayers()
 		{
-			PlayerDb.FindPlayerNames(1, -1);
+			PlayerDb.FindPlayerNames();
 			PlayerDb.FindPlayerDetails();
 		}
 
