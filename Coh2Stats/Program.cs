@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading;
 
 namespace Coh2Stats
 {
@@ -19,41 +17,10 @@ namespace Coh2Stats
 		{
 			UserIO.WriteSeparator();
 			UserIO.WriteLine("1 - Match logging");
-			UserIO.WriteLine("2 - Match logging (repeating)");
-			UserIO.WriteLine("3 - Match analysis");
+			UserIO.WriteLine("2 - Match analysis");
 			UserIO.WriteLine("Please select an operating mode.");
 
-			return UserIO.RunIntegerSelection(1, 4);
-		}
-
-		public static bool RunCooldownProcedure()
-		{
-			Stopwatch sw = Stopwatch.StartNew();
-			double sessionInterval = 1200;
-			int notificationInterval = 60;
-
-			while (sw.Elapsed.TotalSeconds < sessionInterval)
-			{
-				double difference = sessionInterval - sw.Elapsed.TotalSeconds;
-				int intDiff = (int)difference;
-
-				if (intDiff % notificationInterval == 0)
-				{
-					UserIO.WriteLine("Resuming operations in {0:0} seconds. You can press CTRL + C to exit this program, or ESCAPE to return to the start screen.", difference);
-					Thread.Sleep(1000);
-				}
-
-				if (Console.KeyAvailable)
-				{
-					var cki = Console.ReadKey();
-					if (cki.Key == ConsoleKey.Escape)
-					{
-						return false;
-					}
-				}
-			}
-
-			return true;
+			return UserIO.RunIntegerSelection(1, 2);
 		}
 
 		public static void RunModeOperations(int operatingMode)
@@ -64,19 +31,6 @@ namespace Coh2Stats
 			}
 
 			if (operatingMode == 2)
-			{
-				while (true)
-				{
-					DatabaseHandler.ParseAndProcess();
-					
-					if (RunCooldownProcedure() == false)
-					{
-						return;
-					}
-				}
-			}
-
-			if (operatingMode == 3)
 			{
 				MatchAnalytics.RunInteractiveAnalysis();
 			}
@@ -91,6 +45,7 @@ namespace Coh2Stats
 				if (args[0] == "-auto")
 				{
 					UserIO.PrintStartingInfo();
+
 					DatabaseHandler.Load();
 					RunModeOperations(1);
 				}
@@ -103,7 +58,6 @@ namespace Coh2Stats
 					UserIO.PrintStartingInfo();
 
 					DatabaseHandler.Load();
-
 					int operatingMode = RunOperatingModeSelection();
 					RunModeOperations(operatingMode);
 				}
