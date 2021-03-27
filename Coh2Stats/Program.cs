@@ -52,7 +52,7 @@ namespace Coh2Stats
 		{
 			if (operatingMode == 1)
 			{
-				DatabaseHandler.ParseAndProcess();
+				DatabaseHandler.Process();
 			}
 
 			if (operatingMode == 2)

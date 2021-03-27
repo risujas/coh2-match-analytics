@@ -16,7 +16,7 @@ namespace Coh2Stats
 			MatchDb.Load();
 		}
 
-		public static void ParseAndProcess()
+		public static void Process()
 		{
 			ProcessPlayers();
 			ProcessMatches();
