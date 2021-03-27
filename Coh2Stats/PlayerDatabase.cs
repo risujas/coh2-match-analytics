@@ -17,14 +17,14 @@ namespace Coh2Stats
 
 		private Dictionary<LeaderboardId, int> leaderboardSizes = new Dictionary<LeaderboardId, int>();
 
-		public bool Load(string dbFolder)
+		public bool Load()
 		{
-			if (File.Exists(dbFolder + "\\" + PlayerIdentityFile) || File.Exists(dbFolder + "\\" + StatGroupFile) || File.Exists(dbFolder + "\\" + LeaderboardStatFile))
+			if (File.Exists(Program.DatabaseFolder + "\\" + PlayerIdentityFile) || File.Exists(Program.DatabaseFolder + "\\" + StatGroupFile) || File.Exists(Program.DatabaseFolder + "\\" + LeaderboardStatFile))
 			{
 				UserIO.WriteLine("Loading player data");
 			}
 
-			string fullPath = dbFolder + "\\" + PlayerIdentityFile;
+			string fullPath = Program.DatabaseFolder + "\\" + PlayerIdentityFile;
 			if (File.Exists(fullPath))
 			{
 				string text = File.ReadAllText(fullPath);
@@ -32,7 +32,7 @@ namespace Coh2Stats
 				UserIO.WriteLine("{0} player identities", PlayerIdentities.Count);
 			}
 
-			fullPath = dbFolder + "\\" + StatGroupFile;
+			fullPath = Program.DatabaseFolder + "\\" + StatGroupFile;
 			if (File.Exists(fullPath))
 			{
 				string text = File.ReadAllText(fullPath);
@@ -40,7 +40,7 @@ namespace Coh2Stats
 				UserIO.WriteLine("{0} stat groups", StatGroups.Count);
 			}
 
-			fullPath = dbFolder + "\\" + LeaderboardStatFile;
+			fullPath = Program.DatabaseFolder + "\\" + LeaderboardStatFile;
 			if (File.Exists(fullPath))
 			{
 				string text = File.ReadAllText(fullPath);
@@ -51,20 +51,20 @@ namespace Coh2Stats
 			return true;
 		}
 
-		public void Write(string dbFolder)
+		public void Write()
 		{
 			UserIO.WriteLine("Writing player data");
 
 			var text = JsonConvert.SerializeObject(PlayerIdentities, Formatting.Indented);
-			var fullPath = dbFolder + "\\" + PlayerIdentityFile;
+			var fullPath = Program.DatabaseFolder + "\\" + PlayerIdentityFile;
 			File.WriteAllText(fullPath, text);
 
 			text = JsonConvert.SerializeObject(StatGroups, Formatting.Indented);
-			fullPath = dbFolder + "\\" + StatGroupFile;
+			fullPath = Program.DatabaseFolder + "\\" + StatGroupFile;
 			File.WriteAllText(fullPath, text);
 
 			text = JsonConvert.SerializeObject(LeaderboardStats, Formatting.Indented);
-			fullPath = dbFolder + "\\" + LeaderboardStatFile;
+			fullPath = Program.DatabaseFolder + "\\" + LeaderboardStatFile;
 			File.WriteAllText(fullPath, text);
 		}
 
@@ -212,7 +212,7 @@ namespace Coh2Stats
 				LogStat(lbs);
 			}
 
-			Write(Program.DatabaseFolder);
+			Write();
 
 			return player;
 		}

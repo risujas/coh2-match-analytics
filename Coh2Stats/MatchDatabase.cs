@@ -10,9 +10,9 @@ namespace Coh2Stats
 
 		public const string DbFile = "matchData.json";
 
-		public bool Load(string dbFolder)
+		public bool Load()
 		{
-			string fullPath = dbFolder + "\\" + DbFile;
+			string fullPath = Program.DatabaseFolder + "\\" + DbFile;
 			if (!File.Exists(fullPath))
 			{
 				return false;
@@ -28,12 +28,12 @@ namespace Coh2Stats
 			return true;
 		}
 
-		public void Write(string dbFolder)
+		public void Write()
 		{
 			UserIO.WriteLine("Writing match data");
 
 			var text = JsonConvert.SerializeObject(MatchData, Formatting.Indented);
-			string fullPath = dbFolder + "\\" + DbFile;
+			string fullPath = Program.DatabaseFolder + "\\" + DbFile;
 			File.WriteAllText(fullPath, text);
 		}
 

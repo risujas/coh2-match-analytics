@@ -9,14 +9,12 @@ namespace Coh2Stats
 		public static readonly PlayerDatabase PlayerDb = new PlayerDatabase();
 		public static readonly MatchDatabase MatchDb = new MatchDatabase();
 
-		
-
 		public static void Load()
 		{
 			PlayerDb.FindLeaderboardSizes();
 
-			PlayerDb.Load(Program.DatabaseFolder);
-			MatchDb.Load(Program.DatabaseFolder);
+			PlayerDb.Load();
+			MatchDb.Load();
 		}
 
 		public static void ParseAndProcess()
@@ -30,7 +28,7 @@ namespace Coh2Stats
 			PlayerDb.FindNewPlayers(1, -1);
 			PlayerDb.UpdatePlayerDetails();
 
-			PlayerDb.Write(Program.DatabaseFolder);
+			PlayerDb.Write();
 		}
 
 		private static void ProcessMatches()
@@ -82,8 +80,8 @@ namespace Coh2Stats
 			int difference = newMatchCount - oldMatchCount;
 			UserIO.WriteLine("{0} new matches found", difference);
 
-			PlayerDb.Write(Program.DatabaseFolder);
-			MatchDb.Write(Program.DatabaseFolder);
+			PlayerDb.Write();
+			MatchDb.Write();
 		}
 	}
 }
