@@ -49,11 +49,6 @@
   <ItemGroup>
     <Compile Include="LeaderboardCompatibility.cs" />
     <Compile Include="MatchAnalytics.cs" />
-    <Compile Include="Properties\Settings1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings1.settings</DependentUpon>
-    </Compile>
     <Compile Include="RelicAPI\Leaderboard.cs" />
     <Compile Include="RelicAPI\LeaderboardStat.cs" />
     <Compile Include="MatchDatabase.cs" />
@@ -74,10 +69,6 @@
     <None Include="app.config" />
     <None Include="Configs\App.config" />
     <None Include="Configs\packages.config" />
-    <None Include="Properties\Settings1.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

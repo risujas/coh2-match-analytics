@@ -9,23 +9,11 @@ namespace Coh2Stats
 	public static class UserIO
 	{
 		private static readonly string logFile;
-		
 
 		static UserIO()
 		{
 			var culture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentCulture = culture;
-
-			// todo remove
-			if (Properties.Settings1.Default.DeleteOldLogs)
-			{
-				string[] files = Directory.GetFiles(Program.LogFolder, "*_log.txt");
-
-				foreach (var f in files)
-				{
-					File.Delete(f);
-				}
-			}
 
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
 			logFile = Program.LogFolder + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
