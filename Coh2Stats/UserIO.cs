@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Devices;
+
+using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
-using System.Globalization;
-using Microsoft.VisualBasic.Devices;
 
 namespace Coh2Stats
 {
@@ -57,7 +58,7 @@ namespace Coh2Stats
 			WriteLine("");
 			WriteLine("****************************************************************");
 		}
-		
+
 		public static void WriteExceptions(Exception e)
 		{
 			if (e.InnerException == null)

@@ -71,7 +71,7 @@ namespace Coh2Stats
 
 		private static void Main(string[] args)
 		{
-			CreateFolders();	
+			CreateFolders();
 
 			UserIO.WriteLine("Relevant data cutoff set to " + MatchRelevancyCutoff);
 
