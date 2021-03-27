@@ -88,9 +88,12 @@ namespace Coh2Stats
 
 			if (args.Length > 0)
 			{
-				UserIO.PrintStartingInfo();
-				DatabaseHandler.Load();
-				RunModeOperations(1);
+				if (args[0] == "-auto")
+				{
+					UserIO.PrintStartingInfo();
+					DatabaseHandler.Load();
+					RunModeOperations(1);
+				}
 			}
 
 			else
