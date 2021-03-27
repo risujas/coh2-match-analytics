@@ -41,6 +41,27 @@ namespace Coh2Stats
 		{
 			if (GetMatchById(matchHistoryStat.Id) == null)
 			{
+				for (int i = 0; i < matchHistoryStat.MatchHistoryReportResults.Count; i++)
+				{
+					var r = matchHistoryStat.MatchHistoryReportResults[i];
+
+					var player = DatabaseHandler.PlayerDb.GetPlayerByProfileId(r.ProfileId);
+					var playerLbd = LeaderboardCompatibility.GetLeaderboardByRace((RaceId)r.RaceId);
+					var playerStat = DatabaseHandler.PlayerDb.GetStat(player.PersonalStatGroupId, playerLbd);
+
+					r.RankTotal = DatabaseHandler.PlayerDb.LeaderboardSizes[playerLbd];
+
+					if (playerStat == null)
+					{
+						r.Rank = -1;
+					}
+
+					else
+					{
+						r.Rank = playerStat.Rank;
+					}
+				}
+
 				MatchData.Add(matchHistoryStat);
 			}
 		}

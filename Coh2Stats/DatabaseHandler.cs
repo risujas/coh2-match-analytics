@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Coh2Stats
 {
@@ -12,8 +13,6 @@ namespace Coh2Stats
 		public static void Load()
 		{
 			PlayerDb.FindLeaderboardSizes();
-
-			PlayerDb.Load();
 			MatchDb.Load();
 		}
 
@@ -25,15 +24,13 @@ namespace Coh2Stats
 
 		private static void ProcessPlayers()
 		{
-			PlayerDb.FindNewPlayers(1, -1);
-			PlayerDb.UpdatePlayerDetails();
-
-			PlayerDb.Write();
+			PlayerDb.FindPlayerNames(1, -1);
+			PlayerDb.FindPlayerDetails();
 		}
 
 		private static void ProcessMatches()
 		{
-			var playersToBeProcessed = PlayerDb.GetRankedPlayersFromDatabase();
+			var playersToBeProcessed = PlayerDb.PlayerIdentities.ToList();
 			int oldMatchCount = MatchDb.MatchData.Count;
 
 			while (playersToBeProcessed.Count > 0)
@@ -80,7 +77,6 @@ namespace Coh2Stats
 			int difference = newMatchCount - oldMatchCount;
 			UserIO.WriteLine("{0} new matches found", difference);
 
-			PlayerDb.Write();
 			MatchDb.Write();
 		}
 	}
