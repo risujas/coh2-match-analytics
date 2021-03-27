@@ -273,12 +273,7 @@ namespace Coh2Stats
 
 		private static void SaveResultsToFile(MatchAnalyticsBundle mab, string fileName)
 		{
-			string finalFolder = DatabaseHandler.ApplicationDataFolder + "\\exports";
-
-			Directory.CreateDirectory(DatabaseHandler.ApplicationDataFolder);
-			Directory.CreateDirectory(finalFolder);
-
-			string filePath = finalFolder + "\\" + fileName + ".txt";
+			string filePath = Program.ExportsFolder + "\\" + fileName + ".txt";
 			File.Delete(filePath);
 
 			AnalyzeWinRatesByRace(mab, RaceFlag.German, filePath);

@@ -212,7 +212,7 @@ namespace Coh2Stats
 				LogStat(lbs);
 			}
 
-			Write(DatabaseHandler.DatabaseFolder);
+			Write(Program.DatabaseFolder);
 
 			return player;
 		}

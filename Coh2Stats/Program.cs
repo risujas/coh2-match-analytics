@@ -1,9 +1,30 @@
 ﻿using System;
+using System.IO;
 
 namespace Coh2Stats
 {
 	public class Program
 	{
+		public static string ApplicationDataFolder
+		{
+			get;
+		} = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\coh2stats";
+
+		public static string DatabaseFolder
+		{
+			get;
+		} = ApplicationDataFolder + "\\databases";
+
+		public static string LogFolder
+		{
+			get;
+		} = ApplicationDataFolder + "\\logs";
+
+		public static string ExportsFolder
+		{
+			get;
+		} = ApplicationDataFolder + "\\exports";
+
 		public static readonly long RelevantTimeCutoffSeconds = 0;
 
 		static Program()
@@ -12,8 +33,7 @@ namespace Coh2Stats
 			DateTimeOffset dto = new DateTimeOffset(dt).AddDays(-30);
 			RelevantTimeCutoffSeconds = dto.ToUnixTimeSeconds();
 		}
-
-		public static int RunOperatingModeSelection()
+		private static int RunOperatingModeSelection()
 		{
 			UserIO.WriteSeparator();
 			UserIO.WriteLine("1 - Match logging");
@@ -23,7 +43,7 @@ namespace Coh2Stats
 			return UserIO.RunIntegerSelection(1, 2);
 		}
 
-		public static void RunModeOperations(int operatingMode)
+		private static void RunModeOperations(int operatingMode)
 		{
 			if (operatingMode == 1)
 			{
@@ -36,8 +56,18 @@ namespace Coh2Stats
 			}
 		}
 
+		private static void CreateFolders()
+		{
+			Directory.CreateDirectory(ApplicationDataFolder);
+			Directory.CreateDirectory(DatabaseFolder);
+			Directory.CreateDirectory(LogFolder);
+			Directory.CreateDirectory(ExportsFolder);
+		}
+
 		private static void Main(string[] args)
 		{
+			CreateFolders();	
+
 			UserIO.WriteLine("Relevant data cutoff set to " + RelevantTimeCutoffSeconds);
 
 			if (args.Length > 0)

@@ -9,19 +9,17 @@ namespace Coh2Stats
 	public static class UserIO
 	{
 		private static readonly string logFile;
-		private const string logFolder = "\\logs";
+		
 
 		static UserIO()
 		{
 			var culture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentCulture = culture;
-
-			string fullLogDirectory = DatabaseHandler.ApplicationDataFolder + logFolder;
-			Directory.CreateDirectory(fullLogDirectory);
+			
 
 			if (Properties.Settings1.Default.DeleteOldLogs)
 			{
-				string[] files = Directory.GetFiles(DatabaseHandler.ApplicationDataFolder, "*_log.txt");
+				string[] files = Directory.GetFiles(Program.LogFolder, "*_log.txt");
 
 				foreach (var f in files)
 				{
@@ -30,7 +28,7 @@ namespace Coh2Stats
 			}
 
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
-			logFile = fullLogDirectory + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
+			logFile = Program.LogFolder + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
 		}
 
 		public static void PrintStartingInfo()
