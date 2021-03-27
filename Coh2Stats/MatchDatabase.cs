@@ -47,7 +47,7 @@ namespace Coh2Stats
 
 					var player = DatabaseHandler.PlayerDb.GetPlayerByProfileId(r.ProfileId);
 					var playerLbd = LeaderboardCompatibility.GetLeaderboardByRace((RaceId)r.RaceId);
-					var playerStat = DatabaseHandler.PlayerDb.GetStat(player.PersonalStatGroupId, playerLbd);
+					var playerStat = DatabaseHandler.PlayerDb.GetLeaderboardStat(player.PersonalStatGroupId, playerLbd);
 
 					r.RankTotal = DatabaseHandler.PlayerDb.LeaderboardSizes[playerLbd];
 
