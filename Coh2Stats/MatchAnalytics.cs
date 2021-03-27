@@ -12,7 +12,7 @@ namespace Coh2Stats
 		private const string percentFilterTag = "ranks%";
 		private const string ageFilterTag = "hours";
 
-		public static void RunInteractiveAnalysis(MatchTypeId gameMode, string filterHistory = "")
+		public static void RunInteractiveAnalysis(string filterHistory = "")
 		{
 			MatchAnalyticsBundle mab = null;
 			bool skipFiltering = false;
@@ -22,7 +22,7 @@ namespace Coh2Stats
 			{
 				if (!skipFiltering)
 				{
-					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)Program.RelevantTimeCutoffSeconds, -1).FilterByMatchType(gameMode);
+					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)Program.RelevantTimeCutoffSeconds, -1);
 
 					UserIO.WriteLine("Filter history: " + filterHistory);
 

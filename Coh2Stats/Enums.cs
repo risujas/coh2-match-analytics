@@ -28,28 +28,6 @@ namespace Coh2Stats
 		Allies = 1
 	}
 
-	public enum MatchTypeId
-	{
-		_Custom_ = 0,
-		_1v1_ = 1,
-		_2v2_ = 2,
-		_3v3_ = 3,
-		_4v4_ = 4,
-		_2v2AiEasy_ = 5,
-		_2v2AiMedium_ = 6,
-		_2v2AiHard_ = 7,
-		_2v2AiExpert_ = 8,
-		_3v3AiEasy_ = 9,
-		_3v3AiMedium_ = 10,
-		_3v3AiHard_ = 11,
-		_3v3AiExpert_ = 12,
-		_4v4AiEasy_ = 13,
-		_4v4AiMedium_ = 14,
-		_4v4AiHard_ = 15,
-		_4v4AiExpert_ = 16,
-		_CustomPublic_ = 22
-	}
-
 	public enum LeaderboardId
 	{
 		_CustomGerman_ = 0,

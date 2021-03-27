@@ -68,7 +68,7 @@ namespace Coh2Stats
 			File.WriteAllText(fullPath, text);
 		}
 
-		public void FindNewPlayers(MatchTypeId gameMode, int startingRank = 1, int maxRank = -1)
+		public void FindNewPlayers(int startingRank = 1, int maxRank = -1)
 		{
 			UserIO.WriteLine("Finding new players");
 
@@ -76,7 +76,7 @@ namespace Coh2Stats
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (LeaderboardCompatibility.LeaderboardIsCompatibleWithGameMode((LeaderboardId)leaderboardIndex, gameMode) == false)
+				if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
 				{
 					continue;
 				}
@@ -132,9 +132,9 @@ namespace Coh2Stats
 			UserIO.WriteLine("{0} new players found", playerCountDiff);
 		}
 
-		public void UpdatePlayerDetails(MatchTypeId gameMode)
+		public void UpdatePlayerDetails()
 		{
-			var players = GetRankedPlayersFromDatabase(gameMode);
+			var players = GetRankedPlayersFromDatabase();
 
 			int batchSize = 200;
 			while (players.Count > 0)
@@ -284,17 +284,17 @@ namespace Coh2Stats
 			LeaderboardStats.Add(stat);
 		}
 
-		public List<RelicAPI.PlayerIdentity> GetRankedPlayersFromDatabase(MatchTypeId gameMode)
+		public List<RelicAPI.PlayerIdentity> GetRankedPlayersFromDatabase()
 		{
 			UserIO.WriteLine("Getting ranked players from the database. This is a long operation.");
-			var rankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this, gameMode) != int.MaxValue).ToList();
+			var rankedPlayers = PlayerIdentities.Where(p => p.GetHighestRank(this) != int.MaxValue).ToList();
 			UserIO.WriteLine("Finished.");
 
 			return rankedPlayers;
 
 		}
 
-		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId, MatchTypeId gameMode)
+		public RelicAPI.LeaderboardStat GetHighestStatByStatGroup(int statGroupId)
 		{
 			RelicAPI.LeaderboardStat highest = null;
 
@@ -302,7 +302,12 @@ namespace Coh2Stats
 			{
 				var x = LeaderboardStats[i];
 
-				if (x.StatGroupId == statGroupId && LeaderboardCompatibility.LeaderboardIsCompatibleWithGameMode((LeaderboardId)x.LeaderboardId, gameMode))
+				if (x.LeaderboardId != 4 && x.LeaderboardId != 5 && x.LeaderboardId != 6 && x.LeaderboardId != 7 && x.LeaderboardId != 51)
+				{
+					continue;
+				}
+
+				if (x.StatGroupId == statGroupId)
 				{
 					if (highest == null)
 					{
@@ -319,13 +324,13 @@ namespace Coh2Stats
 			return highest;
 		}
 
-		public void FindLeaderboardSizes(MatchTypeId gameMode)
+		public void FindLeaderboardSizes()
 		{
 			UserIO.WriteLine("Finding leaderboard sizes");
 
 			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
 			{
-				if (LeaderboardCompatibility.LeaderboardIsCompatibleWithGameMode((LeaderboardId)leaderboardIndex, gameMode) == false)
+				if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
 				{
 					continue;
 				}

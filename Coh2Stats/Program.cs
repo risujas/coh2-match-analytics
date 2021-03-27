@@ -15,18 +15,6 @@ namespace Coh2Stats
 			RelevantTimeCutoffSeconds = dto.ToUnixTimeSeconds();
 		}
 
-		public static MatchTypeId RunGameModeSelection()
-		{
-			UserIO.WriteSeparator();
-			UserIO.WriteLine("1 - 1v1 automatch");
-			UserIO.WriteLine("2 - 2v2 automatch");
-			UserIO.WriteLine("3 - 3v3 automatch");
-			UserIO.WriteLine("4 - 4v4 automatch");
-			UserIO.WriteLine("Please select a game mode.");
-
-			return (MatchTypeId)UserIO.RunIntegerSelection(1, 4);
-		}
-
 		public static int RunOperatingModeSelection()
 		{
 			UserIO.WriteSeparator();
@@ -68,18 +56,18 @@ namespace Coh2Stats
 			return true;
 		}
 
-		public static void RunModeOperations(int operatingMode, MatchTypeId gameMode)
+		public static void RunModeOperations(int operatingMode)
 		{
 			if (operatingMode == 1)
 			{
-				DatabaseHandler.ParseAndProcess(gameMode);
+				DatabaseHandler.ParseAndProcess();
 			}
 
 			if (operatingMode == 2)
 			{
 				while (true)
 				{
-					DatabaseHandler.ParseAndProcess(gameMode);
+					DatabaseHandler.ParseAndProcess();
 					
 					if (RunCooldownProcedure() == false)
 					{
@@ -90,7 +78,7 @@ namespace Coh2Stats
 
 			if (operatingMode == 3)
 			{
-				MatchAnalytics.RunInteractiveAnalysis(gameMode);
+				MatchAnalytics.RunInteractiveAnalysis();
 			}
 		}
 
@@ -100,36 +88,9 @@ namespace Coh2Stats
 
 			if (args.Length > 0)
 			{
-				MatchTypeId gameMode;
-
-				if (args[0] == "-1v1")
-				{
-					gameMode = MatchTypeId._1v1_;
-				}
-
-				else if (args[0] == "-2v2")
-				{
-					gameMode = MatchTypeId._2v2_;
-				}
-
-				else if (args[0] == "-3v3")
-				{
-					gameMode = MatchTypeId._3v3_;
-				}
-
-				else if (args[0] == "-4v4")
-				{
-					gameMode = MatchTypeId._4v4_;
-				}
-
-				else
-				{
-					return;
-				}
-
 				UserIO.PrintStartingInfo();
-				DatabaseHandler.Load(gameMode);
-				RunModeOperations(1, gameMode);
+				DatabaseHandler.Load();
+				RunModeOperations(1);
 			}
 
 			else
@@ -138,11 +99,10 @@ namespace Coh2Stats
 				{
 					UserIO.PrintStartingInfo();
 
-					MatchTypeId gameMode = RunGameModeSelection();
-					DatabaseHandler.Load(gameMode);
+					DatabaseHandler.Load();
 
 					int operatingMode = RunOperatingModeSelection();
-					RunModeOperations(operatingMode, gameMode);
+					RunModeOperations(operatingMode);
 				}
 			}
 		}

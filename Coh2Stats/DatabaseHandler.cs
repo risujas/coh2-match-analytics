@@ -8,7 +8,6 @@ namespace Coh2Stats
 	{
 		public static readonly PlayerDatabase PlayerDb = new PlayerDatabase();
 		public static readonly MatchDatabase MatchDb = new MatchDatabase();
-		public static MatchTypeId LoadedDataSet;
 
 		public static string ApplicationDataFolder
 		{
@@ -26,33 +25,31 @@ namespace Coh2Stats
 			Directory.CreateDirectory(DatabaseFolder);
 		}
 
-		public static void Load(MatchTypeId gameMode)
+		public static void Load()
 		{
-			PlayerDb.FindLeaderboardSizes(gameMode);
+			PlayerDb.FindLeaderboardSizes();
 
 			PlayerDb.Load(DatabaseFolder);
-			MatchDb.Load(DatabaseFolder, gameMode);
-
-			LoadedDataSet = gameMode;
+			MatchDb.Load(DatabaseFolder);
 		}
 
-		public static void ParseAndProcess(MatchTypeId gameMode)
+		public static void ParseAndProcess()
 		{
-			ProcessPlayers(gameMode);
-			ProcessMatches(gameMode, Program.RelevantTimeCutoffSeconds);
+			ProcessPlayers();
+			ProcessMatches(Program.RelevantTimeCutoffSeconds);
 		}
 
-		private static void ProcessPlayers(MatchTypeId gameMode)
+		private static void ProcessPlayers()
 		{
-			PlayerDb.FindNewPlayers(gameMode, 1, -1);
-			PlayerDb.UpdatePlayerDetails(gameMode);
+			PlayerDb.FindNewPlayers(1, -1);
+			PlayerDb.UpdatePlayerDetails();
 
 			PlayerDb.Write(DatabaseFolder);
 		}
 
-		private static void ProcessMatches(MatchTypeId gameMode, long startedAfterTimestamp)
+		private static void ProcessMatches(long startedAfterTimestamp)
 		{
-			var playersToBeProcessed = PlayerDb.GetRankedPlayersFromDatabase(gameMode);
+			var playersToBeProcessed = PlayerDb.GetRankedPlayersFromDatabase();
 			int oldMatchCount = MatchDb.MatchData.Count;
 
 			while (playersToBeProcessed.Count > 0)
@@ -86,7 +83,7 @@ namespace Coh2Stats
 				for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 				{
 					var x = response.MatchHistoryStats[i];
-					if (x.MatchTypeId == (int)gameMode && x.StartGameTime >= startedAfterTimestamp)
+					if (x.MatchTypeId == 1 && x.StartGameTime >= startedAfterTimestamp)
 					{
 						MatchDb.LogMatch(x);
 					}
@@ -100,7 +97,7 @@ namespace Coh2Stats
 			UserIO.WriteLine("{0} new matches found", difference);
 
 			PlayerDb.Write(DatabaseFolder);
-			MatchDb.Write(DatabaseFolder, gameMode);
+			MatchDb.Write(DatabaseFolder);
 		}
 	}
 }

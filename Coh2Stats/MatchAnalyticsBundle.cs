@@ -109,21 +109,6 @@ namespace Coh2Stats
 			return matchAnalyticsBundle;
 		}
 
-		public MatchAnalyticsBundle FilterByMatchType(MatchTypeId matchTypeId)
-		{
-			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
-
-			foreach (var m in Matches)
-			{
-				if (m.MatchTypeId == (int)matchTypeId)
-				{
-					matchAnalyticsBundle.Matches.Add(m);
-				}
-			}
-
-			return matchAnalyticsBundle;
-		}
-
 		public MatchAnalyticsBundle FilterByPercentile(double low, double high, bool requireOnAll)
 		{
 			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
@@ -137,94 +122,30 @@ namespace Coh2Stats
 				{
 					var report = match.MatchHistoryReportResults[j];
 					var identity = DatabaseHandler.PlayerDb.GetPlayerByProfileId(report.ProfileId);
-					MatchTypeId gameMode = (MatchTypeId)match.MatchTypeId;
 					RaceId playerFaction = (RaceId)report.RaceId;
+					LeaderboardId ldb = LeaderboardCompatibility.GetLeaderboardByRace(playerFaction);
 
-					if (gameMode == MatchTypeId._1v1_)
+					var stat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, ldb);
+					if (stat == null || stat.Rank < 1)
 					{
-						LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, false);
-
-						var soloStat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
-						if (soloStat == null || soloStat.Rank < 1)
-						{
-							if (requireOnAll)
-							{
-								break;
-							}
-
-							continue;
-						}
-
-						int lowcutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, low);
-						int highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, high);
-
-						if (soloStat.Rank >= lowcutoffInclusive && soloStat.Rank < highCutoffExclusive)
-						{
-							numValidPlayers++;
-						}
-						else if (requireOnAll)
+						if (requireOnAll)
 						{
 							break;
 						}
+
+						continue;
 					}
 
-					else
+					int lowcutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(ldb, low);
+					int highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(ldb, high);
+
+					if (stat.Rank >= lowcutoffInclusive && stat.Rank < highCutoffExclusive)
 					{
-						RelicAPI.LeaderboardStat selectedStat = null;
-						bool useTeamLb = false;
-
-						LeaderboardId soloLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, false);
-						LeaderboardId teamLb = LeaderboardCompatibility.GetLeaderboardFromRaceAndMode(playerFaction, gameMode, true);
-
-						var soloStat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, soloLb);
-						var teamStat = DatabaseHandler.PlayerDb.GetStat(identity.PersonalStatGroupId, teamLb);
-
-						if (soloStat == null && teamStat != null)
-						{
-							selectedStat = teamStat;
-							useTeamLb = true;
-						}
-						else if (soloStat != null && teamStat == null)
-						{
-							selectedStat = soloStat;
-						}
-						else if (soloStat != null && teamStat != null)
-						{
-							selectedStat = soloStat;
-							if (teamStat.Rank < soloStat.Rank)
-							{
-								selectedStat = teamStat;
-								useTeamLb = true;
-							}
-						}
-
-						if (selectedStat == null)
-						{
-							if (requireOnAll)
-							{
-								break;
-							}
-
-							continue;
-						}
-
-						int lowCutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, low);
-						int highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(soloLb, high);
-
-						if (useTeamLb)
-						{
-							lowCutoffInclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(teamLb, low);
-							highCutoffExclusive = DatabaseHandler.PlayerDb.GetLeaderboardRankByPercentile(teamLb, high);
-						}
-
-						if (selectedStat.Rank >= lowCutoffInclusive && selectedStat.Rank < highCutoffExclusive)
-						{
-							numValidPlayers++;
-						}
-						else if (requireOnAll)
-						{
-							break;
-						}
+						numValidPlayers++;
+					}
+					else if (requireOnAll)
+					{
+						break;
 					}
 				}
 
