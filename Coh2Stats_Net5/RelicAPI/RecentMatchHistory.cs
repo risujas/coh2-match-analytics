@@ -9,47 +9,25 @@ namespace Coh2Stats_Net5.RelicAPI
 	{
 		public class Matchhistoryreportresult
 		{
-			[JsonProperty("matchhistory_id")] public int MatchHistoryId { get; set; }
 			[JsonProperty("profile_id")] public int ProfileId { get; set; }
 			[JsonProperty("resulttype")] public int ResultType { get; set; }
 			[JsonProperty("teamid")] public int TeamId { get; set; }
 			[JsonProperty("race_id")] public int RaceId { get; set; }
-			[JsonProperty("xpgained")] public int XpGained { get; set; }
-			[JsonProperty("counters")] public string Counters { get; set; }
-			[JsonProperty("matchstartdate")] public int MatchStartDate { get; set; }
-
-			public int Rank { get; set; }
-			public int RankTotal { get; set; }
-		}
-
-		public class Matchhistoryitem
-		{
-			[JsonProperty("profile_id")] public int ProfileId { get; set; }
-			[JsonProperty("matchhistory_id")] public int MatchHistoryId { get; set; }
-			[JsonProperty("iteminstance_id")] public int ItemInstanceId { get; set; }
-			[JsonProperty("itemdefinition_id")] public int ItemDefinitionId { get; set; }
-			[JsonProperty("durabilitytype")] public int DurabilityType { get; set; }
-			[JsonProperty("durability")] public int Durability { get; set; }
-			[JsonProperty("metadata")] public string MetaData { get; set; }
-			[JsonProperty("itemlocation_id")] public int ItemLocationId { get; set; }
+			[JsonProperty("Rank")] public int Rank { get; set; }
+			[JsonProperty("RankTotal")] public int RankTotal { get; set; }
 		}
 
 		public class MatchHistoryStat
 		{
 			[JsonProperty("id")] public int Id { get; set; }
-			[JsonProperty("creator_profile_id")] public int CreatorProfileId { get; set; }
 			[JsonProperty("mapname")] public string MapName { get; set; }
 			[JsonProperty("maxplayers")] public int MaxPlayers { get; set; }
 			[JsonProperty("matchtype_id")] public int MatchTypeId { get; set; }
-			[JsonProperty("options")] public string Options { get; set; }
-			[JsonProperty("slotinfo")] public string SlotInfo { get; set; }
 			[JsonProperty("description")] public string Description { get; set; }
 			[JsonProperty("startgametime")] public int StartGameTime { get; set; }
 			[JsonProperty("completiontime")] public int CompletionTime { get; set; }
 			[JsonProperty("observertotal")] public int ObserverTotal { get; set; }
 			[JsonProperty("matchhistoryreportresults")] public List<Matchhistoryreportresult> MatchHistoryReportResults { get; set; }
-			[JsonProperty("matchhistoryitems")] public List<Matchhistoryitem> MatchHistoryItems { get; set; }
-			[JsonProperty("matchurls")] public List<object> MatchUrls { get; set; }
 
 			public bool HasAxisVictory()
 			{
