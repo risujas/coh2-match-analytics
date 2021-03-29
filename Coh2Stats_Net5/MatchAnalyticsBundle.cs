@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Coh2Stats
+namespace Coh2Stats_Net5
 {
 	public class MatchAnalyticsBundle
 	{

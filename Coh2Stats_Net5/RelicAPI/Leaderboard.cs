@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Coh2Stats.RelicAPI
+namespace Coh2Stats_Net5.RelicAPI
 {
 	public class Leaderboard
 	{

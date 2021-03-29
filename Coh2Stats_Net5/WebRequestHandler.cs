@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 
-namespace Coh2Stats
+namespace Coh2Stats_Net5
 {
 	public class WebRequestResult
 	{

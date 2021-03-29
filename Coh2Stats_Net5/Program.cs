@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Coh2Stats
+namespace Coh2Stats_Net5
 {
 	public class Program
 	{
