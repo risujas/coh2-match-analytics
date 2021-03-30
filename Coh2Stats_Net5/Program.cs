@@ -8,22 +8,22 @@ namespace Coh2Stats_Net5
 		public static string ApplicationDataFolder
 		{
 			get;
-		} = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\coh2stats";
+		} = AppDomain.CurrentDomain.BaseDirectory + "cache";
 
 		public static string DatabaseFolder
 		{
 			get;
-		} = ApplicationDataFolder + "\\database";
+		} = ApplicationDataFolder + "/database";
 
 		public static string LogFolder
 		{
 			get;
-		} = ApplicationDataFolder + "\\logs";
+		} = ApplicationDataFolder + "/logs";
 
 		public static string ExportsFolder
 		{
 			get;
-		} = ApplicationDataFolder + "\\exports";
+		} = ApplicationDataFolder + "/exports";
 
 		public static readonly long MatchRelevancyCutoff = 0;
 		public static readonly long MatchLoggingCutoff = 0;

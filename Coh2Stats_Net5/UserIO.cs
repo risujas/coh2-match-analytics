@@ -15,7 +15,7 @@ namespace Coh2Stats_Net5
 			Thread.CurrentThread.CurrentCulture = culture;
 
 			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
-			logFile = Program.LogFolder + "\\" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
+			logFile = Program.LogFolder + "/" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
 		}
 
 		public static void PrintStartingInfo()
