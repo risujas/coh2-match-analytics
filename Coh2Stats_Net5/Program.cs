@@ -25,7 +25,7 @@ namespace Coh2Stats_Net5
 			get;
 		} = ApplicationDataFolder + "/exports";
 
-		public static readonly long MatchRelevancyCutoff = 0;
+		public static readonly long MatchDiscardCutoff = 0;
 		public static readonly long MatchLoggingCutoff = 0;
 
 		static Program()
@@ -33,7 +33,7 @@ namespace Coh2Stats_Net5
 			DateTime dt = DateTime.UtcNow;
 
 			DateTimeOffset dto = new DateTimeOffset(dt).AddDays(-30);
-			MatchRelevancyCutoff = dto.ToUnixTimeSeconds();
+			MatchDiscardCutoff = dto.ToUnixTimeSeconds();
 
 			dto = new DateTimeOffset(dt).AddHours(-36);
 			MatchLoggingCutoff = dto.ToUnixTimeSeconds();
@@ -73,7 +73,8 @@ namespace Coh2Stats_Net5
 		{
 			CreateFolders();
 
-			UserIO.WriteLine("Relevant data cutoff set to " + MatchRelevancyCutoff);
+			UserIO.WriteLine("Match discard cutoff set to " + DateTimeOffset.FromUnixTimeSeconds(MatchDiscardCutoff).ToString());
+			UserIO.WriteLine("Match logging cutoff set to " + DateTimeOffset.FromUnixTimeSeconds(MatchLoggingCutoff).ToString());
 
 			if (args.Length > 0)
 			{

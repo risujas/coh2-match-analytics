@@ -24,7 +24,7 @@ namespace Coh2Stats_Net5
 			{
 				if (!skipFiltering)
 				{
-					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)Program.MatchRelevancyCutoff, -1);
+					mab = MatchAnalyticsBundle.GetAllLoggedMatches().FilterByStartGameTime((int)Program.MatchDiscardCutoff, -1);
 
 					UserIO.WriteLine("Filter history: " + filterHistory);
 
