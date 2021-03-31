@@ -8,7 +8,7 @@ namespace Coh2Stats_Net5
 		public static string ApplicationDataFolder
 		{
 			get;
-		} = AppDomain.CurrentDomain.BaseDirectory + "cache";
+		} = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/coh2stats";
 
 		public static string DatabaseFolder
 		{
