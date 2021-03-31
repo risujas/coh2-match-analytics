@@ -35,7 +35,7 @@ namespace Coh2Stats_Net5
 			DateTimeOffset dto = new DateTimeOffset(dt).AddDays(-30);
 			MatchRelevancyCutoff = dto.ToUnixTimeSeconds();
 
-			dto = new DateTimeOffset(dt).AddDays(-1);
+			dto = new DateTimeOffset(dt).AddHours(-36);
 			MatchLoggingCutoff = dto.ToUnixTimeSeconds();
 		}
 		private static int RunOperatingModeSelection()
