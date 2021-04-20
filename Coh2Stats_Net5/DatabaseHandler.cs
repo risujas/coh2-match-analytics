@@ -11,7 +11,9 @@ namespace Coh2Stats_Net5
 		public static void Load()
 		{
 			PlayerDb.FindLeaderboardSizes();
+
 			MatchDb.Load();
+			UserIO.WriteLine("Highest post-load match ID: " + MatchDb.GetHighestId());
 		}
 
 		public static void Process()
@@ -20,6 +22,7 @@ namespace Coh2Stats_Net5
 			PlayerDb.FindPlayerDetails();
 
 			ProcessMatches();
+			UserIO.WriteLine("Highest post-process match ID: " + MatchDb.GetHighestId());
 		}
 
 		private static void ProcessMatches()

@@ -81,5 +81,20 @@ namespace Coh2Stats_Net5
 
 			return null;
 		}
+
+		public int GetHighestId()
+		{
+			int highest = 0;
+
+			foreach (var md in MatchData)
+			{
+				if (md.Id >= highest)
+				{
+					highest = md.Id;
+				}
+			}
+			
+			return highest;
+		}
 	}
 }
