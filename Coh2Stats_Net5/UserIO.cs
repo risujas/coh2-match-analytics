@@ -57,6 +57,8 @@ namespace Coh2Stats_Net5
 			if (e.InnerException == null)
 			{
 				WriteLine("An error occurred: " + e.Message);
+				WriteLine("Stack trace: " + e.ToString());
+				Console.Beep();
 			}
 
 			else
