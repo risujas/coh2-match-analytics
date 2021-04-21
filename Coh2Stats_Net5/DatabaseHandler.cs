@@ -62,10 +62,7 @@ namespace Coh2Stats_Net5
 				for (int i = 0; i < response.MatchHistoryStats.Count; i++)
 				{
 					var x = response.MatchHistoryStats[i];
-					if (x.MatchTypeId == 1 && x.StartGameTime >= Program.MatchLoggingCutoff && x.Description == "AUTOMATCH")
-					{
-						MatchDb.LogMatch(x);
-					}
+					MatchDb.LogMatch(x);
 				}
 
 				UserIO.AllowPause();

@@ -3,11 +3,13 @@
 using System.Collections.Generic;
 using System.IO;
 
+using static Coh2Stats_Net5.RelicAPI.RecentMatchHistory;
+
 namespace Coh2Stats_Net5
 {
 	public class MatchDatabase
 	{
-		public List<RelicAPI.RecentMatchHistory.MatchHistoryStat> MatchData = new List<RelicAPI.RecentMatchHistory.MatchHistoryStat>();
+		public List<MatchHistoryStat> MatchData = new List<MatchHistoryStat>();
 
 		public const string DbFile = "matchData.json";
 
@@ -22,7 +24,18 @@ namespace Coh2Stats_Net5
 			UserIO.WriteLine("Loading match data");
 
 			string text = File.ReadAllText(fullPath);
-			MatchData = JsonConvert.DeserializeObject<List<RelicAPI.RecentMatchHistory.MatchHistoryStat>>(text);
+			var loadedMatches = JsonConvert.DeserializeObject<List<MatchHistoryStat>>(text);
+
+			UserIO.WriteLine("Validating match data");
+			foreach (var lm in loadedMatches)
+			{
+				if (ValidateMatch(lm, Program.MatchDiscardCutoff))
+				{
+					MatchData.Add(lm);
+				}
+			}
+
+			Write();
 
 			UserIO.WriteLine("{0} match history stats", MatchData.Count);
 
@@ -38,9 +51,9 @@ namespace Coh2Stats_Net5
 			File.WriteAllText(fullPath, text);
 		}
 
-		public void LogMatch(RelicAPI.RecentMatchHistory.MatchHistoryStat matchHistoryStat)
+		public void LogMatch(MatchHistoryStat matchHistoryStat)
 		{
-			if (GetMatchById(matchHistoryStat.Id) == null)
+			if (GetMatchById(matchHistoryStat.Id) == null && ValidateMatch(matchHistoryStat, Program.MatchLoggingCutoff))
 			{
 				for (int i = 0; i < matchHistoryStat.MatchHistoryReportResults.Count; i++)
 				{
@@ -67,7 +80,7 @@ namespace Coh2Stats_Net5
 			}
 		}
 
-		public RelicAPI.RecentMatchHistory.MatchHistoryStat GetMatchById(int id)
+		public MatchHistoryStat GetMatchById(int id)
 		{
 			for (int i = 0; i < MatchData.Count; i++)
 			{
@@ -93,8 +106,37 @@ namespace Coh2Stats_Net5
 					highest = md.Id;
 				}
 			}
-			
+
 			return highest;
+		}
+
+		public bool ValidateMatch(MatchHistoryStat matchHistoryStat, long startTimeCutoff)
+		{
+			if (matchHistoryStat.MatchTypeId != 1)
+			{
+				return false;
+			}
+
+			if (matchHistoryStat.StartGameTime < startTimeCutoff)
+			{
+				return false;
+			}
+
+			if (matchHistoryStat.Description != "AUTOMATCH")
+			{
+				return false;
+			}
+
+			for (int i = 0; i < matchHistoryStat.MatchHistoryReportResults.Count; i++)
+			{
+				var r = matchHistoryStat.MatchHistoryReportResults[i];
+				if (r.ResultType != 0 && r.ResultType != 1)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }

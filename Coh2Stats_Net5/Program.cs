@@ -71,41 +71,45 @@ namespace Coh2Stats_Net5
 
 		private static void Main(string[] args)
 		{
+#if RELEASE
 			try
 			{
-				CreateFolders();
+#endif
+			CreateFolders();
 
-				UserIO.WriteLine("Match discard cutoff set to " + DateTimeOffset.FromUnixTimeSeconds(MatchDiscardCutoff).ToString());
-				UserIO.WriteLine("Match logging cutoff set to " + DateTimeOffset.FromUnixTimeSeconds(MatchLoggingCutoff).ToString());
+			UserIO.WriteLine("Match discard cutoff set to " + DateTimeOffset.FromUnixTimeSeconds(MatchDiscardCutoff).ToString());
+			UserIO.WriteLine("Match logging cutoff set to " + DateTimeOffset.FromUnixTimeSeconds(MatchLoggingCutoff).ToString());
 
-				if (args.Length > 0)
+			if (args.Length > 0)
+			{
+				if (args[0] == "-auto")
 				{
-					if (args[0] == "-auto")
-					{
-						UserIO.PrintStartingInfo();
+					UserIO.PrintStartingInfo();
 
-						DatabaseHandler.Load();
-						RunModeOperations(1);
-					}
+					DatabaseHandler.Load();
+					RunModeOperations(1);
 				}
+			}
 
-				else
+			else
+			{
+				while (true)
 				{
-					while (true)
-					{
-						UserIO.PrintStartingInfo();
+					UserIO.PrintStartingInfo();
 
-						DatabaseHandler.Load();
-						int operatingMode = RunOperatingModeSelection();
-						RunModeOperations(operatingMode);
-					}
+					DatabaseHandler.Load();
+					int operatingMode = RunOperatingModeSelection();
+					RunModeOperations(operatingMode);
 				}
+			}
+#if RELEASE
 			}
 			catch (Exception e)
 			{
 				UserIO.WriteExceptions(e);
 				Console.ReadLine();
 			}
+#endif
 		}
 	}
 }
