@@ -7,6 +7,7 @@ namespace Coh2Stats_Net5
 	{
 		public static readonly PlayerDatabase PlayerDb = new PlayerDatabase();
 		public static readonly MatchDatabase MatchDb = new MatchDatabase();
+		public const int MaxBatchSize = 100;
 
 		public static void Load()
 		{
@@ -32,7 +33,7 @@ namespace Coh2Stats_Net5
 
 			while (playersToBeProcessed.Count > 0)
 			{
-				int batchSize = 200;
+				int batchSize = MaxBatchSize;
 				if (playersToBeProcessed.Count < batchSize)
 				{
 					batchSize = playersToBeProcessed.Count;

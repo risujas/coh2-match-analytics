@@ -30,9 +30,9 @@ namespace Coh2Stats_Net5
 				while (batchStartingIndex < leaderboardMaxRank)
 				{
 					int difference = leaderboardMaxRank - batchStartingIndex;
-					int batchSize = 200;
+					int batchSize = DatabaseHandler.MaxBatchSize;
 
-					if (difference < 200)
+					if (difference < batchSize)
 					{
 						batchSize = difference + 1;
 					}
@@ -66,7 +66,7 @@ namespace Coh2Stats_Net5
 		{
 			var players = PlayerIdentities.ToList();
 
-			int batchSize = 200;
+			int batchSize = DatabaseHandler.MaxBatchSize;
 			while (players.Count > 0)
 			{
 				if (players.Count >= batchSize)
