@@ -163,6 +163,57 @@ namespace Coh2Stats_Net5
 			return matchAnalyticsBundle;
 		}
 
+		public MatchAnalyticsBundle FilterByRank(int low, int high, bool requireOnAll)
+		{
+			MatchAnalyticsBundle matchAnalyticsBundle = new MatchAnalyticsBundle();
+
+			for (int i = 0; i < Matches.Count; i++)
+			{
+				var match = Matches[i];
+				int numValidPlayers = 0;
+
+				for (int j = 0; j < match.MatchHistoryReportResults.Count; j++)
+				{
+					var report = match.MatchHistoryReportResults[j];
+					LeaderboardId ldb = LeaderboardCompatibility.GetLeaderboardByRace((RaceId)report.RaceId);
+
+					if (report.Rank < 1)
+					{
+						if (requireOnAll)
+						{
+							break;
+						}
+
+						continue;
+					}
+
+					if (report.Rank >= low && report.Rank <= high)
+					{
+						numValidPlayers++;
+					}
+					else if (requireOnAll)
+					{
+						break;
+					}
+				}
+
+				if (numValidPlayers > 0)
+				{
+					if (!requireOnAll)
+					{
+						matchAnalyticsBundle.Matches.Add(match);
+					}
+
+					else if (requireOnAll && numValidPlayers == match.MaxPlayers)
+					{
+						matchAnalyticsBundle.Matches.Add(match);
+					}
+				}
+			}
+
+			return matchAnalyticsBundle;
+		}
+
 		public Dictionary<string, int> GetOrderedMapPlayCount()
 		{
 			Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();

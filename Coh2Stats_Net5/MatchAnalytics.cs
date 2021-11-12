@@ -12,6 +12,7 @@ namespace Coh2Stats_Net5
 
 		private const string factionFilterTag = "factions";
 		private const string percentFilterTag = "ranks%";
+		private const string ranksFilterTag = "ranks#";
 		private const string ageFilterTag = "hours";
 
 		public static void RunInteractiveAnalysis(string filterHistory = "")
@@ -54,6 +55,15 @@ namespace Coh2Stats_Net5
 								mab = mab.FilterByPercentile(double.Parse(low), double.Parse(high), true);
 							}
 
+							if (first == ranksFilterTag)
+							{
+								var moreParts = second.Split('_');
+								var low = moreParts[0];
+								var high = moreParts[1];
+
+								mab = mab.FilterByRank(int.Parse(low), int.Parse(high), true);
+							}
+
 							if (first == ageFilterTag)
 							{
 								mab = mab.FilterByMaxAgeInHours(int.Parse(second));
@@ -83,12 +93,13 @@ namespace Coh2Stats_Net5
 				UserIO.WriteLine("Q - Finish running the interactive analysis");
 				UserIO.WriteLine("S - Export the current results");
 				UserIO.WriteLine("D - Remove a filter");
-				UserIO.WriteLine("1 - Filter by percentile brackets");
+				UserIO.WriteLine("1 - Filter by percentile bracket");
 				UserIO.WriteLine("2 - Filter by faction");
 				UserIO.WriteLine("3 - Filter by match age in hours");
+				UserIO.WriteLine("4 - Filter by rank bracket");
 				UserIO.WriteLine("Please select an operation.");
 
-				char operation = UserIO.RunCharSelection('Q', 'S', 'D', '1', '2', '3');
+				char operation = UserIO.RunCharSelection('Q', 'S', 'D', '1', '2', '3', '4');
 				operation = char.ToLower(operation);
 
 				if (operation == 'q')
@@ -188,6 +199,17 @@ namespace Coh2Stats_Net5
 					int hours = UserIO.RunIntegerSelection(0, 8760);
 
 					filterHistory += "," + ageFilterTag + "-" + hours;
+				}
+
+				if (operation == '4')
+				{
+					UserIO.WriteLine("Please select the low rank cutoff - 'lowest' and BEST rank is 1.");
+					int lowCutoff = UserIO.RunIntegerSelection(0, 1000000);
+
+					UserIO.WriteLine("Please select the high rank cutoff - 'higher' ranks are WORSE.");
+					int highCutoff = UserIO.RunIntegerSelection(0, 1000000);
+
+					filterHistory += "," + ranksFilterTag + "-" + lowCutoff.ToString() + "_" + highCutoff.ToString();
 				}
 			}
 		}
