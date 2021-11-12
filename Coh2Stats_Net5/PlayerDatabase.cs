@@ -24,8 +24,17 @@ namespace Coh2Stats_Net5
 					continue;
 				}
 
+				
+
+#if DEBUG
+				UserIO.WriteLine("Debug - Top 200 only");
+				int leaderboardMaxRank = 200;
+				int batchStartingIndex = 1;
+#else
+				UserIO.WriteLine("Release - all players");
 				int leaderboardMaxRank = LeaderboardSizes[(LeaderboardId)leaderboardIndex];
 				int batchStartingIndex = 1;
+#endif
 
 				while (batchStartingIndex < leaderboardMaxRank)
 				{

@@ -53,7 +53,7 @@ namespace Coh2Stats_Net5
 
 		public void LogMatch(MatchHistoryStat matchHistoryStat)
 		{
-			if (GetMatchById(matchHistoryStat.Id) == null && ValidateMatch(matchHistoryStat, Program.MatchLoggingCutoff))
+			if (ValidateMatch(matchHistoryStat, Program.MatchLoggingCutoff))
 			{
 				for (int i = 0; i < matchHistoryStat.MatchHistoryReportResults.Count; i++)
 				{
@@ -112,6 +112,11 @@ namespace Coh2Stats_Net5
 
 		public bool ValidateMatch(MatchHistoryStat matchHistoryStat, long startTimeCutoff)
 		{
+			if (GetMatchById(matchHistoryStat.Id) != null)
+			{
+				return false;
+			}
+
 			if (matchHistoryStat.MatchTypeId != 1)
 			{
 				return false;
