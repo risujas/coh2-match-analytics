@@ -19,16 +19,16 @@ namespace Coh2Stats_Net5
 
 		public static void Process()
 		{
-			PlayerDb.FindPlayerNames();
-			PlayerDb.FindPlayerDetails();
+			var rankedPlayers = PlayerDb.FindRankedPlayers();
+			PlayerDb.FindPlayerDetails(rankedPlayers);
 
-			ProcessMatches();
+			ProcessMatches(rankedPlayers);
 			UserIO.WriteLine("Highest post-process match ID: " + MatchDb.GetHighestId());
 		}
 
-		private static void ProcessMatches()
+		private static void ProcessMatches(List<RelicAPI.PlayerIdentity> rankedPlayers)
 		{
-			var playersToBeProcessed = PlayerDb.PlayerIdentities.ToList();
+			var playersToBeProcessed = rankedPlayers;
 			int oldMatchCount = MatchDb.MatchData.Count;
 
 			while (playersToBeProcessed.Count > 0)

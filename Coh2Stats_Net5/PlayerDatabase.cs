@@ -11,9 +11,11 @@ namespace Coh2Stats_Net5
 
 		public Dictionary<LeaderboardId, int> LeaderboardSizes = new Dictionary<LeaderboardId, int>();
 
-		public void FindPlayerNames()
+		public List<RelicAPI.PlayerIdentity> FindRankedPlayers()
 		{
 			UserIO.WriteLine("Finding players");
+
+			List<RelicAPI.PlayerIdentity> rankedPlayers = new List<RelicAPI.PlayerIdentity>();
 
 			int numPlayersBefore = PlayerIdentities.Count;
 
@@ -54,7 +56,11 @@ namespace Coh2Stats_Net5
 						for (int j = 0; j < sg.Members.Count; j++)
 						{
 							var x = sg.Members[j];
-							LogPlayer(x);
+							if (LogPlayer(x) == false)
+							{
+								rankedPlayers.Add(x);
+							}
+							
 						}
 					}
 
@@ -69,11 +75,13 @@ namespace Coh2Stats_Net5
 			int playerCountDiff = numPlayersAfter - numPlayersBefore;
 
 			UserIO.WriteLine("{0} players found", playerCountDiff);
+
+			return rankedPlayers;
 		}
 
-		public void FindPlayerDetails()
+		public void FindPlayerDetails(List<RelicAPI.PlayerIdentity> rankedPlayers)
 		{
-			var players = PlayerIdentities.ToList();
+			var players = rankedPlayers.ToList();
 
 			int batchSize = DatabaseHandler.MaxBatchSize;
 			while (players.Count > 0)
@@ -148,8 +156,10 @@ namespace Coh2Stats_Net5
 			return player;
 		}
 
-		public void LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
+		public bool LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
 		{
+			bool alreadyExisted = false;
+
 			for (int i = 0; i < PlayerIdentities.Count; i++)
 			{
 				var p = PlayerIdentities[i];
@@ -157,11 +167,13 @@ namespace Coh2Stats_Net5
 				if (playerIdentity.ProfileId == p.ProfileId)
 				{
 					PlayerIdentities.RemoveAt(i);
+					alreadyExisted = true;
 					break;
 				}
 			}
 
 			PlayerIdentities.Add(playerIdentity);
+			return alreadyExisted;
 		}
 
 		public RelicAPI.StatGroup GetStatGroupById(int id)
