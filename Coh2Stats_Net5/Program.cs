@@ -5,10 +5,17 @@ namespace Coh2Stats_Net5
 {
 	public class Program
 	{
+#if RELEASE
 		public static string ApplicationDataFolder
 		{
 			get;
 		} = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/coh2stats";
+#elif DEBUG
+		public static string ApplicationDataFolder
+		{
+			get;
+		} = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/coh2stats_debug";
+#endif
 
 		public static string DatabaseFolder
 		{
