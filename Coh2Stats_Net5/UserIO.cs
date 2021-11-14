@@ -5,233 +5,233 @@ using System.Threading;
 
 namespace Coh2Stats
 {
-	public static class UserIO
-	{
-		private static readonly string logFile;
+    public static class UserIO
+    {
+        private static readonly string logFile;
 
-		static UserIO()
-		{
-			var culture = CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentCulture = culture;
+        static UserIO()
+        {
+            var culture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = culture;
 
-			DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
-			logFile = Program.LogFolder + "/" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
-		}
+            DateTimeOffset dto = new DateTimeOffset(DateTime.UtcNow);
+            logFile = Program.LogFolder + "/" + dto.ToUnixTimeSeconds().ToString() + "_log.txt";
+        }
 
-		public static void PrintStartingInfo()
-		{
-			DateTime dt = DateTime.Now;
-			WriteLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
+        public static void PrintStartingInfo()
+        {
+            DateTime dt = DateTime.Now;
+            WriteLine(dt.ToShortDateString() + " " + dt.ToShortTimeString());
 #if DEBUG
 			WriteLine("DEBUG BUILD - NOT FOR RELEASE");
 #endif
-		}
+        }
 
-		public static void WriteLine(string text, params object[] args)
-		{
-			if (args.Length > 0)
-			{
-				text = string.Format(text, args);
-			}
+        public static void WriteLine(string text, params object[] args)
+        {
+            if (args.Length > 0)
+            {
+                text = string.Format(text, args);
+            }
 
-			DateTime dt = DateTime.Now;
-			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] " + text;
+            DateTime dt = DateTime.Now;
+            string time = dt.ToLongTimeString();
+            string message = "[" + time + "] " + text;
 
-			Console.WriteLine(message);
+            Console.WriteLine(message);
 
-			using (StreamWriter file = File.AppendText(logFile))
-			{
-				file.WriteLine(message);
-			}
-		}
+            using (StreamWriter file = File.AppendText(logFile))
+            {
+                file.WriteLine(message);
+            }
+        }
 
-		public static void WriteSeparator()
-		{
-			WriteLine("");
-			WriteLine("****************************************************************");
-		}
+        public static void WriteSeparator()
+        {
+            WriteLine("");
+            WriteLine("****************************************************************");
+        }
 
-		public static void WriteExceptions(Exception e)
-		{
-			if (e.InnerException == null)
-			{
-				WriteLine("An error occurred: " + e.Message);
-				WriteLine("Stack trace: " + e.ToString());
-				Console.Beep();
-			}
+        public static void WriteExceptions(Exception e)
+        {
+            if (e.InnerException == null)
+            {
+                WriteLine("An error occurred: " + e.Message);
+                WriteLine("Stack trace: " + e.ToString());
+                Console.Beep();
+            }
 
-			else
-			{
-				WriteExceptions(e.InnerException);
-			}
-		}
+            else
+            {
+                WriteExceptions(e.InnerException);
+            }
+        }
 
-		public static int RunIntegerSelection(int inclusiveMin, int inclusiveMax)
-		{
-			int selection = 0;
+        public static int RunIntegerSelection(int inclusiveMin, int inclusiveMax)
+        {
+            int selection = 0;
 
-			DateTime dt = DateTime.Now;
-			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] << ";
+            DateTime dt = DateTime.Now;
+            string time = dt.ToLongTimeString();
+            string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Yellow;
 
-			bool good = false;
-			while (!good)
-			{
-				Console.Write(message);
-				string input = Console.ReadLine();
+            bool good = false;
+            while (!good)
+            {
+                Console.Write(message);
+                string input = Console.ReadLine();
 
-				bool goodParse = int.TryParse(input, out int result);
-				if (!goodParse)
-				{
-					continue;
-				}
+                bool goodParse = int.TryParse(input, out int result);
+                if (!goodParse)
+                {
+                    continue;
+                }
 
-				if (result < inclusiveMin || result > inclusiveMax)
-				{
-					continue;
-				}
+                if (result < inclusiveMin || result > inclusiveMax)
+                {
+                    continue;
+                }
 
-				selection = result;
-				good = true;
-			}
+                selection = result;
+                good = true;
+            }
 
-			Console.ResetColor();
+            Console.ResetColor();
 
-			WriteLine("User input: " + selection);
-			Console.Clear();
+            WriteLine("User input: " + selection);
+            Console.Clear();
 
-			return selection;
-		}
+            return selection;
+        }
 
-		public static char RunCharSelection(params char[] options)
-		{
-			char selection = ' ';
+        public static char RunCharSelection(params char[] options)
+        {
+            char selection = ' ';
 
-			DateTime dt = DateTime.Now;
-			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] << ";
+            DateTime dt = DateTime.Now;
+            string time = dt.ToLongTimeString();
+            string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Yellow;
 
-			bool good = false;
-			while (!good)
-			{
-				Console.Write(message);
-				string input = Console.ReadLine();
+            bool good = false;
+            while (!good)
+            {
+                Console.Write(message);
+                string input = Console.ReadLine();
 
-				bool goodParse = char.TryParse(input, out char result);
-				if (!goodParse)
-				{
-					continue;
-				}
+                bool goodParse = char.TryParse(input, out char result);
+                if (!goodParse)
+                {
+                    continue;
+                }
 
-				result = char.ToLower(result);
+                result = char.ToLower(result);
 
-				bool matchFound = false;
-				for (int i = 0; i < options.Length; i++)
-				{
-					if (result == char.ToLower(options[i]))
-					{
-						matchFound = true;
-						break;
-					}
-				}
-				if (!matchFound)
-				{
-					continue;
-				}
+                bool matchFound = false;
+                for (int i = 0; i < options.Length; i++)
+                {
+                    if (result == char.ToLower(options[i]))
+                    {
+                        matchFound = true;
+                        break;
+                    }
+                }
+                if (!matchFound)
+                {
+                    continue;
+                }
 
-				selection = result;
-				good = true;
-			}
+                selection = result;
+                good = true;
+            }
 
-			Console.ResetColor();
+            Console.ResetColor();
 
-			WriteLine("User input: " + selection);
-			Console.Clear();
+            WriteLine("User input: " + selection);
+            Console.Clear();
 
-			return selection;
-		}
+            return selection;
+        }
 
-		public static double RunFloatingPointInput()
-		{
-			double floatInput = 0;
+        public static double RunFloatingPointInput()
+        {
+            double floatInput = 0;
 
-			DateTime dt = DateTime.Now;
-			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] << ";
+            DateTime dt = DateTime.Now;
+            string time = dt.ToLongTimeString();
+            string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Yellow;
 
-			bool good = false;
-			while (!good)
-			{
-				Console.Write(message);
-				string input = Console.ReadLine();
+            bool good = false;
+            while (!good)
+            {
+                Console.Write(message);
+                string input = Console.ReadLine();
 
-				bool goodParse = double.TryParse(input, out double result);
-				if (!goodParse)
-				{
-					continue;
-				}
+                bool goodParse = double.TryParse(input, out double result);
+                if (!goodParse)
+                {
+                    continue;
+                }
 
-				floatInput = result;
-				good = true;
-			}
+                floatInput = result;
+                good = true;
+            }
 
-			Console.ResetColor();
+            Console.ResetColor();
 
-			WriteLine("User input: " + floatInput);
-			Console.Clear();
+            WriteLine("User input: " + floatInput);
+            Console.Clear();
 
-			return floatInput;
-		}
+            return floatInput;
+        }
 
-		public static string RunStringInput()
-		{
-			DateTime dt = DateTime.Now;
-			string time = dt.ToLongTimeString();
-			string message = "[" + time + "] << ";
+        public static string RunStringInput()
+        {
+            DateTime dt = DateTime.Now;
+            string time = dt.ToLongTimeString();
+            string message = "[" + time + "] << ";
 
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.Write(message);
-			string input = Console.ReadLine();
-			Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(message);
+            string input = Console.ReadLine();
+            Console.ResetColor();
 
-			WriteLine("User input: " + input);
-			Console.Clear();
+            WriteLine("User input: " + input);
+            Console.Clear();
 
-			return input;
-		}
+            return input;
+        }
 
-		public static void AllowPause()
-		{
-			if (Console.KeyAvailable)
-			{
-				var cki = Console.ReadKey(true);
-				if (cki.Key == ConsoleKey.P)
-				{
-					WriteLine("Paused. Press P again to unpause.");
+        public static void AllowPause()
+        {
+            if (Console.KeyAvailable)
+            {
+                var cki = Console.ReadKey(true);
+                if (cki.Key == ConsoleKey.P)
+                {
+                    WriteLine("Paused. Press P again to unpause.");
 
-					bool paused = true;
-					while (paused)
-					{
-						if (Console.KeyAvailable)
-						{
-							cki = Console.ReadKey(true);
-							if (cki.Key == ConsoleKey.P)
-							{
-								paused = false;
-							}
-						}
+                    bool paused = true;
+                    while (paused)
+                    {
+                        if (Console.KeyAvailable)
+                        {
+                            cki = Console.ReadKey(true);
+                            if (cki.Key == ConsoleKey.P)
+                            {
+                                paused = false;
+                            }
+                        }
 
-						Thread.Sleep(1000);
-					}
-				}
-			}
-		}
-	}
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
+        }
+    }
 }

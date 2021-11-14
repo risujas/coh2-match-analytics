@@ -3,272 +3,272 @@ using System.Linq;
 
 namespace Coh2Stats
 {
-	public class PlayerDatabase
-	{
-		public List<RelicAPI.PlayerIdentity> PlayerIdentities = new List<RelicAPI.PlayerIdentity>();
-		public List<RelicAPI.StatGroup> StatGroups = new List<RelicAPI.StatGroup>();
-		public List<RelicAPI.LeaderboardStat> LeaderboardStats = new List<RelicAPI.LeaderboardStat>();
+    public class PlayerDatabase
+    {
+        public List<RelicAPI.PlayerIdentity> PlayerIdentities = new List<RelicAPI.PlayerIdentity>();
+        public List<RelicAPI.StatGroup> StatGroups = new List<RelicAPI.StatGroup>();
+        public List<RelicAPI.LeaderboardStat> LeaderboardStats = new List<RelicAPI.LeaderboardStat>();
 
-		public Dictionary<LeaderboardId, int> LeaderboardSizes = new Dictionary<LeaderboardId, int>();
+        public Dictionary<LeaderboardId, int> LeaderboardSizes = new Dictionary<LeaderboardId, int>();
 
-		public List<RelicAPI.PlayerIdentity> FindRankedPlayers()
-		{
-			UserIO.WriteLine("Finding players");
+        public List<RelicAPI.PlayerIdentity> FindRankedPlayers()
+        {
+            UserIO.WriteLine("Finding players");
 
-			List<RelicAPI.PlayerIdentity> rankedPlayers = new List<RelicAPI.PlayerIdentity>();
+            List<RelicAPI.PlayerIdentity> rankedPlayers = new List<RelicAPI.PlayerIdentity>();
 
-			int numPlayersBefore = PlayerIdentities.Count;
+            int numPlayersBefore = PlayerIdentities.Count;
 
-			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
-			{
-				if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
-				{
-					continue;
-				}
+            for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
+            {
+                if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
+                {
+                    continue;
+                }
 
-				
+
 
 #if DEBUG
 				UserIO.WriteLine("Debug - Top 200 only");
 				int leaderboardMaxRank = 200;
 				int batchStartingIndex = 1;
 #else
-				UserIO.WriteLine("Release - all players");
-				int leaderboardMaxRank = LeaderboardSizes[(LeaderboardId)leaderboardIndex];
-				int batchStartingIndex = 1;
+                UserIO.WriteLine("Release - all players");
+                int leaderboardMaxRank = LeaderboardSizes[(LeaderboardId)leaderboardIndex];
+                int batchStartingIndex = 1;
 #endif
 
-				while (batchStartingIndex < leaderboardMaxRank)
-				{
-					int difference = leaderboardMaxRank - batchStartingIndex;
-					int batchSize = DatabaseHandler.MaxBatchSize;
+                while (batchStartingIndex < leaderboardMaxRank)
+                {
+                    int difference = leaderboardMaxRank - batchStartingIndex;
+                    int batchSize = DatabaseHandler.MaxBatchSize;
 
-					if (difference < batchSize)
-					{
-						batchSize = difference + 1;
-					}
+                    if (difference < batchSize)
+                    {
+                        batchSize = difference + 1;
+                    }
 
-					var response = RelicAPI.Leaderboard.RequestById(leaderboardIndex, batchStartingIndex, batchSize);
+                    var response = RelicAPI.Leaderboard.RequestById(leaderboardIndex, batchStartingIndex, batchSize);
 
-					for (int i = 0; i < response.StatGroups.Count; i++)
-					{
-						var sg = response.StatGroups[i];
-						for (int j = 0; j < sg.Members.Count; j++)
-						{
-							var x = sg.Members[j];
-							if (LogPlayer(x) == false)
-							{
-								rankedPlayers.Add(x);
-							}
-							
-						}
-					}
+                    for (int i = 0; i < response.StatGroups.Count; i++)
+                    {
+                        var sg = response.StatGroups[i];
+                        for (int j = 0; j < sg.Members.Count; j++)
+                        {
+                            var x = sg.Members[j];
+                            if (LogPlayer(x) == false)
+                            {
+                                rankedPlayers.Add(x);
+                            }
 
-					UserIO.WriteLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
-					batchStartingIndex += batchSize;
+                        }
+                    }
 
-					UserIO.AllowPause();
-				}
-			}
+                    UserIO.WriteLine("Parsing leaderboard #{0}: {1} - {2}", leaderboardIndex, batchStartingIndex, batchStartingIndex + batchSize - 1);
+                    batchStartingIndex += batchSize;
 
-			int numPlayersAfter = PlayerIdentities.Count;
-			int playerCountDiff = numPlayersAfter - numPlayersBefore;
+                    UserIO.AllowPause();
+                }
+            }
 
-			UserIO.WriteLine("{0} players found", playerCountDiff);
+            int numPlayersAfter = PlayerIdentities.Count;
+            int playerCountDiff = numPlayersAfter - numPlayersBefore;
 
-			return rankedPlayers;
-		}
+            UserIO.WriteLine("{0} players found", playerCountDiff);
 
-		public void FindPlayerDetails(List<RelicAPI.PlayerIdentity> rankedPlayers)
-		{
-			var players = rankedPlayers.ToList();
+            return rankedPlayers;
+        }
 
-			int batchSize = DatabaseHandler.MaxBatchSize;
-			while (players.Count > 0)
-			{
-				if (players.Count >= batchSize)
-				{
-					UserIO.WriteLine("Finding player details, {0} remaining", players.Count);
+        public void FindPlayerDetails(List<RelicAPI.PlayerIdentity> rankedPlayers)
+        {
+            var players = rankedPlayers.ToList();
 
-					var range = players.GetRange(0, batchSize);
-					players.RemoveRange(0, batchSize);
+            int batchSize = DatabaseHandler.MaxBatchSize;
+            while (players.Count > 0)
+            {
+                if (players.Count >= batchSize)
+                {
+                    UserIO.WriteLine("Finding player details, {0} remaining", players.Count);
 
-					List<int> profileIds = range.Select(p => p.ProfileId).ToList();
-					var response = RelicAPI.PersonalStat.RequestByProfileId(profileIds);
+                    var range = players.GetRange(0, batchSize);
+                    players.RemoveRange(0, batchSize);
 
-					for (int i = 0; i < response.StatGroups.Count; i++)
-					{
-						var sg = response.StatGroups[i];
-						LogStatGroup(sg);
-					}
+                    List<int> profileIds = range.Select(p => p.ProfileId).ToList();
+                    var response = RelicAPI.PersonalStat.RequestByProfileId(profileIds);
 
-					for (int i = 0; i < response.LeaderboardStats.Count; i++)
-					{
-						var lbs = response.LeaderboardStats[i];
-						LogLeaderboardStat(lbs);
-					}
-				}
+                    for (int i = 0; i < response.StatGroups.Count; i++)
+                    {
+                        var sg = response.StatGroups[i];
+                        LogStatGroup(sg);
+                    }
 
-				else
-				{
-					batchSize = players.Count;
-				}
+                    for (int i = 0; i < response.LeaderboardStats.Count; i++)
+                    {
+                        var lbs = response.LeaderboardStats[i];
+                        LogLeaderboardStat(lbs);
+                    }
+                }
 
-				UserIO.AllowPause();
-			}
-		}
+                else
+                {
+                    batchSize = players.Count;
+                }
 
-		public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
-		{
-			for (int i = 0; i < PlayerIdentities.Count; i++)
-			{
-				var x = PlayerIdentities[i];
-				if (x.ProfileId == profileId)
-				{
-					return x;
-				}
-			}
+                UserIO.AllowPause();
+            }
+        }
 
-			UserIO.WriteLine("Missing player data; making an additional request to fill the gaps");
+        public RelicAPI.PlayerIdentity GetPlayerByProfileId(int profileId)
+        {
+            for (int i = 0; i < PlayerIdentities.Count; i++)
+            {
+                var x = PlayerIdentities[i];
+                if (x.ProfileId == profileId)
+                {
+                    return x;
+                }
+            }
 
-			List<int> list = new List<int>();
-			list.Add(profileId);
+            UserIO.WriteLine("Missing player data; making an additional request to fill the gaps");
 
-			var ps = RelicAPI.PersonalStat.RequestByProfileId(list);
-			RelicAPI.PlayerIdentity player = null;
+            List<int> list = new List<int>();
+            list.Add(profileId);
 
-			foreach (var sg in ps.StatGroups)
-			{
-				if (sg.Type == 1)
-				{
-					player = sg.Members[0];
-					LogPlayer(player);
-				}
+            var ps = RelicAPI.PersonalStat.RequestByProfileId(list);
+            RelicAPI.PlayerIdentity player = null;
 
-				LogStatGroup(sg);
-			}
+            foreach (var sg in ps.StatGroups)
+            {
+                if (sg.Type == 1)
+                {
+                    player = sg.Members[0];
+                    LogPlayer(player);
+                }
 
-			foreach (var lbs in ps.LeaderboardStats)
-			{
-				LogLeaderboardStat(lbs);
-			}
+                LogStatGroup(sg);
+            }
 
-			return player;
-		}
+            foreach (var lbs in ps.LeaderboardStats)
+            {
+                LogLeaderboardStat(lbs);
+            }
 
-		public bool LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
-		{
-			bool alreadyExisted = false;
+            return player;
+        }
 
-			for (int i = 0; i < PlayerIdentities.Count; i++)
-			{
-				var p = PlayerIdentities[i];
+        public bool LogPlayer(RelicAPI.PlayerIdentity playerIdentity)
+        {
+            bool alreadyExisted = false;
 
-				if (playerIdentity.ProfileId == p.ProfileId)
-				{
-					PlayerIdentities.RemoveAt(i);
-					alreadyExisted = true;
-					break;
-				}
-			}
+            for (int i = 0; i < PlayerIdentities.Count; i++)
+            {
+                var p = PlayerIdentities[i];
 
-			PlayerIdentities.Add(playerIdentity);
-			return alreadyExisted;
-		}
+                if (playerIdentity.ProfileId == p.ProfileId)
+                {
+                    PlayerIdentities.RemoveAt(i);
+                    alreadyExisted = true;
+                    break;
+                }
+            }
 
-		public RelicAPI.StatGroup GetStatGroupById(int id)
-		{
-			for (int i = 0; i < StatGroups.Count; i++)
-			{
-				var x = StatGroups[i];
+            PlayerIdentities.Add(playerIdentity);
+            return alreadyExisted;
+        }
 
-				if (x.Id == id)
-				{
-					return x;
-				}
-			}
+        public RelicAPI.StatGroup GetStatGroupById(int id)
+        {
+            for (int i = 0; i < StatGroups.Count; i++)
+            {
+                var x = StatGroups[i];
 
-			return null;
-		}
+                if (x.Id == id)
+                {
+                    return x;
+                }
+            }
 
-		public void LogStatGroup(RelicAPI.StatGroup statGroup)
-		{
-			var oldStatGroup = GetStatGroupById(statGroup.Id);
-			if (oldStatGroup != null)
-			{
-				StatGroups.Remove(oldStatGroup);
-			}
-			StatGroups.Add(statGroup);
-		}
+            return null;
+        }
 
-		// can return a stat with -1 rank
-		public RelicAPI.LeaderboardStat GetLeaderboardStat(int statGroupId, LeaderboardId leaderboardId)
-		{
-			for (int i = 0; i < LeaderboardStats.Count; i++)
-			{
-				var x = LeaderboardStats[i];
+        public void LogStatGroup(RelicAPI.StatGroup statGroup)
+        {
+            var oldStatGroup = GetStatGroupById(statGroup.Id);
+            if (oldStatGroup != null)
+            {
+                StatGroups.Remove(oldStatGroup);
+            }
+            StatGroups.Add(statGroup);
+        }
 
-				if (x.StatGroupId == statGroupId && x.LeaderboardId == (int)leaderboardId)
-				{
-					return x;
-				}
-			}
+        // can return a stat with -1 rank
+        public RelicAPI.LeaderboardStat GetLeaderboardStat(int statGroupId, LeaderboardId leaderboardId)
+        {
+            for (int i = 0; i < LeaderboardStats.Count; i++)
+            {
+                var x = LeaderboardStats[i];
 
-			return null;
-		}
+                if (x.StatGroupId == statGroupId && x.LeaderboardId == (int)leaderboardId)
+                {
+                    return x;
+                }
+            }
 
-		public void LogLeaderboardStat(RelicAPI.LeaderboardStat stat)
-		{
-			var oldStat = GetLeaderboardStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId);
+            return null;
+        }
 
-			if (oldStat != null)
-			{
-				LeaderboardStats.Remove(oldStat);
-			}
+        public void LogLeaderboardStat(RelicAPI.LeaderboardStat stat)
+        {
+            var oldStat = GetLeaderboardStat(stat.StatGroupId, (LeaderboardId)stat.LeaderboardId);
 
-			LeaderboardStats.Add(stat);
-		}
+            if (oldStat != null)
+            {
+                LeaderboardStats.Remove(oldStat);
+            }
 
-		public void FindLeaderboardSizes()
-		{
-			UserIO.WriteLine("Finding leaderboard sizes");
+            LeaderboardStats.Add(stat);
+        }
 
-			for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
-			{
-				if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
-				{
-					continue;
-				}
+        public void FindLeaderboardSizes()
+        {
+            UserIO.WriteLine("Finding leaderboard sizes");
 
-				var probeResponse = RelicAPI.Leaderboard.RequestById(leaderboardIndex, 1, 1);
-				int leaderboardMaxRank = probeResponse.RankTotal;
+            for (int leaderboardIndex = 0; leaderboardIndex < 100; leaderboardIndex++)
+            {
+                if (leaderboardIndex != 4 && leaderboardIndex != 5 && leaderboardIndex != 6 && leaderboardIndex != 7 && leaderboardIndex != 51)
+                {
+                    continue;
+                }
 
-				if (LeaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
-				{
-					LeaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
-				}
-				else
-				{
-					LeaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
-				}
+                var probeResponse = RelicAPI.Leaderboard.RequestById(leaderboardIndex, 1, 1);
+                int leaderboardMaxRank = probeResponse.RankTotal;
 
-				UserIO.WriteLine(((LeaderboardId)leaderboardIndex).ToString() + " " + LeaderboardSizes[(LeaderboardId)leaderboardIndex]);
-			}
-		}
+                if (LeaderboardSizes.ContainsKey((LeaderboardId)leaderboardIndex))
+                {
+                    LeaderboardSizes[(LeaderboardId)leaderboardIndex] = leaderboardMaxRank;
+                }
+                else
+                {
+                    LeaderboardSizes.Add((LeaderboardId)leaderboardIndex, leaderboardMaxRank);
+                }
 
-		public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)
-		{
-			if (LeaderboardSizes.ContainsKey(id) == false)
-			{
-				var probeResponse = RelicAPI.Leaderboard.RequestById((int)id, 1, 1);
-				int leaderboardMaxRank = probeResponse.RankTotal;
-				LeaderboardSizes.Add(id, leaderboardMaxRank);
-			}
+                UserIO.WriteLine(((LeaderboardId)leaderboardIndex).ToString() + " " + LeaderboardSizes[(LeaderboardId)leaderboardIndex]);
+            }
+        }
 
-			int maxRank = LeaderboardSizes[id];
-			double cutoffRank = maxRank * (percentile / 100.0);
+        public int GetLeaderboardRankByPercentile(LeaderboardId id, double percentile)
+        {
+            if (LeaderboardSizes.ContainsKey(id) == false)
+            {
+                var probeResponse = RelicAPI.Leaderboard.RequestById((int)id, 1, 1);
+                int leaderboardMaxRank = probeResponse.RankTotal;
+                LeaderboardSizes.Add(id, leaderboardMaxRank);
+            }
 
-			return (int)cutoffRank;
-		}
-	}
+            int maxRank = LeaderboardSizes[id];
+            double cutoffRank = maxRank * (percentile / 100.0);
+
+            return (int)cutoffRank;
+        }
+    }
 }

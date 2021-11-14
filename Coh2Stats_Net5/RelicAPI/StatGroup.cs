@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Coh2Stats.RelicAPI
 {
-	public class StatGroup
-	{
-		[JsonProperty("id")] public int Id { get; set; }
-		[JsonProperty("name")] public string Name { get; set; }
-		[JsonProperty("type")] public int Type { get; set; }
-		[JsonProperty("members")] public List<PlayerIdentity> Members { get; set; }
-	}
+    public class StatGroup
+    {
+        [JsonProperty("id")] public int Id { get; set; }
+        [JsonProperty("name")] public string Name { get; set; }
+        [JsonProperty("type")] public int Type { get; set; }
+        [JsonProperty("members")] public List<PlayerIdentity> Members { get; set; }
+    }
 }
