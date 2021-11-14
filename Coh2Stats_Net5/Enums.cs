@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Coh2Stats_Net5
+namespace Coh2Stats
 {
 	[Flags]
 	public enum RaceFlag

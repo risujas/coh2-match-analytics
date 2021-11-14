@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Coh2Stats_Net5
+namespace Coh2Stats
 {
 	static class MatchAnalytics
 	{

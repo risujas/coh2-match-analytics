@@ -3,9 +3,9 @@
 using System.Collections.Generic;
 using System.IO;
 
-using static Coh2Stats_Net5.RelicAPI.RecentMatchHistory;
+using static Coh2Stats.RelicAPI.RecentMatchHistory;
 
-namespace Coh2Stats_Net5
+namespace Coh2Stats
 {
 	public class MatchDatabase
 	{

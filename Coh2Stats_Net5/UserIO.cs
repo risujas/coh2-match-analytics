@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 
-namespace Coh2Stats_Net5
+namespace Coh2Stats
 {
 	public static class UserIO
 	{

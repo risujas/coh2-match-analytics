@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Coh2Stats_Net5
+namespace Coh2Stats
 {
 	public class PlayerDatabase
 	{

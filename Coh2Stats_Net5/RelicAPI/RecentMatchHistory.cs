@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Coh2Stats_Net5.RelicAPI
+namespace Coh2Stats.RelicAPI
 {
 	public class RecentMatchHistory
 	{
