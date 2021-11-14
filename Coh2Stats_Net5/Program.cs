@@ -39,10 +39,10 @@ namespace Coh2Stats_Net5
 		{
 			DateTime dt = DateTime.UtcNow;
 
-			DateTimeOffset dto = new DateTimeOffset(dt).AddDays(-30);
+			DateTimeOffset dto = new DateTimeOffset(dt).AddDays(-90);
 			MatchDiscardCutoff = dto.ToUnixTimeSeconds();
 
-			dto = new DateTimeOffset(dt).AddHours(-36);
+			dto = new DateTimeOffset(dt).AddDays(-30);
 			MatchLoggingCutoff = dto.ToUnixTimeSeconds();
 		}
 		private static int RunOperatingModeSelection()
